@@ -4,7 +4,9 @@ import { Password } from "../services/password";
 // An interface that describes the properties
 // that are requried to create a new User
 interface UserAttrs {
+  name: string;
   email: string;
+  phone: number;
   password: string;
 }
 
@@ -23,14 +25,33 @@ interface UserDoc extends mongoose.Document {
 
 const userSchema = new mongoose.Schema(
   {
+    name: {
+      type: String,
+      trim: true,
+      required: true,
+      maxlength: 32,
+    },
     email: {
       type: String,
+      trim: true,
       required: true,
+      unique: 32,
     },
     password: {
       type: String,
       required: true,
     },
+    phone: {
+      type: Number,
+      required: true,
+      unique: 10,
+    },
+    status: {
+      type: Boolean,
+      default: true,
+    },
+    referalcode : String,
+    usedCoupons: Array,
   },
   {
     toJSON: {

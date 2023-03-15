@@ -1,6 +1,6 @@
 import express from "express";
-import { currentUser } from "../middlewares/current-user";
-import { requireAuth } from "../middlewares/require-auth";
+import { currentUser } from "@snackopedia/common";
+import { requireAuth } from "@snackopedia/common";
 
 const router = express.Router();
 
@@ -9,3 +9,4 @@ router.get("/api/users/currentuser", currentUser, requireAuth, (req, res) => {
 });
 
 export { router as currentUserRouter };
+

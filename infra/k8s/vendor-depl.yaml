@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vendor-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vendor
+  template:
+    metadata:
+      labels:
+        app: vendor
+    spec:
+      containers:
+        - name: vendor
+          image: pos/vendor
+          env:
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: 'vendor'
+            - name: MONGO_URI
+              value: 'mongodb+srv://ashim_ashraf:j2EAqwP8RYZ1S98n@cultstore.otypapd.mongodb.net/?retryWrites=true&w=majority'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vendor-srv
+spec:
+  selector:
+    app: vendor
+  ports:
+    - name: vendor
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

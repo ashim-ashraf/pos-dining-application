@@ -16,6 +16,8 @@ spec:
         - name: auth
           image: pos/auth
           env:
+            - name: MONGO_URI
+              value: 'mongodb+srv://ashim_ashraf:j2EAqwP8RYZ1S98n@cultstore.otypapd.mongodb.net/?retryWrites=true&w=majority'
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
