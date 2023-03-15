@@ -1,6 +1,7 @@
 import express from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
+import { currentUserRouter } from './routes/test';
 
 import cookieSession from 'cookie-session';
 
@@ -17,6 +18,9 @@ app.use(
     secure: true
   })
 );
+
+
+app.use(currentUserRouter)
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
