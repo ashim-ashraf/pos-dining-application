@@ -5,10 +5,7 @@ import { requireAuth } from "@snackopedia/common";
 const router = express.Router();
 
 router.get("/api/tables/currentuser",(req, res) => {
-   console.log("asdf");
-}, currentUser, requireAuth, (req, res) => {
-  
-    res.send({ currentUser: req.currentUser || null });
+   console.log("test route");
 });
 
 export { router as currentUserRouter };
