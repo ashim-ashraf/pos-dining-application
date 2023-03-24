@@ -5,7 +5,7 @@ import { currentUserRouter } from './routes/test';
 
 import cookieSession from 'cookie-session';
 
-import { errorHandler , NotFoundError } from '@snackopedia/common';
+import { errorHandler , NotFoundError, currentUser } from '@snackopedia/common';
 const cors = require('cors');
 
 const app = express();
@@ -18,8 +18,7 @@ app.use(
     secure: true
   })
 );
-
-
+app.use(currentUser);
 app.use(currentUserRouter)
 
 app.all('*', async (req, res) => {

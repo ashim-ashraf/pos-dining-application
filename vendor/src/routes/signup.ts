@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { validateRequest, BadRequestError } from "@snackopedia/common";
 
 import { Vendor } from "../models/vendor";
- 
+
 const router = express.Router();
 
 router.post(
@@ -24,10 +24,17 @@ router.post(
       .matches(/^[0-9]{10}$/)
       .withMessage("Phone number must be valid"),
   ],
-  validateRequest,
   async (req: Request, res: Response) => {
-    console.log("hii");
-    const { name, email, password, phone } = req.body;
+    const {
+      name,
+      restaurantName,
+      description,
+      address,
+      liscenceNo,
+      email,
+      password,
+      phone,
+    } = req.body;
 
     const existingVendor = await Vendor.findOne({ email });
 
@@ -41,23 +48,25 @@ router.post(
       throw new BadRequestError("Phone number in use");
     }
 
-    const vendor = Vendor.build({ name, email, password, phone });
-    await vendor.save();
-
-    // Generate JWT
-    const vendorJwt = jwt.sign(
-      {
-        id: vendor.id,
-        email: vendor.email,
-      },
-      process.env.JWT_VENDOR_KEY!
-    );
-
-    // Store it on session object
-    req.session = {
-      jwt: vendorJwt,
-    };
-
+    const vendor = Vendor.build({
+      name,
+      restaurantName,
+      description,
+      address,
+      liscenceNo,
+      email,
+      password,
+      phone,
+    });
+       console.log(vendor)
+       try {
+         await vendor.save();
+        
+       } catch (error) {
+        console.log(error)
+       }
+    console.log("reached");
+    console.log("reached end");
     res.status(201).send(vendor);
   }
 );

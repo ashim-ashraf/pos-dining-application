@@ -28,7 +28,7 @@ router.post(
       throw new BadRequestError('Invalid Credentials')
     }
 
-    if(existingVendor.isAdmin === false){
+    if(existingVendor.vendorStatus === false){
       throw new BadRequestError('Invalid Credentials')
     }
 
@@ -47,7 +47,7 @@ router.post(
         id: existingVendor.id,
         email: existingVendor.email,
       },
-      process.env.JWT_KEY!
+      process.env.JWT_VENDOR_KEY!
     );
 
     // Store it on session object
