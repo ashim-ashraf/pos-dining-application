@@ -3,8 +3,8 @@ import { natsWrapper } from "./nats-wrapper";
 import { app } from "./app";
 
 const start = async () => {
-  if (!process.env.JWT_KEY) {
-    throw new Error("JWT_KEY must be defined");
+  if (!process.env.JWT_VENDOR_KEY) {
+    throw new Error("JWT_VENDOR_KEY must be defined");
   }
   if (!process.env.MONGO_URI) {
     throw new Error("MONGO_URI must be defined");
@@ -33,7 +33,7 @@ const start = async () => {
     process.on("SIGTERM", () => natsWrapper.client.close());
 
     await mongoose.connect(process.env.MONGO_URI, {
-      dbName:'pos',
+      dbName:'pos-vendor',
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

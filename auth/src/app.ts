@@ -9,6 +9,7 @@ import { signinRouter } from './routes/signin';
 import { signoutRouter } from './routes/signout';
 import { signupRouter } from './routes/signup';
 import { errorHandler , NotFoundError } from '@snackopedia/common';
+import { getUsersRouter } from './routes/get-users';
 const cors = require('cors');
 
 const app = express();
@@ -26,6 +27,7 @@ app.use(currentUserRouter);
 app.use(signinRouter);
 app.use(signoutRouter);
 app.use(signupRouter);
+app.use(getUsersRouter)
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();

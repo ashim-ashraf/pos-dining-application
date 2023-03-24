@@ -5,9 +5,13 @@ import { Password } from "../services/password";
 // that are requried to create a new User
 interface VendorAttrs {
   name: string;
+  restaurantName:string;
+  description:string;
+  address: object;
   email: string;
   phone: number;
   password: string;
+  liscenceNo:number;
 }
 
 // An interface that describes the properties
@@ -19,9 +23,15 @@ interface UserModel extends mongoose.Model<VendorDoc> {
 // An interface that describes the properties
 // that a User Document has
 interface VendorDoc extends mongoose.Document {
+  name: string;
+  restaurantName:string;
+  description:string;
+  address: object;
   email: string;
+  phone: number;
   password: string;
-  isAdmin: boolean;
+  liscenceNo:number;
+  vendorStatus: boolean;
 }
 
 const vendorSchema = new mongoose.Schema(
@@ -31,6 +41,19 @@ const vendorSchema = new mongoose.Schema(
       trim: true,
       required: true,
       maxlength: 32,
+    },
+    restaurantName:{
+      type: String,
+      trim: true,
+      maxlength: 32,
+    },
+    description:{
+      type: String,
+    },
+    address: {
+       address: String,
+       pincode: Number,
+       mobile: Number
     },
     email: {
       type: String,
@@ -47,11 +70,17 @@ const vendorSchema = new mongoose.Schema(
       required: true,
       unique: 10,
     },
-    isAdmin: {
+    liscenceNo: {
+      type: Number,
+    },
+    image:{
+      type: Array,
+    },
+    vendorStatus: {
       type: Boolean,
       default: true,
     },
-    Coupons: Array,
+    coupons: Array,
   },
   {
     toJSON: {

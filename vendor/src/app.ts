@@ -4,12 +4,13 @@ import { json } from 'body-parser';
 
 import cookieSession from 'cookie-session';
 
-import { currentVendorRouter } from './routes/current-vendor';
+
 import { signinRouter } from './routes/signin';
 import { signoutRouter } from './routes/signout';
 import { signupRouter } from './routes/signup';
 
-import { errorHandler , NotFoundError } from '@snackopedia/common';
+import { currentVendor, errorHandler , NotFoundError } from '@snackopedia/common';
+import { tablebookingrouter } from './routes/create-menu';
 const cors = require('cors');
 
 const app = express();
@@ -23,10 +24,9 @@ app.use(
   })
 );
 
-
-
+app.use(currentVendor);
+app.use(tablebookingrouter)
 app.use(signupRouter);
-app.use(currentVendorRouter);
 app.use(signinRouter);
 app.use(signoutRouter);
 

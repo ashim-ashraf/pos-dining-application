@@ -28,11 +28,11 @@ function Singupform() {
 
   return (
     <div>
-       <section>
-      <nav class="flex items-center justify-between flex-wrap bg-teal-500 p-6">
-        <div class="flex items-center flex-shrink-0 text-white mr-6">
+    <section>
+      <nav className="flex items-center justify-between flex-wrap bg-teal-500 p-6">
+        <div className="flex items-center flex-shrink-0 text-white mr-6">
           <svg
-            class="fill-current h-8 w-8 mr-2"
+            className="fill-current h-8 w-8 mr-2"
             width="54"
             height="54"
             viewBox="0 0 54 54"
@@ -40,12 +40,12 @@ function Singupform() {
           >
             <path d="M13.5 22.1c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 38.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z" />
           </svg>
-          <span class="font-semibold text-xl tracking-tight">Dine Out</span>
+          <span className="font-semibold text-xl tracking-tight">Dine Out</span>
         </div>
-        <div class="block lg:hidden">
-          <button class="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
+        <div className="block lg:hidden">
+          <button className="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
             <svg
-              class="fill-current h-3 w-3"
+              className="fill-current h-3 w-3"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -54,23 +54,23 @@ function Singupform() {
             </svg>
           </button>
         </div>
-        <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-          <div class="text-sm lg:flex-grow">
+        <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+          <div className="text-sm lg:flex-grow">
             <a
               href="#responsive-header"
-              class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
+              className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
             >
               Docs
             </a>
             <a
               href="#responsive-header"
-              class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
+              className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
             >
               Examples
             </a>
             <a
               href="#responsive-header"
-              class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white"
+              className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white"
             >
               Blog
             </a>
@@ -79,13 +79,13 @@ function Singupform() {
         </div>
       </nav>
 
-      <div class="bg-grey-lighter min-h-screen flex flex-col">
-        <div class="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
-          <div class="bg-white px-6 py-8 rounded shadow-md text-black w-full">
-            <h1 class="mb-8 text-3xl text-center">Sign up</h1>
+      <div className="bg-grey-lighter min-h-screen flex flex-col">
+        <div className="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
+          <div className="bg-white px-6 py-8 rounded shadow-md text-black w-full">
+            <h1 className="mb-8 text-3xl text-center">Sign up</h1>
             <input
               type="text"
-              class="block border border-grey-light w-full p-3 rounded mb-4"
+              className="block border border-grey-light w-full p-3 rounded mb-4"
               name="fullname"
               placeholder="Full Name"
               value={name}
@@ -96,7 +96,7 @@ function Singupform() {
 
             <input
               type="text"
-              class="block border border-grey-light w-full p-3 rounded mb-4"
+              className="block border border-grey-light w-full p-3 rounded mb-4"
               name="email"
               placeholder="Email"
               value={email}
@@ -107,7 +107,7 @@ function Singupform() {
 
             <input
               type="password"
-              class="block border border-grey-light w-full p-3 rounded mb-4"
+              className="block border border-grey-light w-full p-3 rounded mb-4"
               name="password"
               placeholder="Password"
               value={password}
@@ -117,7 +117,7 @@ function Singupform() {
             />
             <input
               type="number"
-              class="block border border-grey-light w-full p-3 rounded mb-4"
+              className="block border border-grey-light w-full p-3 rounded mb-4"
               name="phone"
               placeholder="Phone Number"
               value={phone}
@@ -128,7 +128,7 @@ function Singupform() {
 
             <button
               type="submit"
-              class="w-full text-center py-3 rounded bg-green text-grey-dark hover:bg-green-dark focus:outline-none my-1"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               onClick={onSubmit}
             >
               Create Account
@@ -137,7 +137,7 @@ function Singupform() {
             
           </div>
 
-          <div class="text-grey-dark mt-6">
+          <div className="text-grey-dark mt-6">
             Already have an account?
             <Link to="/login">Login here</Link>
             .
