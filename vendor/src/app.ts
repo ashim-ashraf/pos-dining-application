@@ -11,6 +11,7 @@ import { signupRouter } from './routes/signup';
 
 import { currentVendor, errorHandler , NotFoundError } from '@snackopedia/common';
 import { tablebookingrouter } from './routes/create-menu';
+import { getVendorsRouter } from './routes/get-vendors';
 const cors = require('cors');
 
 const app = express();
@@ -25,10 +26,11 @@ app.use(
 );
 
 app.use(currentVendor);
-app.use(tablebookingrouter)
+app.use(tablebookingrouter);
 app.use(signupRouter);
 app.use(signinRouter);
 app.use(signoutRouter);
+app.use(getVendorsRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();

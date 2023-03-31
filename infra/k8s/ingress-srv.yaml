@@ -14,7 +14,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: auth-srv
+                name: open-srv
                 port:
                   number: 3000
           - path: /api/vendors/?(.*)
@@ -35,7 +35,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: frontend-srv
+                name: client-srv
                 port:
                   number: 3000
           

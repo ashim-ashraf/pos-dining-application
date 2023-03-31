@@ -8,21 +8,21 @@ build:
   local:
     push: false
   artifacts:
-    - image: pos/auth
-      context: auth
+    - image: pos/open
+      context: open
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: pos/frontend
-      context: frontend
+    - image: pos/client
+      context: client
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
-          - src: '**/*.js'
+          - src: '**/*.jsx'
             dest: .
     - image: pos/vendor
       context: vendor
