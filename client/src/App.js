@@ -2,11 +2,12 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import UserLoginPage from "./pages/user/UserLoginPage";
 import UserSignupPage from "./pages/user/UserSignupPage";
-import VendorSignupPage from "./pages/vendor/VendorSignupPage";
+import VendorSignupPage from "./pages/vendor/VendorRegistrationPage";
 import LandingPage from "./pages/user/LandingPage";
 import HomePage from "./pages/user/HomePage";
 import { CheckLogin, IsLogged } from "./auth/auth";
 import VendorPage from "./pages/user/VendorPage";
+import VendorRegistrationPage from "./pages/vendor/VendorRegistrationPage";
 
 function App() {
   return (
@@ -26,6 +27,8 @@ function App() {
             </Route>
 
             <Route path="/vendors/signup" element={<VendorSignupPage />} />
+            <Route path="/vendors/registration" element={<VendorRegistrationPage />} />
+
         </Routes>
       </Router>
     </div>
