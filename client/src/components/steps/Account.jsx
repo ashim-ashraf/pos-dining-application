@@ -101,9 +101,9 @@ export default function Account() {
           <input
             class="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
             id="grid-first-name"
-            name="phone"
+            name="restaurantPhone"
             onChange={handleChange}
-            value={userData["phone"] || ""}
+            value={userData["restaurantPhone"] || ""}
             type="text"
             placeholder="9994442211"
           />

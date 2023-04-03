@@ -3,6 +3,10 @@ import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from "../../firebase.js/firebase";
 import { toast, Toaster } from "react-hot-toast";
 import { CgSpinner } from "react-icons/cg";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { adminLogin } from "../../features/user/adminSlice";
+import { Link, useNavigate } from "react-router-dom";
 
 function VendorSignup() {
   const [phone, setPhone] = useState("");
@@ -10,6 +14,10 @@ function VendorSignup() {
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
   const [user, setUser] = useState(null);
+  const [userName, setUserName] = useState("");
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   function onCaptchaVerify() {
     if (!window.recaptchaVerifier) {
@@ -31,13 +39,14 @@ function VendorSignup() {
     e.preventDefault();
     onCaptchaVerify();
     const appVerifier = window.recaptchaVerifier;
-    const phoneNumber = "+91" + phone;
+    const phoneNumber = "+1" + phone;
     signInWithPhoneNumber(auth, phoneNumber, appVerifier)
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
         toast.success("OTP sended successfully!");
         setShowOTP(true);
         setLoading(false);
+        console.log(userName);
       })
       .catch((error) => {
         console.log(error);
@@ -49,9 +58,16 @@ function VendorSignup() {
     window.confirmationResult
       .confirm(otp)
       .then(async (res) => {
-        console.log(res);
-        setUser(res.user);
-        setLoading(false);
+        console.log(res.user);
+        let user = res.user;
+        await axios
+          .post("/api/vendors/signup", { user, userName })
+          .then((response) => {
+            console.log(response);
+            dispatch(adminLogin(response.data));
+            setLoading(false);
+            navigate("/vendors/home");
+          });
       })
       .catch((err) => {
         console.log(err);
@@ -107,14 +123,28 @@ function VendorSignup() {
                    px-4 py-3 mt-6"
                       >
                         {loading && (
-                    <CgSpinner size={20} className="mt-1 animate-spin" />
-                  )}
+                          <CgSpinner size={20} className="mt-1 animate-spin" />
+                        )}
                         <span>Verify OTP</span>
                       </button>
                     </div>
                   ) : (
                     <div className="mt-6">
                       <div>
+                        <label className="block text-gray-700">Username</label>
+                        <input
+                          onChange={(e) => setUserName(e.target.value)}
+                          type="text"
+                          name="name"
+                          id=""
+                          placeholder="Enter Phone Number"
+                          className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                          autoComplete=""
+                          required
+                        />
+                      </div>
+
+                      <div className="mt-2">
                         <label className="block text-gray-700">
                           Phone Number
                         </label>
@@ -139,6 +169,10 @@ function VendorSignup() {
                         )}
                         <span>Signup</span>
                       </button>
+                      <div className="text-grey-dark mt-6">
+                        Already have an accout? 
+                        <Link to="/vendors/login">Login</Link>
+                      </div>
                     </div>
                   )}
                 </div>

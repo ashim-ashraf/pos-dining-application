@@ -7,6 +7,7 @@ import Account from "../steps/Account";
 import Details from "../steps/Details";
 import Payment from "../steps/Payment";
 import Final from "../steps/Final";
+  
 
 function RegistrationForm() {
   const [currentStep, setCurrentStep] = useState(1);

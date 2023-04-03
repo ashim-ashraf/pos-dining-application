@@ -24,7 +24,7 @@ export default function Details() {
             id="grid-first-name"
             name="restaurantType"
             onChange={handleChange}
-            value={userData["restaurantName"] || ""}
+            value={userData["restaurantType"] || ""}
             type="text"
             placeholder="Resto Cafe"
           />

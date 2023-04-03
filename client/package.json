@@ -5,6 +5,7 @@
   "dependencies": {
     "@heroicons/react": "^2.0.16",
     "@material-tailwind/react": "^1.4.2",
+    "@popperjs/core": "^2.11.7",
     "@reduxjs/toolkit": "^1.9.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
