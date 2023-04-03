@@ -31,7 +31,7 @@ const DropdownAdminNav = () => {
             <img
               alt="..."
               className="w-full rounded-full align-middle border-none shadow-lg"
-              src={require("assets/img/team-1-800x800.jpg").default}
+              src="../../../public/images/team1"
             />
           </span>
         </div>

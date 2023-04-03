@@ -9,7 +9,7 @@ import Payment from "../steps/Payment";
 import Final from "../steps/Final";
   
 
-function RegistrationForm() {
+function  RegistrationForm() {
   const [currentStep, setCurrentStep] = useState(1);
 
   const steps = [
@@ -42,12 +42,12 @@ function RegistrationForm() {
   };
 
   return (
-    <div className="mx-auto rounded-2xl bg-white pb-2 shadow-xl md:w-1/2">
+    <div className=" mx-auto rounded-2xl bg-white pb-2 shadow-2xl md:w-full">
       {/* Stepper */}
       <div className="horizontal container mt-5 ">
         <Stepper steps={steps} currentStep={currentStep} />
 
-        <div className="my-10 p-10 ">
+        <div className="p-10 ">
           <UseContextProvider>{displayStep(currentStep)}</UseContextProvider>
         </div>
       </div>
