@@ -118,44 +118,34 @@ export default function Details() {
 </div>
 
       <div className="flex flex-row items-center justify-center">
-  <div className="w-1/2 p-4">
-    <label
-      className="block mb-2 font-bold text-gray-700"
-      htmlFor="opening-time"
-    >
-      Opening Time
-    </label>
-    <select
-      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-      id="opening-time"
-      name="opening-time"
-    >
-      <option value={0}>12:00 AM</option>
-      <option value={1}>1:00 AM</option>
-      <option value={2}>2:00 AM</option>
-      {/* and so on... */}
-      <option value={23}>11:00 PM</option>
-    </select>
-  </div>
-  <div className="w-1/2 p-4">
-    <label
-      className="block mb-2 font-bold text-gray-700"
-      htmlFor="closing-time"
-    >
-      Closing Time
-    </label>
-    <select
-      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-      id="closing-time"
-      name="closingTime"
-    >
-      <option value={0}>12:00 AM</option>
-      <option value={1}>1:00 AM</option>
-      <option value={2}>2:00 AM</option>
-      {/* and so on... */}
-      <option value={23}>11:00 PM</option>
-    </select>
-  </div>
+      <div
+  class="relative mb-3 xl:w-96"
+  id="timepicker-inline-12"
+  data-te-input-wrapper-init>
+  <input
+    type="text"
+    class="peer block min-h-[auto] w-full rounded border-0 bg-transparent py-[0.32rem] px-3 leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+    id="form2" />
+  <label
+    for="form2"
+    class="pointer-events-none absolute top-0 left-3 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[2.15] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[1.15rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[1.15rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-neutral-200"
+    >Select a time</label
+  >
+</div>
+<div
+  class="relative mb-3 xl:w-96"
+  id="timepicker-inline-12"
+  data-te-input-wrapper-init>
+  <input
+    type="text"
+    class="peer block min-h-[auto] w-full rounded border-0 bg-transparent py-[0.32rem] px-3 leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+    id="form2" />
+  <label
+    for="form2"
+    class="pointer-events-none absolute top-0 left-3 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[2.15] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[1.15rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[1.15rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-neutral-200"
+    >Select a time</label
+  >
+</div>
 </div>
 
 
