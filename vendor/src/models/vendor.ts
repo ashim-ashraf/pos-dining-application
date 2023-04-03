@@ -4,14 +4,16 @@ import { Password } from "../services/password";
 // An interface that describes the properties
 // that are requried to create a new User
 interface VendorAttrs {
-  name: string;
-  restaurantName:string;
-  description:string;
-  address: object;
-  email: string;
-  phone: number;
-  password: string;
-  liscenceNo:number;
+  name?:string;
+  restaurantName?:string;
+  description?:string;
+  restaurantAddress?: object;
+  email?: string;
+  phone?: number;
+  liscenceNo?:number;
+  image?:[];
+  restaurantType?:string;
+  restaurantPhone?:number;
 }
 
 // An interface that describes the properties
@@ -26,12 +28,15 @@ interface VendorDoc extends mongoose.Document {
   name: string;
   restaurantName:string;
   description:string;
-  address: object;
+  restaurantAddress: object;
   email: string;
   phone: number;
   password: string;
   liscenceNo:number;
   vendorStatus: boolean;
+  image:[] ;
+  restaurantType:string;
+  restaurantPhone:number;
 }
 
 const vendorSchema = new mongoose.Schema(
@@ -39,7 +44,6 @@ const vendorSchema = new mongoose.Schema(
     name: {
       type: String,
       trim: true,
-      required: true,
       maxlength: 32,
     },
     restaurantName:{
@@ -50,37 +54,34 @@ const vendorSchema = new mongoose.Schema(
     description:{
       type: String,
     },
-    address: {
+    restaurantType:String,
+    restaurantAddress: {
        address: String,
        pincode: Number,
-       mobile: Number
+       state: String
     },
     email: {
       type: String,
       trim: true,
-      required: true,
       unique: 32,
     },
     password: {
       type: String,
-      required: true,
     },
     phone: {
       type: Number,
       required: true,
       unique: 10,
     },
+    restaurantPhone:Number,
     liscenceNo: {
       type: Number,
     },
-    image:{
-      type: Array,
-    },
     vendorStatus: {
       type: Boolean,
-      default: true,
+      default: false,
     },
-    coupons: Array,
+    image:Array,
   },
   {
     toJSON: {
