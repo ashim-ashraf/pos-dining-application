@@ -63,7 +63,6 @@ const vendorSchema = new mongoose.Schema(
     email: {
       type: String,
       trim: true,
-      unique: 32,
     },
     password: {
       type: String,
@@ -81,6 +80,9 @@ const vendorSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    workingDays: Object,
+    openingTime: Object,
+    closingTime: Object,
     image:Array,
   },
   {

@@ -7,6 +7,8 @@ import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
+// to list all the vendors
+
 router.get("/api/vendors/get-vendors", async (req, res) => {
    let vendors =  await Vendor.find()
     res.status(200).send(vendors)

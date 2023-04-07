@@ -10,6 +10,8 @@ import VendorRegistrationPage from "./pages/vendor/VendorRegistrationPage";
 import VendorLandingPage from "./pages/vendor/VendorLandingPage";
 import VendorSignupPage from "./pages/vendor/VendorSignupPage";
 import VendorLoginPage from "./pages/vendor/VendorLoginPage";
+import Category from "./components/Categoryresource";
+import CategoryManagementPage from "./pages/vendor/CategoryManagementPage";
 
 
 function App() {
@@ -32,6 +34,7 @@ function App() {
             <Route path="/vendors/signup" element={<VendorSignupPage />} />
             <Route path="/vendors/login" element={<VendorLoginPage />} />
 
+            <Route path="/vendors/menu" element={<CategoryManagementPage />} />
             <Route path="/vendors/registration" element={<VendorRegistrationPage />} />
             <Route path="/vendors/home" element={<VendorLandingPage />} />
 

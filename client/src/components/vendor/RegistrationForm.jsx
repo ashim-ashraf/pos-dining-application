@@ -11,7 +11,7 @@ import Final from "../steps/Final";
 
 function  RegistrationForm() {
   const [currentStep, setCurrentStep] = useState(1);
-
+  const [validate,SetValidate]=useState(false)
   const steps = [
     "Restaurant Info",
     "Type and Timing",
@@ -22,7 +22,7 @@ function  RegistrationForm() {
   const displayStep = (step) => {
     switch (step) {
       case 1:
-        return <Account />;
+        return <Account SetValidate={SetValidate}/>;
       case 2:
         return <Details />;
       case 3:
@@ -36,7 +36,13 @@ function  RegistrationForm() {
   const handleClick = (direction) => {
     let newStep = currentStep;
 
-    direction === "next" ? newStep++ : newStep--;
+    // direction === "next" ? newStep++ : newStep--;
+    if(direction === "next"){
+      alert(validate)
+      newStep++
+    }else{
+      newStep--
+    }
     // check if steps are within bounds
     newStep > 0 && newStep <= steps.length && setCurrentStep(newStep);
   };

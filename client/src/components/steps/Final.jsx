@@ -1,14 +1,17 @@
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useStepperContext } from "../../contexts/StepperContext";
 import { useSelector } from "react-redux";
 
 export default function Final() {
   const { userData, setUserData } = useStepperContext();
+  const [success, setSuccess] = useState(false)
   const admin = useSelector((state) => state.admin)
 
   const onSubmit = async () => {
     userData.userId = admin.admin.id; 
+    console.log("userid" , userData.userId);
+    console.log(userData);
     const formData = new FormData();
     
     console.log("here",userData)
@@ -29,7 +32,9 @@ export default function Final() {
 
     axios.post("/api/vendors/registration", formData)
       .then((response) => {
+        setSuccess(true)
         console.log("then", response);
+        
       })
       .catch(async (err) => {
         console.log(err.response.data.errors);
@@ -48,7 +53,8 @@ export default function Final() {
 
     <div className="container md:mt-10">
       <div className="flex flex-col items-center">
-        <div className="wrapper">
+
+        {success?(<><div className="wrapper">
           <svg
             className="checkmark"
             xmlns="http://www.w3.org/2000/svg"
@@ -75,11 +81,24 @@ export default function Final() {
         <div className="text-lg font-semibold text-gray-500">
           Your Request has been Submitted. Awaiting Approval
         </div>
-        <a className="mt-10" href="/user/dashboard">
+        <a className="mt-10" href="/vendor/home">
           <button className="h-10 px-5 text-green-700 transition-colors duration-150 border border-gray-300 rounded-lg focus:shadow-outline hover:bg-green-500 hover:text-green-100 on">
             Close
           </button>
-        </a>
+        </a></>):(<><div className="wrapper">
+          
+        </div>
+
+        <div className="mt-3 text-xl font-semibold uppercase text-green-500">
+          Hold On!
+        </div>
+        <div className="text-lg font-semibold text-gray-500">
+          Your Request is beeing submitted
+        </div>
+        <a className="mt-10" href="/vendor/home">
+          
+        </a></>)}
+        
       </div>
     </div>
   );

@@ -7,6 +7,8 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { adminLogin } from "../../features/user/adminSlice";
 import { Link, useNavigate } from "react-router-dom";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 function VendorSignup() {
   const [phone, setPhone] = useState("");
@@ -39,8 +41,13 @@ function VendorSignup() {
     e.preventDefault();
     onCaptchaVerify();
     const appVerifier = window.recaptchaVerifier;
-    const phoneNumber = "+1" + phone;
-    signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+    const phoneNumber = "+" + phone;
+    axios.post('/api/vendors/check-vendor', {phone} ).then((res) => {
+      console.log("user exists", res)
+      setLoading(false)
+      toast.error("Phone number in use!");
+    }).catch(() => {
+      signInWithPhoneNumber(auth, phoneNumber, appVerifier)
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
         toast.success("OTP sended successfully!");
@@ -49,8 +56,11 @@ function VendorSignup() {
         console.log(userName);
       })
       .catch((error) => {
+        setLoading(false)
+        toast.error("Invalid Phone number")
         console.log(error);
       });
+    })
   };
 
   function onOTPVerify() {
@@ -71,6 +81,7 @@ function VendorSignup() {
       })
       .catch((err) => {
         console.log(err);
+        toast.error(err.code)
         setLoading(false);
       });
   }
@@ -148,16 +159,9 @@ function VendorSignup() {
                         <label className="block text-gray-700">
                           Phone Number
                         </label>
-                        <input
-                          onChange={(e) => setPhone(e.target.value)}
-                          type="text"
-                          name=""
-                          id=""
-                          placeholder="Enter Phone Number"
-                          className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
-                          autoComplete=""
-                          required
-                        />
+                        <div className="w-full overflow-hidden">
+                        <PhoneInput country={"in"} value={phone} onChange={setPhone}  />
+                        </div>
                       </div>
                       <button
                         onClick={handleSubmit}

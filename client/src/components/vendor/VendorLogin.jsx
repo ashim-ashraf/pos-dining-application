@@ -7,6 +7,8 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { adminLogin } from "../../features/user/adminSlice";
 import { Link, useNavigate } from "react-router-dom";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 function VendorLogin() {
   const [phone, setPhone] = useState("");
@@ -32,12 +34,15 @@ function VendorLogin() {
     }
   }
 
-  const handleSubmit = (e) => {
+  
+  const handleSubmit =  (e) => {
     setLoading(true);
     e.preventDefault();
-    onCaptchaVerify();
+    const phoneNumber = "+" + phone;
+    console.log(phone)
+     axios.post('/api/vendors/check-vendor', {phone} ).then(() => {
+      onCaptchaVerify();
     const appVerifier = window.recaptchaVerifier;
-    const phoneNumber = "+1" + phone;
     signInWithPhoneNumber(auth, phoneNumber, appVerifier)
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
@@ -46,8 +51,15 @@ function VendorLogin() {
         setLoading(false);
       })
       .catch((error) => {
+        toast.error("Invalid Phone number")
+        setLoading(false)
         console.log(error);
       });
+    }).catch((error) => {
+      toast.error("Account not found!");
+      console.log("catch block", error)
+      setLoading(false)
+    })
   };
 
   function onOTPVerify() {
@@ -67,6 +79,7 @@ function VendorLogin() {
           });
       })
       .catch((err) => {
+        toast.error(err.code);
         console.log(err);
         setLoading(false);
       });
@@ -121,22 +134,16 @@ function VendorLogin() {
                       </button>
                     </div>
                   ) : (
-                    <div className="mt-6">
+                    <div className="mt-6 ">
 
-                      <div className="mt-2">
+                      <div className="mt-2 ">
                         <label className="block text-gray-700">
                           Phone Number
                         </label>
-                        <input
-                          onChange={(e) => setPhone(e.target.value)}
-                          type="text"
-                          name=""
-                          id=""
-                          placeholder="Enter Phone Number"
-                          className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
-                          autoComplete=""
-                          required
-                        />
+                        <div className="w-full overflow-hidden">
+                        <PhoneInput country={"in"} value={phone} onChange={setPhone}  />
+                        </div>
+                        
                       </div>
                       <button
                         onClick={handleSubmit}

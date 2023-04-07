@@ -1,18 +1,56 @@
+import { useEffect } from "react";
 import { useStepperContext } from "../../contexts/StepperContext";
 
-export default function Account() {
+export default function Account({SetValidate}) {
   const { userData, setUserData } = useStepperContext();
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
+    validateInputs();
+    console.log(userData)
   };
+
+  const validateInputs = () => { 
+    const errors = {};
+  if (userData.restaurantName.length === 0) {
+    errors.restaurantName = "Please enter a restaurant name";
+  }
+  if (!userData.liscenceNo) {
+    errors.liscenceNo = "Please enter a license number";
+  }
+
+  if (!userData.description) {
+    errors.description = "Please enter a description";
+  }
+
+  if (!userData.email) {
+    errors.email = "Please enter a restaurant email";
+  }
+
+  if (!userData.restaurantPhone) {
+    errors.restaurantPhone = "Please enter a Restaurant phone number";
+  }
+
+  
+  if (!userData.address) {
+    errors.address = "Please enter a address";
+  }
+
+  if (!userData.state) {
+    errors.state = "Please enter a state";
+  }
+  if (!userData.pincode) {
+    errors.pincode = "Please enter a pincode";
+  }
+  
+  SetValidate(Object.keys(errors).length === 0);
+  return errors;
+  }
 
   return (
     <div className="flex flex-col ">
-
-
-      <div class="flex flex-wrap -mx-3 mb-6">
+      
+      <div class="flex flex-wrap -mx-3 mb-4">
         <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <label
             class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -50,7 +88,7 @@ export default function Account() {
           {/* <p class="text-red-500 text-xs italic">Please fill out this field.</p> */}
         </div>
       </div>
-      <div class="flex flex-wrap -mx-3 mb-6">
+      <div class="flex flex-wrap -mx-3 mb-4">
         <div class="w-full px-3">
           <label
             class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -72,7 +110,7 @@ export default function Account() {
           </p>
         </div>
       </div>
-      <div class="flex flex-wrap -mx-3 mb-6">
+      <div class="flex flex-wrap -mx-3 mb-4">
         <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <label
             class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -110,8 +148,8 @@ export default function Account() {
           {/* <p class="text-red-500 text-xs italic">Please fill out this field.</p> */}
         </div>
       </div>
-      <div class="flex flex-wrap -mx-3 mb-6">
-        <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+      <div class="flex flex-wrap -mx-3">
+        <div class="w-full md:w-1/3 px-3  md:mb-0">
           <label
             class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
             for="grid-city"
@@ -128,7 +166,7 @@ export default function Account() {
             placeholder="Albuquerque"
           />
         </div>
-        <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+        <div class="w-full md:w-1/3 px-3  md:mb-0">
           <label
             class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
             for="grid-city"
@@ -145,7 +183,7 @@ export default function Account() {
             placeholder="Albuquerque"
           />
         </div>
-        <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+        <div class="w-full md:w-1/3 px-3 md:mb-0">
           <label
             class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
             for="grid-zip"
@@ -164,9 +202,6 @@ export default function Account() {
         </div>
       </div>
 
-      
-
-       
     </div>
   );
 }

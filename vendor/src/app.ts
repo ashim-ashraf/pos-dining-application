@@ -13,6 +13,7 @@ import { currentVendor, errorHandler , NotFoundError } from '@snackopedia/common
 import { tablebookingrouter } from './routes/create-menu';
 import { getVendorsRouter } from './routes/get-vendors';
 import { vendorRegistrationRouter } from './routes/vendor-registration';
+import { checkVendorRouter } from './routes/check-vendor';
 const cors = require('cors');
 
 const app = express();
@@ -29,6 +30,7 @@ app.use(
 app.use(signupRouter)
 app.use(signinRouter)
 app.use(currentVendor);
+app.use(checkVendorRouter)
 app.use(tablebookingrouter);
 app.use(vendorRegistrationRouter);
 app.use(signinRouter);

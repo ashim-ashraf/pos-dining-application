@@ -22,28 +22,39 @@ router.post(
       restaurantType,
       state,
       userId,
+      workingDays,
+      openingTime,
+      closingTime,
     } = req.body;
 
+    // console.log(workingDays.monday)
+    // console.log(JSON.stringify(workingDays));
+    // console.log(openingTime.hour)
+    // console.log(openingTime[0]);
+    // console.log(JSON.stringify(openingTime[0]));
+    // console.log(JSON.stringify(openingTime.hour));
+    
+    
+    
+    
     interface FileObject {
       location: string;
       // add other properties as needed
     }
-    
+
     const files = req.files;
-let image: { location: string }[] = [];
+    let image: { location: string }[] = [];
 
-if (Array.isArray(files)) {
-  image = files.map((file) => ({ location: (file as any).location }));
-} else if (files && typeof files === 'object') {
-  const keys = Object.keys(files);
-  image = keys.flatMap((key) => files[key].map((file) => ({ location: (file as any).location })));
-}
+    if (Array.isArray(files)) {
+      image = files.map((file) => ({ location: (file as any).location }));
+    } else if (files && typeof files === "object") {
+      const keys = Object.keys(files);
+      image = keys.flatMap((key) =>
+        files[key].map((file) => ({ location: (file as any).location }))
+      );
+    }
 
-console.log(image)
-    
-  
-   
-    
+    console.log(userId);
 
     const pincodeNumber = parseInt(pincode);
     const restaurantPhoneNumer = parseInt(restaurantPhone);
@@ -62,15 +73,18 @@ console.log(image)
           restaurantName,
           restaurantType,
           state,
-          image
+          image,
+          workingDays,
+          openingTime,
+          closingTime,
         },
       },
-      { new: true } 
+      { new: true }
     );
 
-    console.log(updatedDoc)
+    console.log(updatedDoc);
 
-    // res.status(201)
+    res.status(200).send(updatedDoc);
   }
 );
 

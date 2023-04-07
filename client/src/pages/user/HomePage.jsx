@@ -1,5 +1,5 @@
 import React from "react";
-import Category from "../../components/Category";
+import Category from "../../components/Categoryresource";
 import Food from "../../components/Food";
 import HeadlineCards from "../../components/HeadlineCards";
 import Hero from "../../components/Hero";
