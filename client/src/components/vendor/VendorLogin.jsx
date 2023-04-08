@@ -9,6 +9,7 @@ import { adminLogin } from "../../features/user/adminSlice";
 import { Link, useNavigate } from "react-router-dom";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { validatePhone } from "../validation/validation";
 
 function VendorLogin() {
   const [phone, setPhone] = useState("");
@@ -36,30 +37,46 @@ function VendorLogin() {
 
   
   const handleSubmit =  (e) => {
-    setLoading(true);
     e.preventDefault();
-    const phoneNumber = "+" + phone;
-    console.log(phone)
-     axios.post('/api/vendors/check-vendor', {phone} ).then(() => {
-      onCaptchaVerify();
-    const appVerifier = window.recaptchaVerifier;
-    signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-      .then((confirmationResult) => {
-        window.confirmationResult = confirmationResult;
-        toast.success("OTP sended successfully!");
-        setShowOTP(true);
-        setLoading(false);
-      })
-      .catch((error) => {
-        toast.error("Invalid Phone number")
-        setLoading(false)
-        console.log(error);
-      });
-    }).catch((error) => {
-      toast.error("Account not found!");
-      console.log("catch block", error)
-      setLoading(false)
-    })
+
+    try {
+      if (!phone) {
+        toast.error('Please fill in the credentials');
+      }else{
+        if(!validatePhone(phone)){
+          toast.error('enter valid phone')
+        }
+        if(validatePhone(phone))
+        { setLoading(true);
+          const phoneNumber = "+" + phone;
+          console.log(phone)
+           axios.post('/api/vendors/check-vendor', {phone} ).then(() => {
+            onCaptchaVerify();
+          const appVerifier = window.recaptchaVerifier;
+          signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+            .then((confirmationResult) => {
+              window.confirmationResult = confirmationResult;
+              toast.success("OTP sended successfully!");
+              setShowOTP(true);
+              setLoading(false);
+            })
+            .catch((error) => {
+              toast.error(error.code)
+              setLoading(false)
+              console.log(error);
+            });
+          }).catch((error) => {
+            toast.error("Account not found!");
+            console.log("catch block", error)
+            setLoading(false)
+          })}
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+
+   
   };
 
   function onOTPVerify() {
@@ -103,7 +120,7 @@ function VendorLogin() {
             <div className="items-center justify-between py-10 px-5 bg-white shadow-2xl rounded-lg mx-auto text-center">
               <div className="px-2 -mt-6">
                 <div className="text-center">
-                  <h1 className="font-normal text-3xl text-grey-800 font-medium leading-loose my-3 w-full">
+                  <h1 className="text-3xl text-grey-800 font-medium leading-loose my-3 w-full">
                     Login
                   </h1>
                   {showOTP ? (
@@ -153,7 +170,7 @@ function VendorLogin() {
                         {loading && (
                           <CgSpinner size={20} className="mt-1 animate-spin" />
                         )}
-                        <span>Signup</span>
+                        <span>Login</span>
                       </button>
                       <div className="text-grey-dark mt-6">
                         Do not have an accout? 

@@ -1,4 +1,8 @@
-.App {
+.blank-section {
+  background-color: white;
+}
+
+/* .App {
   text-align: center;
 }
 
@@ -35,6 +39,6 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
 
 

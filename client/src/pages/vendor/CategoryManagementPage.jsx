@@ -1,21 +1,15 @@
 import React from 'react'
-import AdminSidebar from '../../components/vendor/AdminSidebar'
-import AdminNavbar from '../../components/vendor/AdminNavbar'
-import Category from '../../components/vendor/Category'
+import VendorLayout from '../../components/vendor/VendorLayout'
+import MenuManagementForm from '../../components/vendor/MenuManagementForm'
 
 
 function CategoryManagementPage() {
   return (
-    <>
-    <AdminSidebar/>
-    <div className="relative md:ml-64 bg-blueGray-100">
-    <AdminNavbar/>
-      
-      <div className="px-4 pt-24 md:px-10 mx-auto w-full -m-24 ">
-      <Category/>
-      </div>
-    </div>
-  </>
+   <>
+   <VendorLayout>
+    <MenuManagementForm/>
+   </VendorLayout>
+   </>
   )
 }
 

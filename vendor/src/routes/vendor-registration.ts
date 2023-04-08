@@ -27,19 +27,9 @@ router.post(
       closingTime,
     } = req.body;
 
-    // console.log(workingDays.monday)
-    // console.log(JSON.stringify(workingDays));
-    // console.log(openingTime.hour)
-    // console.log(openingTime[0]);
-    // console.log(JSON.stringify(openingTime[0]));
-    // console.log(JSON.stringify(openingTime.hour));
-    
-    
-    
-    
+
     interface FileObject {
       location: string;
-      // add other properties as needed
     }
 
     const files = req.files;

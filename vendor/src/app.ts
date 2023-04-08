@@ -10,10 +10,11 @@ import { signoutRouter } from './routes/signout';
 import { signupRouter } from './routes/signup';
 
 import { currentVendor, errorHandler , NotFoundError } from '@snackopedia/common';
-import { tablebookingrouter } from './routes/create-menu';
+
 import { getVendorsRouter } from './routes/get-vendors';
 import { vendorRegistrationRouter } from './routes/vendor-registration';
 import { checkVendorRouter } from './routes/check-vendor';
+import { MenuRouter } from './routes/create-menu';
 const cors = require('cors');
 
 const app = express();
@@ -31,7 +32,7 @@ app.use(signupRouter)
 app.use(signinRouter)
 app.use(currentVendor);
 app.use(checkVendorRouter)
-app.use(tablebookingrouter);
+app.use(MenuRouter);
 app.use(vendorRegistrationRouter);
 app.use(signinRouter);
 app.use(signoutRouter);

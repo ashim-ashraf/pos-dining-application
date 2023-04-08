@@ -4,9 +4,6 @@ import { useStepperContext } from "../../contexts/StepperContext";
 export default function Details() {
   const { userData, setUserData } = useStepperContext();
   
-  
-
-
 
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;

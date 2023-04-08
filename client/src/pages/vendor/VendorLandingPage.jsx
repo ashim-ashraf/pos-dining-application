@@ -5,6 +5,7 @@ import AdminSidebar from "../../components/vendor/AdminSidebar";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import ListRestaurant from "../../components/vendor/ListRestaurant";
+import VendorLayout from "../../components/vendor/VendorLayout";
 
 
 function VendorLandingPage() {
@@ -24,14 +25,9 @@ function VendorLandingPage() {
 
   return (
     <>
-      <AdminSidebar />
-      <div className="relative md:ml-64 bg-blueGray-100">
-        <AdminNavbar />
-
-        <div className=" md:px-10 mx-auto w-full ">
-          {showRegistration ? (<ListRestaurant  Restaurant={Restaurant}  />) : (<VendorLanding />)}
-        </div>
-      </div>
+     <VendorLayout>
+     {showRegistration ? (<ListRestaurant  Restaurant={Restaurant}  />) : (<VendorLanding />)}
+     </VendorLayout>
     </>
   );
 }

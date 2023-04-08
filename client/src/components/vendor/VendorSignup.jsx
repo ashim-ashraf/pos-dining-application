@@ -9,6 +9,7 @@ import { adminLogin } from "../../features/user/adminSlice";
 import { Link, useNavigate } from "react-router-dom";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { isValidName, validatePhone } from "../validation/validation";
 
 function VendorSignup() {
   const [phone, setPhone] = useState("");
@@ -37,30 +38,52 @@ function VendorSignup() {
   }
 
   const handleSubmit = (e) => {
-    setLoading(true);
     e.preventDefault();
-    onCaptchaVerify();
-    const appVerifier = window.recaptchaVerifier;
-    const phoneNumber = "+" + phone;
-    axios.post('/api/vendors/check-vendor', {phone} ).then((res) => {
-      console.log("user exists", res)
-      setLoading(false)
-      toast.error("Phone number in use!");
-    }).catch(() => {
-      signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-      .then((confirmationResult) => {
-        window.confirmationResult = confirmationResult;
-        toast.success("OTP sended successfully!");
-        setShowOTP(true);
-        setLoading(false);
-        console.log(userName);
-      })
-      .catch((error) => {
-        setLoading(false)
-        toast.error("Invalid Phone number")
-        console.log(error);
-      });
-    })
+
+    try {
+      if (!phone || !userName) {
+        toast.error('Please fill in the credentials');
+      }else{
+        if(!validatePhone(phone)){
+          toast.error('Enter Valid Phone')
+        }
+        if(!isValidName(userName)){
+          toast.error("Enter Valid Name")
+        }
+        if(validatePhone(phone) && isValidName(userName))
+        {
+          setLoading(true);
+          onCaptchaVerify();
+          const appVerifier = window.recaptchaVerifier;
+          const phoneNumber = "+" + phone;
+          axios.post('/api/vendors/check-vendor', {phone} ).then((res) => {
+            console.log("user exists", res)
+            setLoading(false)
+            toast.error("Phone number in use!");
+          }).catch(() => {
+            signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+            .then((confirmationResult) => {
+              window.confirmationResult = confirmationResult;
+              toast.success("OTP sended successfully!");
+              setShowOTP(true);
+              setLoading(false);
+              console.log(userName);
+            })
+            .catch((error) => {
+              setLoading(false)
+              toast.error("Invalid Phone number")
+              console.log(error);
+            });
+          })
+        }
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    }
+
+
+   
   };
 
   function onOTPVerify() {
