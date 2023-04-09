@@ -15,6 +15,7 @@ import { getVendorsRouter } from './routes/get-vendors';
 import { vendorRegistrationRouter } from './routes/vendor-registration';
 import { checkVendorRouter } from './routes/check-vendor';
 import { MenuRouter } from './routes/create-menu';
+import { publishVendorRouter } from './routes/publish-vendor';
 const cors = require('cors');
 
 const app = express();
@@ -37,6 +38,7 @@ app.use(vendorRegistrationRouter);
 app.use(signinRouter);
 app.use(signoutRouter);
 app.use(getVendorsRouter);
+app.use(publishVendorRouter)
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();

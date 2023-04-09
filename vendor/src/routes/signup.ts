@@ -47,8 +47,15 @@ router.post(
       };
 
     }
+
+    const vendorDetails = {
+      vendorStatus: newVendor.vendorStatus,
+      name: newVendor.name,
+      phone: newVendor.phone,
+      id:newVendor._id,
+    };
       
-    res.status(201).send(existingVendor);
+    res.status(201).send(vendorDetails);
   }
 );
 

@@ -22,17 +22,17 @@ function ListRestaurant({Restaurant}) {
             <h3 className="text-xl font-semibold leading-normal  text-blueGray-700 mb-2">
               {Restaurant.restaurantName}
             </h3>
-            <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
+            <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold ">
               <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>{" "}
               {Restaurant.email}
             </div>
-            <div className="mb-2 text-blueGray-600 mt-10">
+            <div className="mb-2 text-blueGray-600 mt-2">
               <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
-              {`${Restaurant.restaurantType}, ${Restaurant.liscenceNo}`}
+              {`${Restaurant.restaurantType}`}
             </div>
             <div className="mb-2 text-blueGray-600">
               <i className="fas fa-university mr-2 text-lg text-blueGray-400"></i>
-              University of Computer Science
+              Liscence Number : {`${Restaurant.liscenceNo}`}
             </div>
           </div>
           <div className="mt-10 py-10 border-t border-blueGray-200 text-center">

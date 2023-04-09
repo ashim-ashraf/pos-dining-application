@@ -152,6 +152,14 @@ function MenuManagementForm() {
     }
   };
 
+  const  publishRestaurant = () => {
+    axios.get(`/api/vendors/publish-vendors/${userId}`).then(() => {
+      toast.success("vendor published")
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
   return (
     <>
       {menuManagement ? (
@@ -350,7 +358,13 @@ function MenuManagementForm() {
       ) : (
         <section>
           <div className="flex justify-between items-center border-b-2 pb-2 mb-4">
-            <div className="ml-auto">
+            <div className="flex flex-row ml-auto">
+              <button
+                onClick={publishRestaurant}
+                className="bg-emerald-700 hover:bg-green-600 text-white font-bold py-2 mx-6 mt-2 rounded w-full"
+              >
+                Publish Restaurant
+              </button>
               <button
                 onClick={(e) => {
                   setMenuManagement(true);
@@ -363,24 +377,11 @@ function MenuManagementForm() {
           </div>
           <div className="flex flex-col ">
             <div class="flex flex-wrap -mx-3 mb-4">
-              {/* {category.map((item, index) => (
-                <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0 bg-emerald-700">
-                  <div className="text-sm text-bol">{item}</div>
-                  <ul>
-                  {menu
-              .filter((item) => menu.category === category)
-              .map((item) => (
-                <li key={item}>{item.itemName}</li>
-              ))}
-                  </ul>
-                </div>
-              ))}   */}
-
               {category.map((category) => (
-                <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0" key={category}>
-                    <hr className="border-2"></hr>
-                    <h2 className="text-sm text-bold bg-menugreen py-2 mx-4 text-center">{category}</h2>
-                    <ul>
+                <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0 mt-5 uppercase" key={category}>
+                    
+                    <h2 className="text-sm font-bold bg-menugreen  py-2 text-center">{category}</h2>
+                    <ul className="bg-listgreen px-2 text-sm py-2">
                       {menu
                         .filter((item) => item.category === category)
                         .map((item, index) => (
@@ -389,7 +390,6 @@ function MenuManagementForm() {
                           </li>
                         ))}
                     </ul>
-                  
                 </div>
               ))}
             </div>

@@ -4,12 +4,14 @@ import { Password } from "../services/password";
 // An interface that describes the properties
 // that are requried to create a new User
 interface VendorAttrs {
+  id?: string;
   name?: string;
   restaurantName?: string;
   description?: string;
   restaurantAddress?: object;
   email?: string;
   phone?: number;
+  vendorStatus?: boolean;
   liscenceNo?: number;
   image?: [];
   restaurantType?: string;
@@ -21,13 +23,14 @@ interface VendorAttrs {
 // An interface that describes the properties
 // that a User Model has
 interface UserModel extends mongoose.Model<VendorDoc> {
+  save(): unknown;
   build(attrs: VendorAttrs): VendorDoc;
 }
 
 // An interface that describes the properties
 // that a User Document has
 export interface VendorDoc extends mongoose.Document {
-  _id:string;
+  id: string;
   name: string;
   restaurantName: string;
   description: string;
@@ -45,6 +48,7 @@ export interface VendorDoc extends mongoose.Document {
 
 const vendorSchema = new mongoose.Schema(
   {
+    vendorId: String,
     name: {
       type: String,
       trim: true,

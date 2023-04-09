@@ -1,10 +1,10 @@
 import { BadRequestError, requireVendorAuth } from "@snackopedia/common";
 import express from "express";
-import { TableBookedPublisher } from "../events/publishers/table-booked-publisher";
-import { natsWrapper } from "../nats-wrapper";
 import { Vendor } from "../models/vendor";
 import { UpdateQuery } from 'mongoose';
 import { VendorDoc } from "../models/vendor"; 
+import { VendorPublisher } from "../events/publishers/vendor-publisher";
+import { natsWrapper } from "../nats-wrapper";
 
 const upload = require("../middleware/upload");
 const router = express.Router();

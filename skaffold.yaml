@@ -32,12 +32,4 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: pos/table
-      context: table
-      docker:
-        dockerfile: Dockerfile
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
     

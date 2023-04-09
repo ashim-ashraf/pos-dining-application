@@ -31,9 +31,9 @@ function AdminNavbar() {
     }
 
     return (
-    <nav className="bg-emerald-800 py-4">
+    <nav className="bg-emerald-700 py-4">
   <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
-    <div className="text-white font-bold text-lg">Dashboard</div>
+    <div className="text-white font-bold text-lg"></div>
     <div className="flex items-center">
       <div className="relative ">
       <button className="text-white font-medium mr-4" onClick={dropdown}>{admin}</button>

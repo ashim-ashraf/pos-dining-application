@@ -9,16 +9,18 @@ import VendorLayout from "../../components/vendor/VendorLayout";
 
 
 function VendorLandingPage() {
-  const [showRegistration, setShowRegistration] = useState("false");
+  const [showRegistration, setShowRegistration] = useState(false);
   const [Restaurant, setRestaurant] = useState('')
   const vendorId = useSelector((state) => state.admin.admin.id);
 
   useEffect(() => {
     console.log(vendorId);
-    axios.get("/api/vendors/listed-restaurant", vendorId).then((res) => {
+    axios.get(`/api/vendors/listed-restaurant/${vendorId}`).then((res) => {
       console.log(res.data)
       setRestaurant(res.data)
       setShowRegistration(true);
+    }).catch(() => {
+      console.log("restaurant not listed")
     });
   }, [])
   

@@ -74,7 +74,11 @@ router.post(
 
     console.log(updatedDoc);
 
-    res.status(200).send(updatedDoc);
+    if(updatedDoc?.restaurantName){
+      res.status(200).send(updatedDoc);
+    }else {
+      res.status(400).send({success:false})
+    }
   }
 );
 

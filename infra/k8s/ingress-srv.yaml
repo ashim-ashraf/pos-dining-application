@@ -24,13 +24,6 @@ spec:
                 name: vendor-srv
                 port:
                   number: 3000
-          - path: /api/tables/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: table-srv
-                port:
-                  number: 3000
           - path: /?(.*)
             pathType: Prefix
             backend:

@@ -24,15 +24,6 @@ router.post('/api/vendors/check-vendor' , async (req,res) => {
 
 })
 
-router.get('/api/vendors/listed-restaurant' , async (req,res) => {
-    const { userId } = req.body;
-    console.log(userId)
-    const vendorDetails = await Vendor.findOne({ userId})
-    if(vendorDetails?.vendorStatus){
-        res.status(200).send(vendorDetails)
-    } else {
-        res.status(400);
-    }
-})
+
 
 export {router as checkVendorRouter}

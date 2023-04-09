@@ -81,7 +81,7 @@ export default function Final() {
         <div className="text-lg font-semibold text-gray-500">
           Your Request has been Submitted. Awaiting Approval
         </div>
-        <a className="mt-10" href="/vendor/home">
+        <a className="mt-10" href="/vendors/home">
           <button className="h-10 px-5 text-green-700 transition-colors duration-150 border border-gray-300 rounded-lg focus:shadow-outline hover:bg-green-500 hover:text-green-100 on">
             Close
           </button>
@@ -95,9 +95,8 @@ export default function Final() {
         <div className="text-lg font-semibold text-gray-500">
           Your Request is beeing submitted
         </div>
-        <a className="mt-10" href="/vendor/home">
-          
-        </a></>)}
+        
+        </>)}
         
       </div>
     </div>

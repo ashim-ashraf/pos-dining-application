@@ -11,7 +11,7 @@ import Final from "../steps/Final";
 
 function  RegistrationForm() {
   const [currentStep, setCurrentStep] = useState(1);
-  const [validate,SetValidate]=useState(false)
+  const [validate,SetValidate]=useState('')
   const steps = [
     "Restaurant Info",
     "Type and Timing",

@@ -1,6 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 
 export const validatePhone = (phone) => {
+  if(!phone){
+    return false
+  }
     const regex = /([0-9\s\-]{7,})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/;
     return regex.test(phone);
   };
@@ -15,6 +18,9 @@ export const validatePhone = (phone) => {
   }
   
   export const isValidEmail=(email)=> {
+    if(!email){
+      return false
+    }
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
   }
@@ -58,6 +64,9 @@ export const validatePhone = (phone) => {
   }
   
   export function validatePassword(password) {
+    if(!password){
+      return false
+    }
     const hasUppercase = /[A-Z]/.test(password);
     const hasNumber = /\d/.test(password);
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);

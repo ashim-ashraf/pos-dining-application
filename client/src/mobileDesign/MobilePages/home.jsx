@@ -1,68 +1,80 @@
-import React from 'react';
-import { App, Page, Navbar, Block, ListItem, BlockTitle, List } from 'konsta/react';
-
+import React, { useEffect, useState } from "react";
+import {
+  App,
+  Page,
+  ListItem,
+  BlockTitle,
+  List,
+  TabbarLink,
+  Icon,
+  Tabbar,
+} from "konsta/react";
+import {  useNavigate } from "react-router-dom";
+import axios from "axios";
+import MobileNav from "./MobileNav";
+import MobileNavigation from "./MobileNavigation";
 export default function MyApp() {
-  
+
+
+  const [restaurants, setRestaurants] = useState([]);
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    axios.get("/api/vendors/get-vendors").then((res) => {
+      setRestaurants(res.data);
+    }).catch((err) => {
+      console.log(err)
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log(restaurants);
+  }, [restaurants]);
+
+
+  const handleclick = (restaurantId) => {
+    navigate(`/restaurant/${restaurantId}`)
+  };
+
   return (
     <App theme="ios">
-      <Page>
-        <Navbar title="Yummers" />
+      <Page className="bg-slate-200">
+      <MobileNav/>
+
+        <div class="mx-auto w-4/5">
+          <img
+            class="mt-8 h-32 w-full rounded-lg  mx-auto object-cover shadow-2xl"
+            src="https://images.unsplash.com/photo-1550461716-dbf266b2a8a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=525&q=80"
+            alt="food"
+          ></img>
+        </div>
+
         <BlockTitle>Restaurants</BlockTitle>
-      <List strongIos outlineIos>
 
-        <ListItem
-          link
-          chevronMaterial={false}
-          title="Yellow Submarine"
-          after="$15"
-          subtitle="Beatles"
-          text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sagittis tellus ut turpis condimentum, ut dignissim lacus tincidunt. Cras dolor metus, ultrices condimentum sodales sit amet, pharetra sodales eros. Phasellus vel felis tellus. Mauris rutrum ligula nec dapibus feugiat. In vel dui laoreet, commodo augue id, pulvinar lacus."
-          media={
-            <img
-              className="ios:rounded-lg material:rounded-full ios:w-20 material:w-10"
-              src="https://cdn.framework7.io/placeholder/people-160x160-1.jpg"
-              width="80"
-              alt="demo"
+        
+          {restaurants.map((restaurants) => (
+            <List strongIos outlineIos className="-mt-2">
+            <ListItem 
+              link
+              chevronMaterial={false}
+              title={restaurants.restaurantName}
+              // after="$22"
+              subtitle={restaurants.restaurantType}
+              text={restaurants.description}
+              media={
+                <img
+                  className="ios:rounded-lg material:rounded-full ios:w-20 material:w-10"
+                  src={restaurants.image[1].location}
+                  width="80"
+                  alt="demo"
+                />
+              }
+              onClick={() => handleclick(restaurants.id)}
             />
-          }
-        />
-        <ListItem
-          link
-          chevronMaterial={false}
-          title="Don't Stop Me Now"
-          after="$22"
-          subtitle="Queen"
-          text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sagittis tellus ut turpis condimentum, ut dignissim lacus tincidunt. Cras dolor metus, ultrices condimentum sodales sit amet, pharetra sodales eros. Phasellus vel felis tellus. Mauris rutrum ligula nec dapibus feugiat. In vel dui laoreet, commodo augue id, pulvinar lacus."
-          media={
-            <img
-              className="ios:rounded-lg material:rounded-full ios:w-20 material:w-10"
-              src="https://cdn.framework7.io/placeholder/people-160x160-2.jpg"
-              width="80"
-              alt="demo"
-            />
-          }
-        />
-        <ListItem
-          link
-          chevronMaterial={false}
-          title="Billie Jean"
-          after="$16"
-          subtitle="Michael Jackson"
-          text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sagittis tellus ut turpis condimentum, ut dignissim lacus tincidunt. Cras dolor metus, ultrices condimentum sodales sit amet, pharetra sodales eros. Phasellus vel felis tellus. Mauris rutrum ligula nec dapibus feugiat. In vel dui laoreet, commodo augue id, pulvinar lacus."
-          media={
-            <img
-              className="ios:rounded-lg material:rounded-full ios:w-20 material:w-10"
-              src="https://cdn.framework7.io/placeholder/people-160x160-3.jpg"
-              width="80"
-              alt="demo"
-            />
-          }
-        />
-      </List>
-
-        <Block strong>Hello world!</Block>
+            </List>
+          ))}
+       <MobileNavigation/>
       </Page>
     </App>
-
   );
 }

@@ -1,5 +1,8 @@
 import { useEffect } from "react";
 import { useStepperContext } from "../../contexts/StepperContext";
+import { Toaster, toast } from "react-hot-toast";
+import { isValidEmail, isValidName, validateDescription } from "../validation/validation";
+import { validatePhone } from "../validation/validation";
 
 export default function Account({SetValidate}) {
   const { userData, setUserData } = useStepperContext();
@@ -11,45 +14,49 @@ export default function Account({SetValidate}) {
   };
 
   const validateInputs = () => { 
-    const errors = {};
-  if (userData.restaurantName.length === 0) {
-    errors.restaurantName = "Please enter a restaurant name";
+    let errors={};
+  if (!isValidName(userData.restaurantName)) {
+    errors.restaurantName = "Please enter a restaurant name"
   }
-  if (!userData.liscenceNo) {
-    errors.liscenceNo = "Please enter a license number";
+  
+  if(!userData.liscenceNo || userData.liscenceNo.length<6){
+    errors.liscenceNo = "Please enter a valid license number";
   }
 
-  if (!userData.description) {
+  if (!validateDescription(userData.description) ) {
     errors.description = "Please enter a description";
   }
 
-  if (!userData.email) {
+  if (!isValidEmail( userData.email)) {
     errors.email = "Please enter a restaurant email";
   }
 
-  if (!userData.restaurantPhone) {
+  if (!validatePhone(userData.restaurantPhone)) {
     errors.restaurantPhone = "Please enter a Restaurant phone number";
   }
 
   
-  if (!userData.address) {
+  if (!isValidName(userData.address)) {
     errors.address = "Please enter a address";
   }
 
-  if (!userData.state) {
+  if (!isValidName(userData.state)) {
     errors.state = "Please enter a state";
   }
   if (!userData.pincode) {
     errors.pincode = "Please enter a pincode";
   }
+  if (userData.pincode<6 || userData.pincode>6) {
+    errors.pincode = "Please enter a valid pincode";
+  }
   
-  SetValidate(Object.keys(errors).length === 0);
+  SetValidate(errors);
   return errors;
   }
 
   return (
     <div className="flex flex-col ">
-      
+      <Toaster toastOptions={{ duration: 4000 }} />
       <div class="flex flex-wrap -mx-3 mb-4">
         <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <label
@@ -83,7 +90,7 @@ export default function Account({SetValidate}) {
             onChange={handleChange}
             value={userData["liscenceNo"] || ""}
             type="text"
-            placeholder="FSSAI2324"
+            placeholder="862342"
           />
           {/* <p class="text-red-500 text-xs italic">Please fill out this field.</p> */}
         </div>

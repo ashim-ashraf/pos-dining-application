@@ -18,6 +18,7 @@ import VendorLoginPage from "./pages/vendor/VendorLoginPage";
 import Category from "./components/Categoryresource";
 import CategoryManagementPage from "./pages/vendor/CategoryManagementPage";
 import MyApp from "./mobileDesign/MobilePages/home";
+import RestaurantDetailPage from "./mobileDesign/MobilePages/RestaurantDetailPage";
 
 function App() {
   return (
@@ -32,8 +33,12 @@ function App() {
 
           <Route element={<CheckLogin />}>
             <Route path="/vendors" element={<VendorPage />} />
-            <Route path="/home" element={<MyApp />} />
+            <Route path="/home" element={<HomePage />} />
+           
           </Route>
+
+          <Route path="/mobile/home" element={<MyApp />} />
+            <Route path="/restaurant/:restaurantId" element={<RestaurantDetailPage />} />
 
           <Route element={<AdminIsLogged />}>
             <Route path="/vendors/signup" element={<VendorSignupPage />} />
