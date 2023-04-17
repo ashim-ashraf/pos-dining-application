@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import VendorLanding from "../../components/vendor/VendorLanding";
-import AdminNavbar from "../../components/vendor/AdminNavbar";
-import AdminSidebar from "../../components/vendor/AdminSidebar";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import ListRestaurant from "../../components/vendor/ListRestaurant";
-import VendorLayout from "../../components/vendor/VendorLayout";
+
+
+import VendorLanding from "../../components/Vendor-Components/VendorLanding";
+import ListRestaurant from "../../components/Vendor-Components/ListRestaurant";
+import VendorLayout from "../../components/Vendor-Components/VendorLayout";
+
 
 
 function VendorLandingPage() {
   const [showRegistration, setShowRegistration] = useState(false);
   const [Restaurant, setRestaurant] = useState('')
-  const vendorId = useSelector((state) => state.admin.admin.id);
+  const vendorId = useSelector((state) => state.vendor.vendor.id);
 
   useEffect(() => {
     console.log(vendorId);

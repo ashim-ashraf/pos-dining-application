@@ -1,55 +1,64 @@
-import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import UserLoginPage from "./pages/user/UserLoginPage";
-import UserSignupPage from "./pages/user/UserSignupPage";
-import LandingPage from "./pages/user/LandingPage";
-import HomePage from "./pages/user/HomePage";
+import "./App.css";
+import Homepage from "./pages/user/home";
+import RestaurantDetailPage from "./pages/user/RestaurantDetailPage";
 import {
   AdminCheckLogin,
   AdminIsLogged,
-  CheckLogin,
-  IsLogged,
+  VendorCheckLogin,
+  VendorIsLogged,
 } from "./auth/auth";
-import VendorPage from "./pages/user/VendorPage";
-import VendorRegistrationPage from "./pages/vendor/VendorRegistrationPage";
-import VendorLandingPage from "./pages/vendor/VendorLandingPage";
 import VendorSignupPage from "./pages/vendor/VendorSignupPage";
 import VendorLoginPage from "./pages/vendor/VendorLoginPage";
-import Category from "./components/Categoryresource";
 import CategoryManagementPage from "./pages/vendor/CategoryManagementPage";
-import MyApp from "./mobileDesign/MobilePages/home";
-import RestaurantDetailPage from "./mobileDesign/MobilePages/RestaurantDetailPage";
+import VendorRegistrationPage from "./pages/vendor/VendorRegistrationPage";
+import VendorLandingPage from "./pages/vendor/VendorLandingPage";
+import NotFoundPage from "./pages/user/NotFoundPage";
+import AdminLoginPage from "./pages/admin/AdminLoginPage";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminTableManagement from "./pages/admin/AdminTableManagement";
+
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import AdminVendorManagement from "./pages/admin/AdminVendorManagement";
+import VendorTableManagement from "./pages/vendor/VendorTableManagement";
 
 function App() {
   return (
     <div className="App">
       <Router>
         <Routes>
-          <Route element={<IsLogged />}>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/signup" element={<UserSignupPage />} />
-            <Route path="/login" element={<UserLoginPage />} />
-          </Route>
 
-          <Route element={<CheckLogin />}>
-            <Route path="/vendors" element={<VendorPage />} />
-            <Route path="/home" element={<HomePage />} />
-           
-          </Route>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/restaurant/:restaurantId" element={<RestaurantDetailPage />} />
 
-          <Route path="/mobile/home" element={<MyApp />} />
-            <Route path="/restaurant/:restaurantId" element={<RestaurantDetailPage />} />
-
-          <Route element={<AdminIsLogged />}>
+        <Route element={<VendorIsLogged/>}>
             <Route path="/vendors/signup" element={<VendorSignupPage />} />
             <Route path="/vendors/login" element={<VendorLoginPage />} />
           </Route>
 
-          <Route element={<AdminCheckLogin />}>
+          <Route element={<VendorCheckLogin/>}>
             <Route path="/vendors/menu" element={<CategoryManagementPage />} />
             <Route path="/vendors/registration"element={<VendorRegistrationPage />}/>
             <Route path="/vendors/home" element={<VendorLandingPage />} />
+            <Route path="/vendors/table-management" element={<VendorTableManagement/>} />
+
           </Route>
+
+
+          {/* admin routes */}
+
+          
+          <Route element={<AdminIsLogged />}>
+            <Route path="/admin/login" element={< AdminLoginPage />} />
+        </Route>
+
+          <Route element={<AdminCheckLogin />}>
+           <Route path="/admin/dashboard" element={<AdminDashboard />}/>
+           <Route path="/admin/table-management" element={<AdminTableManagement />}/>
+           <Route path="/admin/vendor-management" element={<AdminVendorManagement />}/>
+          </Route>
+
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>
     </div>

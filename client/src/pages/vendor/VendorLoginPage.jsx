@@ -1,5 +1,5 @@
 import React from 'react'
-import VendorLogin from '../../components/vendor/VendorLogin'
+import VendorLogin from '../../components/Vendor-Components/VendorLogin'
 
 function VendorLoginPage() {
   return (

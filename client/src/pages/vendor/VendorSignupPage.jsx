@@ -1,5 +1,6 @@
 import React from 'react'
-import VendorSignup from '../../components/vendor/VendorSignup'
+import VendorSignup from '../../components/Vendor-Components/VendorSignup'
+
 
 function VendorSignupPage() {
   return (

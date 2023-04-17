@@ -1,6 +1,6 @@
 import React from 'react'
-import VendorLayout from '../../components/vendor/VendorLayout'
-import MenuManagementForm from '../../components/vendor/MenuManagementForm'
+import VendorLayout from '../../components/Vendor-Components/VendorLayout'
+import MenuManagementForm from '../../components/Vendor-Components/MenuManagementForm'
 
 
 function CategoryManagementPage() {

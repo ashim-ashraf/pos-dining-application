@@ -2,6 +2,10 @@
   background-color: white;
 }
 
+body {
+  overflow: hidden;
+}
+
 /* .App {
   text-align: center;
 }
