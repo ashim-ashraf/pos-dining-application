@@ -95,6 +95,14 @@ export default function AdminSidebar() {
             <Link to="/admin/vendor-management" className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1  no-underline">
               Vendor Management
             </Link>
+
+            
+            {/* Divider */}
+            <hr className="my-4 md:min-w-full" />
+            {/* Heading */}
+            <Link to="/admin/banner-management" className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1  no-underline">
+              Banner Management
+            </Link>
             
           </div>
         </div>

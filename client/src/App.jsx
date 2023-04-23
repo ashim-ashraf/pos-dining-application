@@ -21,6 +21,8 @@ import AdminTableManagement from "./pages/admin/AdminTableManagement";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import AdminVendorManagement from "./pages/admin/AdminVendorManagement";
 import VendorTableManagement from "./pages/vendor/VendorTableManagement";
+import AdminBannerManagement from "./pages/admin/AdminBannerManagement";
+import Cart from "./pages/user/Cart";
 
 function App() {
   return (
@@ -30,6 +32,7 @@ function App() {
 
         <Route path="/" element={<Homepage />} />
         <Route path="/restaurant/:restaurantId" element={<RestaurantDetailPage />} />
+        <Route path="/cart" element={<Cart />} />
 
         <Route element={<VendorIsLogged/>}>
             <Route path="/vendors/signup" element={<VendorSignupPage />} />
@@ -41,7 +44,6 @@ function App() {
             <Route path="/vendors/registration"element={<VendorRegistrationPage />}/>
             <Route path="/vendors/home" element={<VendorLandingPage />} />
             <Route path="/vendors/table-management" element={<VendorTableManagement/>} />
-
           </Route>
 
 
@@ -56,6 +58,7 @@ function App() {
            <Route path="/admin/dashboard" element={<AdminDashboard />}/>
            <Route path="/admin/table-management" element={<AdminTableManagement />}/>
            <Route path="/admin/vendor-management" element={<AdminVendorManagement />}/>
+           <Route path="/admin/banner-management" element={<AdminBannerManagement />}/>
           </Route>
 
           <Route path="*" element={<NotFoundPage />} />

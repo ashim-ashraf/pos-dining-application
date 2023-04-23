@@ -9,23 +9,10 @@ export default function Payment() {
 
   function handleImageChange(event) {
     const { name } = event.target;
-    const files = Array.from(event.target.files)
-    setUserData({ ...userData, [name]: files });
-    const selectedFiles = Array.from(event.target.files);
-    const images = [];
-    selectedFiles.forEach((file) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        images.push(reader.result);
-        if (images.length === selectedFiles.length) {
-          setSelectedImages(images);
-        }
-      };
-    });
+    const file = event.target.files[0];
+    setUserData({ ...userData, [name]: file });
+    setSelectedImages(file);
   }
-
-
 
 // function handledrop(e) {
 //   e.preventDefault()

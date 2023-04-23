@@ -60,7 +60,7 @@ function AdminTable() {
 
   const cancelDelete = () => {
     setDeletingTableId(null);
-    setShowModal(false);
+    setShowModal(false); 
   };
 
   return (

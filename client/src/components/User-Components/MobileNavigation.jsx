@@ -17,7 +17,7 @@ function MobileNavigation() {
   >
     <TabbarLink
       active={activeTab === 'tab-1'}
-      onClick={() => navigate("/mobile/home")}
+      onClick={() => navigate("/")}
       icon={
         isTabbarIcons && (
           <Icon
@@ -43,7 +43,7 @@ function MobileNavigation() {
     />
     <TabbarLink
       active={activeTab === 'tab-3'}
-      onClick={() => setActiveTab('tab-3')}
+      onClick={() => navigate("/cart")}
       icon={
         isTabbarIcons && (
           <Icon

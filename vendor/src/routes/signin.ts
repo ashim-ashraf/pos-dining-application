@@ -14,18 +14,14 @@ router.post(
   async (req: Request, res: Response) => {
     
     const { user } = req.body;
-
     console.log(user.phoneNumber);
 
-
     let phone = user.phoneNumber;
-
     let existingVendor = await Vendor.findOne({ phone });
     if (!existingVendor) {
       throw new BadRequestError("User not found")
     }
 
-      
     // Generate JWT
 
       const vendorJwt = jwt.sign(
@@ -37,7 +33,7 @@ router.post(
       );
 
       req.session = {
-        jwt: vendorJwt,
+        Vendorjwt: vendorJwt,
       };
 
       res.status(201).send(existingVendor);

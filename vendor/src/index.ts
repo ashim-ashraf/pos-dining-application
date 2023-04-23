@@ -7,6 +7,15 @@ const start = async () => {
   if (!process.env.JWT_VENDOR_KEY) {
     throw new Error("JWT_VENDOR_KEY must be defined");
   }
+  if (!process.env.JWT_ADMIN_KEY) {
+    throw new Error("JWT_ADMIN_KEY must be defined");
+  }
+  if (!process.env.ADMIN_PASSWORD) {
+    throw new Error("ADMIN_PASSWORD must be defined");
+  }
+  if (!process.env.ADMIN_USERNAME) {
+    throw new Error("ADMIN_USERNAME must be defined");
+  }
   if (!process.env.MONGO_URI) {
     throw new Error("MONGO_URI must be defined");
   }
@@ -40,6 +49,7 @@ const start = async () => {
       dbName:'pos-vendor',
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useFindAndModify: false 
     });
     console.log("Connected to MongoDb");
   } catch (err) {

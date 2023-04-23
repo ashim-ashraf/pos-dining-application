@@ -10,42 +10,23 @@ export default function Final() {
 
   const onSubmit = async () => {
     userData.userId = admin.admin.id; 
-    console.log("userid" , userData.userId);
-    console.log(userData);
-    const formData = new FormData();
+    const formData = new FormData();  
     
-    console.log("here",userData)
     for (const key in userData) {
-      if (key === 'image') {
-        console.log("if", key);
-        let file = userData.image;
-        for(let i=0; i<file.length; i++){
-          formData.append("image", file[i])
-        }
-      } else {
-        console.log(key)
-        formData.append(key, userData[key]);
-      }
+    formData.append(key, userData[key]);
     }
     
-    console.log("formdata122", formData);
-
     axios.post("/api/vendors/registration", formData)
       .then((response) => {
         setSuccess(true)
-        console.log("then", response);
-        
       })
       .catch(async (err) => {
         console.log(err.response.data.errors);
-          
       });
   };
 
   useEffect(() => {
-   console.log(userData)
-   onSubmit()
-   
+   onSubmit()   
   }, [])
   
   return (

@@ -34,10 +34,11 @@ export const validatePhone = (phone) => {
   }
 
   export function validatePrice(price) {
-    if(!price){
-        return false
+    if (!price) {
+      return false;
     }
-    return price.trim().length > 0 && parseFloat(price) > 0;
+    const parsedPrice = typeof price === 'string' ? parseFloat(price) : price;
+    return !isNaN(parsedPrice) && parsedPrice > 0;
   }
 
   export function validateDropdown(value) {
@@ -48,9 +49,9 @@ export const validatePhone = (phone) => {
   }
 
   export function validateImage(images) {
-    if (!images || images.length === 0) {
-        return false;
-      }
+      if (!images || images.length === 0) {
+          return true;
+        }
     
       const allowedTypes = ["image/jpeg", "image/jpg", "image/webp"];
     

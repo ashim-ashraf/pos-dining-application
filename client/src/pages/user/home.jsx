@@ -9,7 +9,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import MobileNav from "./MobileNav";
-import MobileNavigation from "./MobileNavigation";
+import MobileNavigation from "../../components/User-Components/MobileNavigation";
+import Banner from "./Banner";
 
 
 export default function Homepage() {
@@ -33,16 +34,10 @@ export default function Homepage() {
 
   return (
     <App theme="ios">
-      <Page className="bg-slate-200">
+      <Page className="bg-white">
         <MobileNav />
 
-        <div className="mx-auto w-4/5">
-          <img
-            className="mt-8 h-32 w-full rounded-lg  mx-auto object-cover shadow-2xl"
-            src="https://images.unsplash.com/photo-1550461716-dbf266b2a8a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=525&q=80"
-            alt="food"
-          ></img>
-        </div>
+        <Banner/>
 
         <BlockTitle>Restaurants</BlockTitle>
 
@@ -59,7 +54,7 @@ export default function Homepage() {
               media={
                 <img
                   className="ios:rounded-lg material:rounded-full ios:w-20 material:w-10"
-                  src={restaurants?.image[1]?.location}
+                  src={restaurants?.image}
                   width="80"
                   alt="demo"
                 />

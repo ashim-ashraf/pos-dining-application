@@ -1,10 +1,7 @@
 import { BadRequestError, requireVendorAuth } from "@snackopedia/common";
 import express from "express";
 import { Vendor } from "../models/vendor";
-import { UpdateQuery } from 'mongoose';
-import { VendorDoc } from "../models/vendor"; 
-import { VendorPublisher } from "../events/publishers/vendor-publisher";
-import { natsWrapper } from "../nats-wrapper";
+import mongoose from "mongoose";
 
 const upload = require("../middleware/upload");
 const router = express.Router();
@@ -69,10 +66,10 @@ router.delete(
 
 router.post(
   "/api/vendors/create-menuItem",
-  upload.array("image"),
+  upload.single("image"),
   async (req, res) => {
-
     const {
+      _id,
       itemName,
       retailPrice,
       description,
@@ -80,48 +77,46 @@ router.post(
       category,
       userId,
     } = req.body;
-
-    interface FileObject {
+    
+    interface FileObject extends Express.Multer.File {
       location: string;
     }
-
-    const files = req.files;
-    let image: { location: string }[] = [];
-    if (Array.isArray(files)) {
-      image = files.map((file) => ({ location: (file as any).location }));
-    } else if (files && typeof files === "object") {
-      const keys = Object.keys(files);
-      image = keys.flatMap((key) =>
-        files[key].map((file) => ({ location: (file as any).location }))
-      );
-    }
-
-    console.log(typeof retailPrice, typeof sellingPrice, typeof category,  image,typeof itemName)
-
-
-
-    const newMenuItem  = {
+    
+      const file = req.file as FileObject;
+      const image : string = file.location;
+    
+    const newMenuItem = {
+      _id: _id ? mongoose.Types.ObjectId(_id) : new mongoose.Types.ObjectId(),
       itemName: String(itemName),
-  retailPrice: Number(retailPrice),
-  description: String(description),
-  sellingPrice: Number(sellingPrice),
-  category: String(category),
+      retailPrice: Number(retailPrice),
+      description: String(description),
+      sellingPrice: Number(sellingPrice),
+      category: String(category),
       image,
     };
 
     try {
-       await Vendor.updateOne(
-        { _id: userId },
-        { $push: { menu: newMenuItem } } as UpdateQuery<VendorDoc>
-      );
+      let vendor;
+      if (_id) {
+        vendor = await Vendor.findOneAndUpdate(
+          { _id: userId, "menu._id": newMenuItem._id },
+          { $set: { "menu.$": newMenuItem } },
+          { new: true }
+        );
+      } else {
+        vendor = await Vendor.findOneAndUpdate(
+          { _id: userId },
+          { $push: { menu: newMenuItem } },
+          { new: true }
+        );
+      }
     } catch (error) {
-      throw new BadRequestError ("Menu item could not be added")
+      console.log(error)
     }
 
-    res.status(200)
+    res.status(200).send({ success: true });
   }
 );
-
 
 router.get("/api/vendors/menu/:id", async (req, res) => {
   const userId = req.params.id;

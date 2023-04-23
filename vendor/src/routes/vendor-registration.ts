@@ -28,23 +28,13 @@ router.post(
     } = req.body;
 
 
-    interface FileObject {
+    interface FileObject extends Express.Multer.File {
       location: string;
     }
 
-    const files = req.files;
-    let image: { location: string }[] = [];
-
-    if (Array.isArray(files)) {
-      image = files.map((file) => ({ location: (file as any).location }));
-    } else if (files && typeof files === "object") {
-      const keys = Object.keys(files);
-      image = keys.flatMap((key) =>
-        files[key].map((file) => ({ location: (file as any).location }))
-      );
-    }
-
-    console.log(userId);
+    
+    const file = req.file as FileObject;
+    const image : string = file.location;
 
     const pincodeNumber = parseInt(pincode);
     const restaurantPhoneNumer = parseInt(restaurantPhone);

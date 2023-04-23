@@ -4,7 +4,13 @@ import { useSelector } from "react-redux";
 import { IoTrashSharp } from "react-icons/io5";
 
 import { Toaster, toast } from "react-hot-toast";
-import { isValidName, validateDescription, validateDropdown, validateImage, validatePrice } from "../../validation/validation";
+import {
+  isValidName,
+  validateDescription,
+  validateDropdown,
+  validateImage,
+  validatePrice,
+} from "../../validation/validation";
 
 function MenuManagementForm() {
   const [categoryName, setCategoryName] = useState("");
@@ -12,11 +18,11 @@ function MenuManagementForm() {
   const [formdata, setFormdata] = useState({});
   const [menu, setMenu] = useState([]);
   const [menuManagement, setMenuManagement] = useState(false);
+  const [editItemStatus, setEditItemStatus] = useState(false);
+  const [editItem, seteditItem] = useState("");
   const userId = useSelector((state) => state.vendor.vendor.id);
-  
 
   const handleCategorySubmit = (e) => {
-    
     try {
       if (!isValidName(categoryName)) {
         toast.error("Enter Valid Catefory Name");
@@ -26,7 +32,6 @@ function MenuManagementForm() {
           .post("/api/vendors/category", { userId, categoryName })
           .then(() => {
             console.log("category added");
-            
           });
       }
     } catch (error) {
@@ -34,7 +39,7 @@ function MenuManagementForm() {
     }
   };
 
-  useEffect( () => {
+  useEffect(() => {
     axios
       .get(`/api/vendors/menu/${userId}`, {
         headers: { "Content-Type": "application/json" },
@@ -55,18 +60,12 @@ function MenuManagementForm() {
         withCredentials: true,
       })
       .then((res) => {
-        console.log("response recieved", res);
         setCategory(res.data.categories);
       })
       .catch((error) => {
         console.error(error);
       });
   }, [userId, setCategory]);
-
-  useEffect(() => {
-    console.log(category);
-    console.log("menu ", menu);
-  }, [category, menu]);
 
   const handleDeleteCategory = (name) => {
     deleteCategory(name);
@@ -90,15 +89,16 @@ function MenuManagementForm() {
 
   function handleImageChange(event) {
     const { name } = event.target;
-    const files = Array.from(event.target.files);
-    setFormdata({ ...formdata, [name]: files });
+    const file = event.target.files[0];
+    setFormdata({ ...formdata, [name]: file });
   }
+
+
 
   const onMenuItemSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      console.log(formdata);
       if (!isValidName(formdata.itemName)) {
         toast.error("Enter Valid Item Name");
       } else if (!validateDescription(formdata.description)) {
@@ -107,39 +107,28 @@ function MenuManagementForm() {
         toast.error("Select Valid Category");
       } else if (!validatePrice(formdata.retailPrice)) {
         toast.error("Enter Valid Retail Price");
-      // } else if (
-      //   !validatePrice(formdata.sellingPrice) ||
-      //   formdata.retailPrice > formdata.sellingPrice
-      // ) {
-      //   toast.error("Enter Valid Selling Price");
-      } else if (!validateImage(formdata.image)) {
-        toast.error("Select a valid image for upload");
-      } else {
+      } else if (!validatePrice(formdata.sellingPrice)) {
+        toast.error("Enter Valid Selling Price");
+      } else if (formdata.retailPrice < formdata.sellingPrice) {
+        toast.error("Enter Valid Selling Price");
+      }
+      // else if (!validateImage(formdata.image)) {
+      //   toast.error("Select a valid image for upload");
+      // }
+      else {
         formdata.userId = userId;
-        console.log("userid", formdata.userId);
-        console.log(formdata);
+        console.log("before submission", formdata);
         const submitFormData = new FormData();
-
         for (const key in formdata) {
-          if (key === "image") {
-            console.log("if", key);
-            let file = formdata.image;
-            for (let i = 0; i < file.length; i++) {
-              submitFormData.append("image", file[i]);
-            }
-          } else {
-            console.log(key);
-            submitFormData.append(key, formdata[key]);
-            console.log(submitFormData);
-          }
+          submitFormData.append(key, formdata[key]);
         }
 
         axios
           .post("/api/vendors/create-menuItem", submitFormData)
           .then((response) => {
-            console.log(response);
-            if(response.data.success){
-              setMenuManagement(false)
+            if (response.data.success) {
+              setMenuManagement(false);
+              setFormdata({});
             }
           })
           .catch(async (err) => {
@@ -151,13 +140,23 @@ function MenuManagementForm() {
     }
   };
 
-  const  publishRestaurant = () => {
-    axios.get(`/api/vendors/publish-vendors/${userId}`).then(() => {
-      toast.success("vendor published")
-    }).catch((err) => {
-      console.log(err)
-    })
-  }
+  const publishRestaurant = () => {
+    axios
+      .get(`/api/vendors/publish-vendors/${userId}`)
+      .then(() => {
+        toast.success("vendor published");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleEditItem = (item) => {
+    setEditItemStatus(true);
+    seteditItem(item);
+    setFormdata(item);
+    setMenuManagement(true);
+  };
 
   return (
     <>
@@ -168,6 +167,7 @@ function MenuManagementForm() {
               <button
                 onClick={(e) => {
                   setMenuManagement(false);
+                  setFormdata({});
                 }}
                 className="bg-emerald-700 hover:bg-green-600 text-white font-bold py-2 mx-4 mt-2 rounded w-full"
               >
@@ -283,19 +283,32 @@ function MenuManagementForm() {
                     type="file"
                     name="image"
                     onChange={handleImageChange}
-                    multiple
                   />
                 </div>
               </div>
 
               <div className="mb-5 mt-6 flex justify-center">
-                <button
-                  type="submit"
-                  onClick={onMenuItemSubmit}
-                  className="bg-emerald-700 hover:bg-green-600 text-white font-bold py-2  rounded w-4/12 "
-                >
-                  Add Item
-                </button>
+                {formdata["itemName"] && formdata["_id"] ? (
+                  <>
+                    <button
+                      type="submit"
+                      onClick={onMenuItemSubmit}
+                      className="bg-emerald-700 hover:bg-green-600 text-white font-bold py-2  rounded w-4/12 "
+                    >
+                      Edit Item
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      type="submit"
+                      onClick={onMenuItemSubmit}
+                      className="bg-emerald-700 hover:bg-green-600 text-white font-bold py-2  rounded w-4/12 "
+                    >
+                      Add Item
+                    </button>
+                  </>
+                )}
               </div>
             </div>
             <div className="w-full md:w-1/4  ml-auto mb-6 mt-10 md:mb-0  ">
@@ -311,7 +324,7 @@ function MenuManagementForm() {
                   id="grid-first-name"
                   name="categoryName"
                   onChange={(e) => {
-                    setCategoryName(e.target.value)
+                    setCategoryName(e.target.value);
                   }}
                   value={categoryName}
                   type="text"
@@ -377,18 +390,30 @@ function MenuManagementForm() {
           <div className="flex flex-col ">
             <div className="flex flex-wrap -mx-3 mb-4">
               {category.map((category) => (
-                <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0 mt-5 uppercase" key={category}>
-                    
-                    <h2 className="text-sm font-bold bg-menugreen  py-2 text-center">{category}</h2>
-                    <ul className="bg-listgreen px-2 text-sm py-2">
-                      {menu
-                        .filter((item) => item.category === category)
-                        .map((item, index) => (
+                <div
+                  className="w-full md:w-1/2 px-3 mb-6 md:mb-0 mt-5 uppercase"
+                  key={category}
+                >
+                  <h2 className="text-sm font-bold bg-menugreen  py-2 text-center">
+                    {category}
+                  </h2>
+                  <ul className="bg-listgreen px-2 text-sm py-2">
+                    {menu
+                      .filter((item) => item.category === category)
+                      .map((item, index) => (
+                        <div className="flex">
                           <li key={index}>
                             {item.itemName} - {item.sellingPrice}
                           </li>
-                        ))}
-                    </ul>
+                          <i
+                            onClick={() => {
+                              handleEditItem(item);
+                            }}
+                            class="fa-regular fa-pen-to-square justify-center ml-auto"
+                          ></i>
+                        </div>
+                      ))}
+                  </ul>
                 </div>
               ))}
             </div>

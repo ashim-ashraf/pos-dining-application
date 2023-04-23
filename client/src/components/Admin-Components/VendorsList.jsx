@@ -27,7 +27,6 @@ export default function VendorsList({ color }) {
     .then(response => {
       console.log("Vendor approval status updated successfully!");
       setUpdated(false)
-      // Do any other actions you need after the approval status is updated
     })
     .catch(error => {
       console.error("Error updating vendor approval status:", error);
@@ -118,9 +117,6 @@ export default function VendorsList({ color }) {
                 >
                   Approval
                 </th>
-                
-              
-             
               </tr>
             </thead>
             <tbody>
@@ -160,8 +156,6 @@ export default function VendorsList({ color }) {
                         />
                         )}
                       </td>
-                      
-                      
                     </tr>
                   );
                 })}

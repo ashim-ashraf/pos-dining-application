@@ -22,8 +22,7 @@ function LandingPage() {
         ></img>
       </div>
       
-      <div >
-
+      <div>
       <div className=" flex flex-col md:flex-row items-center">
         <img
           className="rounded-lg w-1/2 ml-auto object-scale-down"

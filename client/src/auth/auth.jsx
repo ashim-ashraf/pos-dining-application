@@ -1,24 +1,16 @@
-import { useSelector } from "react-redux";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
+import { adminLogout } from "../features/authSlices/adminSlice";
 
-
-function CheckLogin() {
-    const user = useSelector((state) => state.user);
-    console.log(user);
-    return (
-      user.isLoggedIn?<Outlet/>:<Navigate to='/login'/>
-    )
-  }
-
-function  IsLogged(){
-    const user=useSelector((state)=>state.user)
-    console.log(user);
-    return(
-      user.isLoggedIn?<Navigate to='/home' />:<Outlet/>
-    )
-  }
 
   function AdminCheckLogin() {
+    const dispatch = useDispatch();
+    axios.get("/api/admin/admin-verify").then((res) =>{
+      console.log(res)
+    }).catch(() => {
+      dispatch(adminLogout())
+    })
     const admin = useSelector((state) => state.admin);
     console.log(admin);
     return (
@@ -49,4 +41,4 @@ function  VendorIsLogged(){
   }
 
   
-export {CheckLogin , IsLogged , AdminCheckLogin, AdminIsLogged, VendorCheckLogin, VendorIsLogged}
+export { AdminCheckLogin, AdminIsLogged, VendorCheckLogin, VendorIsLogged}

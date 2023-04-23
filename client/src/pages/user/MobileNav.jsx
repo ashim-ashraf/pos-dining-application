@@ -9,12 +9,6 @@ function MobileNav() {
         <Navbar
           title="Yummers"
           className="bg-orange-600"
-          right={
-            <Link navbar>
-              <FaUserAlt />
-              <span></span>
-            </Link>
-          }
         />
     </div>
   )
