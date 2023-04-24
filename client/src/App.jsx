@@ -23,6 +23,8 @@ import AdminVendorManagement from "./pages/admin/AdminVendorManagement";
 import VendorTableManagement from "./pages/vendor/VendorTableManagement";
 import AdminBannerManagement from "./pages/admin/AdminBannerManagement";
 import Cart from "./pages/user/Cart";
+import Orders from "./pages/user/Orders";
+import OrderManagementPage from "./pages/vendor/OrderManagementPage";
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/restaurant/:restaurantId" element={<RestaurantDetailPage />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/orders" element={<Orders />} />
+
 
         <Route element={<VendorIsLogged/>}>
             <Route path="/vendors/signup" element={<VendorSignupPage />} />
@@ -44,6 +48,8 @@ function App() {
             <Route path="/vendors/registration"element={<VendorRegistrationPage />}/>
             <Route path="/vendors/home" element={<VendorLandingPage />} />
             <Route path="/vendors/table-management" element={<VendorTableManagement/>} />
+            <Route path="/vendors/orders" element={<OrderManagementPage/>} />
+          
           </Route>
 
 

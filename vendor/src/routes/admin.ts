@@ -4,6 +4,7 @@ import { body } from "express-validator";
 import { Password } from "../services/password";
 import {
   AdminVerify,
+  addBanner,
   addTable,
   adminSignin,
   deleteTableById,
@@ -30,6 +31,8 @@ router.delete("/delete-table/:id",requireAdminAuth, deleteTableById)
 router.get("/get-vendors",  requireAdminAuth, getVendors )
 
 router.put("/vendor-approval/:id",requireAdminAuth, vendorApproval)
+
+router.post("/create-banner" , requireAdminAuth, addBanner)
 
 
 export { router as adminRouter };

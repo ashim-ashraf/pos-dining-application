@@ -1,7 +1,7 @@
 
 function useCart() {
     const getCart = () => {
-      return JSON.parse(localStorage.getItem('cart'));
+      return JSON.parse(localStorage.getItem('cart')) || { restaurantId: null, items: {} };
     };
   
     function addToCart(item, restaurantId) {
@@ -50,6 +50,7 @@ function useCart() {
 
     function calculateTotal(cart) {
       let total = 0;
+      // eslint-disable-next-line array-callback-return
       Object.keys(cart).map((key) => {
         total += cart[key].count * cart[key].sellingPrice;
       });

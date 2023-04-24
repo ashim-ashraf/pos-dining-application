@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 interface TableAttrs {
+    id:string;
   seats: string;
   status?: string;
   currentOrder?: object;
@@ -8,6 +9,7 @@ interface TableAttrs {
 }
 
 interface TableDoc extends mongoose.Document {
+    id:string;
   _id:string;
   seats: string;
   status: string;
@@ -21,6 +23,7 @@ interface TableModel extends mongoose.Model<TableDoc> {
 
 const tableSchema = new mongoose.Schema(
   {
+    id: String,
     seats: {
       type: String,
       required: true,

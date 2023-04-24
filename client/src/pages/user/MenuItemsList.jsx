@@ -1,13 +1,13 @@
-import { Button, List, ListItem, Stepper } from "konsta/react";
+import { Button, List, ListItem, Stepper, Toast } from "konsta/react";
 import React, { useEffect, useState } from "react";
 import useCart from "../../components/User-Components/Cart-Functions";
+import { Toaster } from "react-hot-toast";
 
 function MenuItemsList(props) {
   const { items, restaurantId } = props;
-  const { getCart, addToCart, removeFromCart, increaseCount, decreaseCount } =
-    useCart();
-  const [value, setValue] = useState(false);
+  const { getCart, addToCart, increaseCount, decreaseCount } = useCart();
   const [cart, setCart] = useState(null);
+
 
   useEffect(() => {
     setCart(getCart().items);
@@ -19,7 +19,7 @@ function MenuItemsList(props) {
   };
 
   return (
-    <List strongIos  dividersIos>
+    <List strongIos dividersIos>
       {items?.length > 0 &&
         items.map((item, index) => (
           <div key={index}>
@@ -57,8 +57,14 @@ function MenuItemsList(props) {
                 />
               ) : (
                 <div className="grid grid-cols-3 gap-x-4">
-                  <Button outline onClick={() =>{ addToCart(item, restaurantId)
-                  setCart(getCart().items)}}>
+                  <Toaster toastOptions={{ duration: 4000 }} />
+                  <Button
+                    outline
+                    onClick={() => {
+                      addToCart(item, restaurantId);
+                      setCart(getCart().items);
+                    }}
+                  >
                     Add
                   </Button>
                 </div>

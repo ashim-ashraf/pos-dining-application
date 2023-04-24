@@ -2,7 +2,7 @@ import express ,{Request, Response } from "express"
 import { Vendor } from "../models/vendor";
 import { BadRequestError, requireVendorAuth } from "@snackopedia/common";
 import jwt from "jsonwebtoken";
-import { getAllTables } from "../controller/vendor-controller";
+import { getAllTables, manageOrderStatus } from "../controller/vendor-controller";
 import { test } from "../controller/admin-controller";
 
 
@@ -79,7 +79,9 @@ router.post(
     }
 })
 
-router.post('/edit-menuItem',test, upload.array("image"),)
+// router.post('/edit-menuItem',test, upload.array("image"),)
+
+router.post('/manage-order-status', requireVendorAuth, manageOrderStatus)
 
 
 

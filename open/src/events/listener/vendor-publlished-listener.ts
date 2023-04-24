@@ -15,7 +15,7 @@ export class VendorPublishedListener extends Listener<VendorPublishedEvent> {
       name,
       restaurantName,
       description,
-      restaurantAddress,
+      restaurantAddress,  
       email,
       phone,
       liscenceNo,
