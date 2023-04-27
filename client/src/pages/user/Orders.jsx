@@ -36,11 +36,11 @@ function Orders() {
   };
 
   const cancelOrderItem = (item) => {
-    const itemId = item._id;
+    const entityId = item.entityId;
     const tableId = table;
     let status = "Cancelled";  
-    console.log(item._id, table, status);
-    axios.post("/api/users/cancel-orderitem", { tableId, itemId, status }).then(() => {
+    console.log(entityId, tableId, status);
+    axios.post("/api/users/cancel-orderitem", { entityId, tableId, status }).then(() => {
       getOrders()
     }).catch((err) => {
       console.log(err)

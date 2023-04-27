@@ -6,6 +6,7 @@ import { TableBookedPublisher } from "../events/publisher/table-booked-publisher
 import mongoose from "mongoose";
 import { OrderCreatedPublisher } from "../events/publisher/order-created-publisher";
 import { Vendor } from "../models/vendor";
+import { v4 as uuidv4 } from "uuid";
 import { OrderStatusUpdatePublisher } from "../events/publisher/order-status-publisher";
 
 export const bookTable = async (req: Request, res: Response) => {
@@ -17,11 +18,11 @@ export const bookTable = async (req: Request, res: Response) => {
       { $set: { status: "booked" } },
       { new: true }
     );
-
+    
     if (!table) {
       return res.status(404).send({ error: "Table not available for booking" });
     }
-
+    
     await new TableBookedPublisher(natsWrapper.client).publish({
       id: code,
       status: "booked",
@@ -78,7 +79,7 @@ export const releiveTable = async (req: Request, res: Response) => {
   }
 };
 
-export const handleOrder = async (req: Request, res: Response) => {
+export const createOrder = async (req: Request, res: Response) => {
   const cart = JSON.parse(req.body.cart);
   const tableId = req.body.table;
 
@@ -106,6 +107,7 @@ export const handleOrder = async (req: Request, res: Response) => {
     };
     return {
       _id,
+      entityId: uuidv4(),
       itemName,
       retailPrice,
       description,
@@ -130,19 +132,24 @@ export const handleOrder = async (req: Request, res: Response) => {
       const orderId = new mongoose.Types.ObjectId();
       const restaurantId = cart.restaurantId;
       const newItems = [...table.currentOrder.items, ...items];
-      const order = { _id: orderId, restaurantId, items:newItems };
+      const order = { _id: orderId, restaurantId, items: newItems };
 
       await Table.updateOne(
         { id: tableId },
-        { $set: { "currentOrder._id": orderId,"currentOrder.restaurantId": restaurantId , "currentOrder.items": newItems} } // include orderId and restaurantId in $set operator
+        {
+          $set: {
+            "currentOrder._id": orderId,
+            "currentOrder.restaurantId": restaurantId,
+            "currentOrder.items": newItems,
+          },
+        } // include orderId and restaurantId in $set operator
       );
 
       await new OrderCreatedPublisher(natsWrapper.client).publish({
         order: order,
         tableId: tableId,
       });
-
-    } 
+    }
 
     res.status(200).json({ message: "Order placed successfully" });
   } catch (error) {
@@ -152,45 +159,41 @@ export const handleOrder = async (req: Request, res: Response) => {
 };
 
 export const cancelOrder = async (req: Request, res: Response) => {
-  const { tableId, itemId, status } = req.body;
-  console.log(tableId, itemId, status);
-  
+  const { entityId, tableId, status} = req.body;
+
+
   try {
     const table = await Table.findOneAndUpdate(
       {
         id: tableId,
-        "currentOrder.items": {
-          $elemMatch: {
-            _id: itemId
-          }
-        }
+        "currentOrder.items.entityId": entityId,
       },
       {
         $set: {
-          "currentOrder.items.$[elem].orderStatus": status
-        }
+          "currentOrder.items.$[elem].orderStatus": status,
+        },
       },
       {
         new: true,
         arrayFilters: [
           {
-            "elem._id": itemId
-          }
-        ]
+            "elem.entityId": entityId,
+          },
+        ],
       }
     );
 
-    console.log(table)
-    
+
     if (!table) {
       return res.status(404).json({ message: "Table not found" });
     }
 
-    // await new OrderStatusUpdatePublisher(natsWrapper.client).publish({
-    //   tableId: tableId,
-    //   itemId: itemId,
-    //   status: status,
-    // });
+    await new OrderStatusUpdatePublisher(natsWrapper.client).publish({
+      tableId: tableId,
+      //itemId is now substituted with entityId while communicating
+      itemId: entityId,
+      status: status,
+    });
 
     return res.status(200).send(table);
   } catch (error) {
@@ -201,7 +204,7 @@ export const cancelOrder = async (req: Request, res: Response) => {
 
 export const getOrders = async (req: Request, res: Response) => {
   const tableId = req.params.id;
-  console.log(tableId)
+  console.log(tableId);
   try {
     const table = await Table.findOne({ id: tableId });
     if (!table) {

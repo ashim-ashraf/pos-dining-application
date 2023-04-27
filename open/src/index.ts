@@ -38,7 +38,7 @@ const start = async () => {
 
     new VendorPublishedListener(natsWrapper.client).listen();
     new TableCreatedListener(natsWrapper.client).listen();
-    new OrderStatusUpdateListener(natsWrapper.client).listen();
+    // new OrderStatusUpdateListener(natsWrapper.client).listen();
     new VendorApprovalListener(natsWrapper.client).listen();
 
     await mongoose.connect(process.env.MONGO_URI, {

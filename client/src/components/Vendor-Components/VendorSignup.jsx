@@ -31,7 +31,7 @@ function VendorSignup() {
       })
       .catch((err) => {
         alert(err);
-      });
+      }); 
   }
 
   useEffect(() => {

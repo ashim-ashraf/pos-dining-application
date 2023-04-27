@@ -1,6 +1,7 @@
 import { BadRequestError, Listener, OrderStatusUpdateEvent, Subjects } from "@snackopedia/common";
 import { Table } from "../../models/table";
 import { Message } from "node-nats-streaming";
+const mongoose = require('mongoose');
 
 export class OrderStatusUpdateListener extends Listener<OrderStatusUpdateEvent> {
     subject: Subjects.OrderUpdated = Subjects.OrderUpdated;
@@ -9,36 +10,36 @@ export class OrderStatusUpdateListener extends Listener<OrderStatusUpdateEvent> 
     async onMessage(data: OrderStatusUpdateEvent["data"], msg: Message) {
       
         const { tableId, itemId, status } = data;
-      
-        try {
-          const table = await Table.findOneAndUpdate(
-            {
-              _id: tableId,
-              "currentOrder.items": {
-                $elemMatch: {
-                  _id: itemId
-                }
-              }
+        const entityId = itemId
+
+        console.log("in kkk",tableId, itemId, status)
+
+
+      try{
+        const table = await Table.findOneAndUpdate(
+          {
+            _id: tableId,
+            "currentOrder.items.entityId": entityId,
+          },
+          {
+            $set: {
+              "currentOrder.items.$[elem].orderStatus": status,
             },
-            {
-              $set: {
-                "currentOrder.items.$[elem].orderStatus": status
-              }
-            },
-            {
-              new: true,
-              arrayFilters: [
-                {
-                  "elem._id": itemId
-                }
-              ]
-            }
-          );
-          console.log(table);
-          if (!table) {
-            throw new BadRequestError("could not update status")
+          },
+          {
+            new: true,
+            arrayFilters: [
+              {
+                "elem.entityId": entityId,
+              },
+            ],
           }
-      
+        );
+        
+          console.log("test",table);
+          
+          
+          
       msg.ack();
     } catch (error) {
         console.log(error)

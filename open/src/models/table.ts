@@ -9,6 +9,7 @@ interface TableAttrs {
     restaurantId: string;
     items: {
       _id: string;
+      entityId: string; 
       itemName: string;
       retailPrice: number;
       description: string;
@@ -32,6 +33,7 @@ interface TableDoc extends mongoose.Document {
     restaurantId: string;
     items: {
       _id: string;
+      entityId: string; 
       itemName: string;
       retailPrice: number;
       description: string;
@@ -65,7 +67,8 @@ const tableSchema = new mongoose.Schema(
       restaurantId:  String ,
       items: [
         {
-          _id:  String, 
+          _id:  String,
+          entityId: String, 
           itemName:  String, 
           retailPrice:  Number, 
           description:  String, 
