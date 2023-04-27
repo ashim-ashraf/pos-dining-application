@@ -4,7 +4,7 @@ import { User } from "../../models/user";
 
 export class UserCreatedListener extends Listener<UserCreatedEvent> {
   subject: Subjects.UserCreated = Subjects.UserCreated;
-  queueGroupName = "user-service";
+  queueGroupName = "vendor-service";
 
   async onMessage(data: UserCreatedEvent["data"], msg: Message) {
     console.log("user created event recieved in the vendor service from user service", data);

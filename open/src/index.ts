@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 import { app } from "./app";
 import { natsWrapper } from "./nats-wrapper";
+import { VendorPublishedListener } from "./events/listener/vendor-publlished-listener";
+import { TableCreatedListener } from "./events/listener/table-created-listener";
+import { OrderStatusUpdateListener } from "./events/listener/order-status-update-listener";
+import { VendorApprovalListener } from "./events/listener/vendor-approval-listener";
 
 const start = async () => {
   if (!process.env.JWT_KEY) {
@@ -32,10 +36,16 @@ const start = async () => {
     process.on("SIGINT", () => natsWrapper.client.close());
     process.on("SIGTERM", () => natsWrapper.client.close());
 
+    new VendorPublishedListener(natsWrapper.client).listen();
+    new TableCreatedListener(natsWrapper.client).listen();
+    // new OrderStatusUpdateListener(natsWrapper.client).listen();
+    new VendorApprovalListener(natsWrapper.client).listen();
+
     await mongoose.connect(process.env.MONGO_URI, {
       dbName:'pos',
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useFindAndModify: false,
     });
     console.log("Connected to MongoDb");
   } catch (err) {

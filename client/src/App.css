@@ -1,4 +1,14 @@
-.App {
+.blank-section {
+  background-color: white;
+}
+
+body {
+  overflow: hidden;
+}
+
+
+
+/* .App {
   text-align: center;
 }
 
@@ -35,6 +45,6 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
 
 

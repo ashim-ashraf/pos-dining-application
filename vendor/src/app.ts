@@ -1,41 +1,40 @@
-import express from 'express';
+import express from "express";
 import { Request, Response, NextFunction } from "express";
-import 'express-async-errors';
-import { json } from 'body-parser';
+import "express-async-errors";
+import { json } from "body-parser";
+import cookieSession from "cookie-session";
 
-import cookieSession from 'cookie-session';
+import {
+  currentVendor,
+  currentAdmin,
+  errorHandler,
+  NotFoundError,
+} from "@snackopedia/common";
 
-import { signinRouter } from './routes/signin';
-import { signoutRouter } from './routes/signout';
-import { signupRouter } from './routes/signup';
 
-import { currentVendor, errorHandler , NotFoundError } from '@snackopedia/common';
-import { tablebookingrouter } from './routes/create-menu';
-import { getVendorsRouter } from './routes/get-vendors';
-import { vendorRegistrationRouter } from './routes/vendor-registration';
-const cors = require('cors');
+import { vendorRouter } from "./routes/vendor";
+import { adminRouter } from "./routes/admin";
+const cors = require("cors");
+const https = require('https');
 
 const app = express();
 app.use(cors());
-app.set('trust proxy', true);
+app.set("trust proxy", true);
 app.use(json());
 app.use(
   cookieSession({
     signed: false,
-    secure: true
   })
 );
 
-app.use(signupRouter)
-app.use(signinRouter)
 app.use(currentVendor);
-app.use(tablebookingrouter);
-app.use(vendorRegistrationRouter);
-app.use(signinRouter);
-app.use(signoutRouter);
-app.use(getVendorsRouter);
+app.use(currentAdmin);
 
-app.all('*', async (req, res) => {
+
+app.use("/api/vendors", vendorRouter);
+app.use("/api/admin", adminRouter);
+
+app.all("*", async (req, res) => {
   throw new NotFoundError();
 });
 
@@ -45,4 +44,4 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 
 app.use(errorHandler);
 
-export {app} ;
+export { app };

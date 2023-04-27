@@ -2,10 +2,22 @@ import mongoose from "mongoose";
 import { natsWrapper } from "./nats-wrapper";
 import { app } from "./app";
 import { UserCreatedListener } from "./events/listeners/user-created-listener";
+import { TableBookedListener } from "./events/listeners/table-booked-listener";
+import { OrderCreatedListener } from "./events/listeners/order-created-listener";
+import { OrderStatusUpdateListener } from "./events/listeners/order-status-update-listener";
 
 const start = async () => {
   if (!process.env.JWT_VENDOR_KEY) {
     throw new Error("JWT_VENDOR_KEY must be defined");
+  }
+  if (!process.env.JWT_ADMIN_KEY) {
+    throw new Error("JWT_ADMIN_KEY must be defined");
+  }
+  if (!process.env.ADMIN_PASSWORD) {
+    throw new Error("ADMIN_PASSWORD must be defined");
+  }
+  if (!process.env.ADMIN_USERNAME) {
+    throw new Error("ADMIN_USERNAME must be defined");
   }
   if (!process.env.MONGO_URI) {
     throw new Error("MONGO_URI must be defined");
@@ -34,12 +46,14 @@ const start = async () => {
     process.on("SIGTERM", () => natsWrapper.client.close());
 
     new UserCreatedListener(natsWrapper.client).listen();
-
-
+    new TableBookedListener(natsWrapper.client).listen();
+    new OrderCreatedListener(natsWrapper.client).listen();
+    new OrderStatusUpdateListener(natsWrapper.client).listen();
     await mongoose.connect(process.env.MONGO_URI, {
       dbName:'pos-vendor',
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useFindAndModify: false 
     });
     console.log("Connected to MongoDb");
   } catch (err) {

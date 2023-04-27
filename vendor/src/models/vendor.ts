@@ -4,16 +4,18 @@ import { Password } from "../services/password";
 // An interface that describes the properties
 // that are requried to create a new User
 interface VendorAttrs {
-  name?:string;
-  restaurantName?:string;
-  description?:string;
+  name?: string;
+  restaurantName?: string;
+  description?: string;
   restaurantAddress?: object;
   email?: string;
   phone?: number;
-  liscenceNo?:number;
-  image?:[];
-  restaurantType?:string;
-  restaurantPhone?:number;
+  liscenceNo?: number;
+  image?: [];
+  restaurantType?: string;
+  restaurantPhone?: number;
+  category?: object;
+  menu?: [{}];
 }
 
 // An interface that describes the properties
@@ -24,19 +26,21 @@ interface UserModel extends mongoose.Model<VendorDoc> {
 
 // An interface that describes the properties
 // that a User Document has
-interface VendorDoc extends mongoose.Document {
+export interface VendorDoc extends mongoose.Document {
+  _id:string;
   name: string;
-  restaurantName:string;
-  description:string;
+  restaurantName: string;
+  description: string;
   restaurantAddress: object;
   email: string;
   phone: number;
-  password: string;
-  liscenceNo:number;
+  liscenceNo: number;
   vendorStatus: boolean;
-  image:[] ;
-  restaurantType:string;
-  restaurantPhone:number;
+  image: [];
+  restaurantType: string;
+  restaurantPhone: number;
+  category: object;
+  menu: [{}];
 }
 
 const vendorSchema = new mongoose.Schema(
@@ -46,24 +50,23 @@ const vendorSchema = new mongoose.Schema(
       trim: true,
       maxlength: 32,
     },
-    restaurantName:{
+    restaurantName: {
       type: String,
       trim: true,
       maxlength: 32,
     },
-    description:{
+    description: {
       type: String,
     },
-    restaurantType:String,
+    restaurantType: String,
     restaurantAddress: {
-       address: String,
-       pincode: Number,
-       state: String
+      address: String,
+      pincode: Number,
+      state: String,
     },
     email: {
       type: String,
       trim: true,
-      unique: 32,
     },
     password: {
       type: String,
@@ -73,7 +76,7 @@ const vendorSchema = new mongoose.Schema(
       required: true,
       unique: 10,
     },
-    restaurantPhone:Number,
+    restaurantPhone: Number,
     liscenceNo: {
       type: Number,
     },
@@ -81,13 +84,23 @@ const vendorSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    image:Array,
+    workingDays: Object,
+    openingTime: Object,
+    closingTime: Object,
+    image: Array,
+    category: {
+      type: [String],
+      default: [],
+    },
+    menu: {
+      type: [{}],
+      default: [],
+    },
   },
   {
     toJSON: {
       transform(doc, ret) {
         ret.id = ret._id;
-        delete ret._id;
         delete ret.password;
         delete ret.__v;
       },
