@@ -1,13 +1,25 @@
-import { Button, List, ListItem, Stepper, Toast } from "konsta/react";
+import {
+  Block,
+  Button,
+  List,
+  ListItem,
+  Sheet,
+  Stepper,
+  Toast,
+  Toolbar,
+} from "konsta/react";
 import React, { useEffect, useState } from "react";
 import useCart from "../../components/User-Components/Cart-Functions";
 import { Toaster } from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 function MenuItemsList(props) {
   const { items, restaurantId } = props;
   const { getCart, addToCart, increaseCount, decreaseCount } = useCart();
   const [cart, setCart] = useState(null);
-
+  const [toast, setToast] = useState(false);
+  const [sheetOpened, setSheetOpened] = useState(false);
+  const [currentItem, setCurrentItem] = useState(null);
 
   useEffect(() => {
     setCart(getCart().items);
@@ -22,8 +34,15 @@ function MenuItemsList(props) {
     <List strongIos dividersIos>
       {items?.length > 0 &&
         items.map((item, index) => (
-          <div key={index}>
+          <div
+            key={index}
+            
+          >
             <ListItem
+            onClick={() => {
+              setSheetOpened(true);
+              setCurrentItem(item);
+            }}
               link
               chevronMaterial={true}
               title={item.itemName}
@@ -37,7 +56,7 @@ function MenuItemsList(props) {
                   alt={item.itemName}
                 />
               }
-            >
+            ></ListItem>
               {isItemInCart(item._id) ? (
                 <Stepper
                   raised
@@ -57,21 +76,77 @@ function MenuItemsList(props) {
                 />
               ) : (
                 <div className="grid grid-cols-3 gap-x-4">
-                  <Toaster toastOptions={{ duration: 4000 }} />
+                  <Toaster
+                    toastOptions={{ duration: 4000 }}
+                    position="top-center"
+                  />
                   <Button
                     outline
                     onClick={() => {
-                      addToCart(item, restaurantId);
-                      setCart(getCart().items);
+                      let status = addToCart(item, restaurantId);
+                      if (status) {
+                        setCart(getCart().items);
+                      } else {
+                        setToast(true);
+                      }
                     }}
                   >
                     Add
                   </Button>
+                  <Toast
+                    className="bottom-12 "
+                    position="left"
+                    opened={toast}
+                    button={
+                      <Button
+                        rounded
+                        clear
+                        small
+                        inline
+                        onClick={() => setToast(false)}
+                      >
+                        Close
+                      </Button>
+                    }
+                  >
+                    <div className="shrink ">
+                      You have items from another restaurant in the Cart
+                    </div>
+                  </Toast>
                 </div>
               )}
-            </ListItem>
+            
           </div>
         ))}
+      <Sheet
+        className="pb-safe"
+        opened={sheetOpened}
+        onBackdropClick={() => setSheetOpened(false)}
+      >
+        <Block>
+          <div>
+            <div class="max-w-sm rounded overflow-hidden shadow-lg">
+              <img
+                class="w-full"
+                src={currentItem?.image}
+                alt="Sunset in the mountains"
+              />
+              <div class="px-6 py-4">
+                <div class="font-bold text-xl mb-2">{currentItem?.itemName}</div>
+                <p class="text-gray-700 text-base">
+                  {currentItem?.description}
+                </p>
+              </div>
+              <div class="px-6 pt-4 pb-2">
+               
+              </div>
+            </div>
+          </div>
+          <div className="">
+            <>End</>
+          </div>
+        </Block>
+      </Sheet>
     </List>
   );
 }

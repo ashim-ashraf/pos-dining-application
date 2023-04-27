@@ -1,3 +1,4 @@
+import { toast } from "react-hot-toast";
 
 function useCart() {
     const getCart = () => {
@@ -7,6 +8,7 @@ function useCart() {
     function addToCart(item, restaurantId) {
       const cart = getCart() || { restaurantId: null, items: {} };
       if (cart.restaurantId && cart.restaurantId !== restaurantId) {
+        // toast.error("You have items from another restaurant in the Cart") 
         return false; // Restaurant ids do not match, cannot add item
       }
       const itemId = item._id;

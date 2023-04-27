@@ -22,8 +22,6 @@ export class TableCreatedListener extends Listener<TableCreatedEvent> {
         id:mongoose.Types.ObjectId(id),
         seats: seats,
         status: status,
-        currentOrder: currentOrder,
-        PreviousOrders: PreviousOrders,
       });
 
 

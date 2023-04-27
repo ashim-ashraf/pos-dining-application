@@ -1,89 +1,62 @@
-import express ,{Request, Response } from "express"
+import express, { Request, Response } from "express";
 import { Vendor } from "../models/vendor";
 import { BadRequestError, requireVendorAuth } from "@snackopedia/common";
-import jwt from "jsonwebtoken";
-import { getAllTables, manageOrderStatus } from "../controller/vendor-controller";
+import {
+  addCategory,
+  checkVendor,
+  createMenuItem,
+  deleteCategory,
+  editItem,
+  getAllTables,
+  getAllVendors,
+  getCategoryById,
+  getMenuByVendorId,
+  getVendorById,
+  listedVendor,
+  manageOrderStatus,
+  publishVendor,
+  vendorRegistration,
+  vendorSignin,
+  vendorSignout,
+  vendorSignup,
+} from "../controller/vendor-controller";
 import { test } from "../controller/admin-controller";
-
 
 const upload = require("../middleware/upload");
 const router = express.Router();
 
-router.get("/get-tables", requireVendorAuth, getAllTables)
+router.get("/get-tables", requireVendorAuth, getAllTables);
 
-router.post(
-    "/signup",
-  
-    async (req: Request, res: Response) => {
-      const { userName, user } = req.body;
-  
-      console.log(user.phoneNumber, userName);
-  
-      let name = userName;
-      let phone = user.phoneNumber;
-  
-      const vendor = Vendor.build({
-        name,
-        phone,
-      });
-  
-      console.log(vendor);
-  
-      let existingVendor = await Vendor.findOne({ phone });
-      if (existingVendor) {
-        throw new BadRequestError("Phone number in use")
-      }
-  
-      var newVendor = await vendor.save();
-        
-      // Generate JWT
-      if(newVendor){
-        const vendorJwt = jwt.sign(
-          {
-            id: newVendor.id,
-            phone: newVendor.phone,
-          },
-          process.env.JWT_VENDOR_KEY!
-        );
-  
-        req.session = {
-          jwt: vendorJwt,
-        };
-  
-      }
-  
-      const vendorDetails = {
-        vendorStatus: newVendor.vendorStatus,
-        name: newVendor.name,
-        phone: newVendor.phone,
-        id:newVendor._id,
-      };
-        
-      res.status(201).send(vendorDetails);
-    }
-  );
+router.post("/signup", vendorSignup);
 
-  router.post('/check-vendor' , async (req,res) => {
-    const { phone } = req.body;
-    console.log('check vendor route called ' , phone)
+router.post("/signin", vendorSignin);
 
-    let existingVendor = await Vendor.findOne({ phone });
-    if (!existingVendor) {
-        console.log("inside reject");
-        res.status(400).send({
-            errors: [{ message: 'Account not found' }]
-          });
-    } else {
-        console.log(existingVendor);
-        res.status(201).send(existingVendor);
-    }
-})
+router.post("/registration", upload.array("image"), vendorRegistration);
 
-// router.post('/edit-menuItem',test, upload.array("image"),)
+router.post("/signout", vendorSignout);
 
-router.post('/manage-order-status', requireVendorAuth, manageOrderStatus)
+router.get("/get-vendor/:id", getVendorById);
 
+router.get("/menu/:id", getMenuByVendorId);
 
+router.post("/check-vendor", checkVendor);
 
+router.get("/publish-vendors/:id", publishVendor);
+
+router.get("/get-vendors", getAllVendors);
+
+router.get("/listed-restaurant/:id", listedVendor);
+
+router.post("/create-menuItem", upload.single("image"), createMenuItem);
+
+router.post("/edit-menuItem", test, upload.single("image"), editItem);
+
+router.post("/category", addCategory);
+
+router.get("/category/:id", getCategoryById);
+
+router.delete("/categories/:userId/:categoryName", deleteCategory);
+
+router.post("/manage-order-status", requireVendorAuth, manageOrderStatus);
 
 export { router as vendorRouter };

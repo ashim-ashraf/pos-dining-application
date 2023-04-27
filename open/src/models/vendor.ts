@@ -6,6 +6,7 @@ import { Password } from "../services/password";
 interface VendorAttrs {
   id?: string;
   name?: string;
+  restaurantId?:string;
   restaurantName?: string;
   description?: string;
   restaurantAddress?: object;
@@ -31,6 +32,7 @@ interface UserModel extends mongoose.Model<VendorDoc> {
 // that a User Document has
 export interface VendorDoc extends mongoose.Document {
   id: string;
+  restaurantId:string;
   name: string;
   restaurantName: string;
   description: string;
@@ -48,6 +50,7 @@ export interface VendorDoc extends mongoose.Document {
 
 const vendorSchema = new mongoose.Schema(
   {
+    restaurantId:String,
     vendorId: String,
     name: {
       type: String,

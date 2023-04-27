@@ -1,5 +1,4 @@
 import express, { Request, Response } from "express";
-
 import { body } from "express-validator";
 import { Password } from "../services/password";
 import {
@@ -9,6 +8,7 @@ import {
   adminSignin,
   deleteTableById,
   getAllTables,
+  getBanners,
   getVendors,
   test,
   validateAdminSignin,
@@ -16,6 +16,7 @@ import {
 } from "../controller/admin-controller";
 import {  requireAdminAuth, validateRequest } from "@snackopedia/common";
 
+const upload = require("../middleware/upload");
 const router = express.Router();
 
 router.get("/admin-verify", requireAdminAuth, AdminVerify);
@@ -32,7 +33,9 @@ router.get("/get-vendors",  requireAdminAuth, getVendors )
 
 router.put("/vendor-approval/:id",requireAdminAuth, vendorApproval)
 
-router.post("/create-banner" , requireAdminAuth, addBanner)
+router.post("/create-banner" , requireAdminAuth,upload.single("image"), addBanner)
+
+router.get("/get-banners",test, getBanners)
 
 
 export { router as adminRouter };

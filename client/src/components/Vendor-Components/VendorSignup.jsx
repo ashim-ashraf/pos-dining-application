@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import { auth } from "../../firebase.js/firebase";
+import { auth, onSigninssubmit, recaptcha } from "../../firebase.js/firebase";
 import { toast, Toaster } from "react-hot-toast";
 import { CgSpinner } from "react-icons/cg";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { adminLogin } from "../../features/authSlices/vendorSlice";
+import { vendorLogin } from "../../features/authSlices/vendorSlice";
 import { Link, useNavigate } from "react-router-dom";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { isValidName, validatePhone } from "../../validation/validation";
-
 
 function VendorSignup() {
   const [phone, setPhone] = useState("");
@@ -19,76 +18,77 @@ function VendorSignup() {
   const [otp, setOtp] = useState("");
   const [user, setUser] = useState(null);
   const [userName, setUserName] = useState("");
+  const [counter, setCounter] = useState(60);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  function onCaptchaVerify() {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        "sign-in-button",
-        {
-          size: "invisible",
-          callback: (response) => {
-            handleSubmit();
-          },
-        },
-        auth
-      );
-    }
+  function resendotp() {
+    const phoneNumber = "+" + phone;
+    onSigninssubmit(phoneNumber)
+      .then(() => {
+        setCounter(60);
+      })
+      .catch((err) => {
+        alert(err);
+      });
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    let timer =
+      counter > 0 &&
+      setInterval(() => {
+        setCounter(counter - 1);
+      }, 1000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [counter]);
 
+  //send otp
+  const handleSubmit = () => {
+    recaptcha();
     try {
       if (!phone || !userName) {
-        toast.error('Please fill in the credentials');
-      }else{
-        if(!validatePhone(phone)){
-          toast.error('Enter Valid Phone')
+        toast.error("Please fill in the credentials");
+      } else {
+        if (!isValidName(userName)) {
+          toast.error("Enter Valid Name");
         }
-        if(!isValidName(userName)){
-          toast.error("Enter Valid Name")
-        }
-        if(validatePhone(phone) && isValidName(userName))
-        {
+        if (isValidName(userName)) {
           setLoading(true);
-          onCaptchaVerify();
-          const appVerifier = window.recaptchaVerifier;
           const phoneNumber = "+" + phone;
-          axios.post('/api/vendors/check-vendor', {phone} ).then((res) => {
-            console.log("user exists", res)
-            setLoading(false)
-            toast.error("Phone number in use!");
-          }).catch(() => {
-            signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-            .then((confirmationResult) => {
-              window.confirmationResult = confirmationResult;
-              toast.success("OTP sended successfully!");
-              setShowOTP(true);
+          axios
+            .post("/api/vendors/check-vendor", { phone })
+            .then((res) => {
               setLoading(false);
-              console.log(userName);
+              toast.error("Phone number in use!");
             })
-            .catch((error) => {
-              setLoading(false)
-              toast.error("Invalid Phone number")
-              console.log(error);
+            .catch(() => {
+              onSigninssubmit(phoneNumber)
+                .then(() => {
+                  toast.success("OTP sended successfully!");
+                  setShowOTP(true);
+                  setLoading(false);
+                  console.log(userName);
+                })
+                .catch((error) => {
+                  setLoading(false);
+                  toast.error("Invalid Phone number");
+                  console.log(error);
+                });
             });
-          })
         }
       }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error);
     }
-
-
-   
   };
 
   function onOTPVerify() {
     setLoading(true);
+    alert(otp);
     window.confirmationResult
       .confirm(otp)
       .then(async (res) => {
@@ -98,21 +98,21 @@ function VendorSignup() {
           .post("/api/vendors/signup", { user, userName })
           .then((response) => {
             console.log(response);
-            dispatch(adminLogin(response.data));
+            dispatch(vendorLogin(response.data));
             setLoading(false);
             navigate("/vendors/home");
           });
       })
       .catch((err) => {
         console.log(err);
-        toast.error(err.code)
+        toast.error(err.code);
         setLoading(false);
       });
   }
 
   return (
     <div>
-      <div id="sign-in-button"></div>
+      <div id="recaptcha-container"></div>
       <Toaster toastOptions={{ duration: 4000 }} />
       {/* start */}
       <div className="flex flex-col justify-center items-center mx-auto ">
@@ -151,17 +151,48 @@ function VendorSignup() {
                           autoComplete=""
                           required
                         />
+                        <label>OTP sent to {phone}</label>
+                        <label>
+                          {counter > 0 ? (
+                            <div>Time Remainig {counter}</div>
+                          ) : (
+                            ""
+                          )}
+                        </label>
                       </div>
-                      <button
-                        onClick={onOTPVerify}
-                        className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg
+                      {!counter ? (
+                        <button
+                          onClick={resendotp}
+                          className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg
                    px-4 py-3 mt-6"
-                      >
-                        {loading && (
-                          <CgSpinner size={20} className="mt-1 animate-spin" />
-                        )}
-                        <span>Verify OTP</span>
-                      </button>
+                        >
+                          <span className="flex items-center justify-center w-full">
+                            {loading && (
+                              <CgSpinner
+                                size={20}
+                                className="mt-1 animate-spin"
+                              />
+                            )}
+                            Resend OTP
+                          </span>
+                        </button>
+                      ) : (
+                        <button
+                          onClick={onOTPVerify}
+                          className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg
+                   px-4 py-3 mt-6"
+                        >
+                          <span className="flex items-center justify-center w-full">
+                            {loading && (
+                              <CgSpinner
+                                size={20}
+                                className="mt-1 animate-spin"
+                              />
+                            )}
+                            Verify OTP
+                          </span>
+                        </button>
+                      )}
                     </div>
                   ) : (
                     <div className="mt-6">
@@ -184,7 +215,11 @@ function VendorSignup() {
                           Phone Number
                         </label>
                         <div className="w-full overflow-hidden">
-                        <PhoneInput country={"in"} value={phone} onChange={setPhone}  />
+                          <PhoneInput
+                            country={"in"}
+                            value={phone}
+                            onChange={setPhone}
+                          />
                         </div>
                       </div>
                       <button
@@ -192,13 +227,15 @@ function VendorSignup() {
                         className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg
       px-4 py-3 mt-6"
                       >
-                        {loading && (
+                        <span className="flex items-center justify-center w-full">
+                          {/* {loading && (
                           <CgSpinner size={20} className="mt-1 animate-spin" />
-                        )}
-                        <span>Signup</span>
+                        )} */}
+                          Signup
+                        </span>
                       </button>
                       <div className="text-grey-dark mt-6">
-                        Already have an accout? 
+                        Already have an accout?
                         <Link to="/vendors/login">Login</Link>
                       </div>
                     </div>

@@ -93,8 +93,6 @@ function MenuManagementForm() {
     setFormdata({ ...formdata, [name]: file });
   }
 
-
-
   const onMenuItemSubmit = async (e) => {
     e.preventDefault();
 
@@ -111,11 +109,9 @@ function MenuManagementForm() {
         toast.error("Enter Valid Selling Price");
       } else if (formdata.retailPrice < formdata.sellingPrice) {
         toast.error("Enter Valid Selling Price");
-      }
-      // else if (!validateImage(formdata.image)) {
-      //   toast.error("Select a valid image for upload");
-      // }
-      else {
+      } else if (!validateImage(formdata.image)) {
+        toast.error("Select a valid image for upload");
+      } else {
         formdata.userId = userId;
         console.log("before submission", formdata);
         const submitFormData = new FormData();
@@ -139,6 +135,51 @@ function MenuManagementForm() {
       console.log(error);
     }
   };
+
+
+  const editItemSubmit = () => {
+
+      try {
+        if (!isValidName(formdata.itemName)) {
+          toast.error("Enter Valid Item Name");
+        } else if (!validateDescription(formdata.description)) {
+          toast.error("Enter Valid Description");
+        } else if (!validateDropdown(formdata.category)) {
+          toast.error("Select Valid Category");
+        } else if (!validatePrice(formdata.retailPrice)) {
+          toast.error("Enter Valid Retail Price");
+        } else if (!validatePrice(formdata.sellingPrice)) {
+          toast.error("Enter Valid Selling Price");
+        } else if (formdata.retailPrice < formdata.sellingPrice) {
+          toast.error("Enter Valid Selling Price");
+        } 
+        // else if (!validateImage(formdata.image)) {
+        //   toast.error("Select a valid image for upload");
+        // } 
+        else {
+          formdata.userId = userId;
+          console.log("before submission", formdata);
+          const submitFormData = new FormData();
+          for (const key in formdata) {
+            submitFormData.append(key, formdata[key]);
+          }
+  
+          axios
+            .post("/api/vendors/edit-menuItem", submitFormData)
+            .then((response) => {
+              if (response.data.success) {
+                setMenuManagement(false);
+                setFormdata({});
+              }
+            })
+            .catch(async (err) => {
+              console.log(err);
+            });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+  }
 
   const publishRestaurant = () => {
     axios
@@ -263,7 +304,7 @@ function MenuManagementForm() {
                     Selling Price
                   </label>
                   <input
-                    className="appearance-none block w-full bg-gray-200 text-gray-700 border mt-3  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                    className="appearance-none block  w-full bg-gray-200 text-gray-700 border mt-3  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                     id="grid-sellingPrice-name"
                     name="sellingPrice"
                     onChange={handleChange}
@@ -271,19 +312,54 @@ function MenuManagementForm() {
                     type="text"
                     placeholder="Resto Cafe"
                   />
-                  <label
-                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-2"
-                    for="grid-sellingPrice-name"
-                  >
-                    Upload Image
-                  </label>
-                  <input
-                    id="image-upload"
-                    className="appearance-none block w-full bg-gray-200 text-gray-700 border mt-3  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                    type="file"
-                    name="image"
-                    onChange={handleImageChange}
-                  />
+                  {/* {formdata["itemName"] && formdata["_id"] ? (
+                    <div className="mt-7">
+                      <div className=" flex ">
+                        <div className="relative">
+                          <img
+                            src={formdata?.image}
+                            alt=""
+                            className="w-40 h-16 object-cover rounded-lg"
+                          />
+                          <button
+                            // onClick={onClose}
+                            className="absolute top-0 right-0 p-2 m-2 bg-white rounded-full"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-2 w-2 text-gray-900"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : ( */}
+                    <>
+                      <label
+                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-2"
+                        for="grid-sellingPrice-name"
+                      >
+                        Upload Image
+                      </label>
+                      <input
+                        id="image-upload"
+                        className="appearance-none block w-full bg-gray-200 text-gray-700 border mt-3  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                        type="file"
+                        name="image"
+                        onChange={handleImageChange}
+                      />
+                    </>
+                  {/* )} */}
                 </div>
               </div>
 
@@ -292,7 +368,7 @@ function MenuManagementForm() {
                   <>
                     <button
                       type="submit"
-                      onClick={onMenuItemSubmit}
+                      onClick={editItemSubmit}
                       className="bg-emerald-700 hover:bg-green-600 text-white font-bold py-2  rounded w-4/12 "
                     >
                       Edit Item

@@ -27,7 +27,7 @@ export class VendorPublishedListener extends Listener<VendorPublishedEvent> {
       menu,
     } = data;
 
-    let vendorId = id;
+    let restaurantId = id;
     const existingVendor = await Vendor.findOne({ phone });
 
     if (existingVendor) {
@@ -35,6 +35,7 @@ export class VendorPublishedListener extends Listener<VendorPublishedEvent> {
       const options = { new: true };
 
       const updatedData = {
+        restaurantId,
         name,
         restaurantName,
         description,
@@ -59,6 +60,7 @@ export class VendorPublishedListener extends Listener<VendorPublishedEvent> {
       });
     } else {
       const vendor = Vendor.build({
+        restaurantId,
         name,
         restaurantName,
         description,

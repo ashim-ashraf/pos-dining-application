@@ -48,21 +48,24 @@ export const validatePhone = (phone) => {
     return value !== "";
   }
 
-  export function validateImage(images) {
-      if (!images || images.length === 0) {
-          return true;
-        }
-    
-      const allowedTypes = ["image/jpeg", "image/jpg", "image/webp"];
-    
-      for (let i = 0; i < images.length; i++) {
-        if (!allowedTypes.includes(images[i].type)) {
-          return false;
-        }
-      }
-    
+  export function validateImage(file) {
+    if (!file) {
+      return false;
+    }
+    const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.webp)$/i;
+    if (!allowedExtensions.exec(file.name)) {
+      return false;
+    } else {
       return true;
+    }
   }
+  
+
+  export function validateUrl(url) {
+    const endpointRegex = /^\/[\w-/]+$/;
+    return endpointRegex.test(url);
+  }
+  
   
   export function validatePassword(password) {
     if(!password){

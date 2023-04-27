@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import QrReader from "react-qr-scanner";
 import { bookedTable } from "../../features/authSlices/userSlice";
+import { releiveTable } from "../../features/authSlices/userSlice";
 
 function Cart() {
   const videoRef = useRef(null);
@@ -27,9 +28,11 @@ function Cart() {
     increaseCount,
     decreaseCount,
     calculateTotal,
+    clearCart,
   } = useCart();
   const [cart, setCart] = useState(getCart().items);
   const table = useSelector((state) => state.user.table);
+  const orderId = useSelector((state) => state.user.orderId)
   const [toast, setToast] = useState(false);
   const [errorToast, setErrorToast] = useState(false);
   const [actionScan, setActionScan] = useState(false);
@@ -39,12 +42,19 @@ function Cart() {
   const [capturedImageDataUrl, setCapturedImageDataUrl] = useState(null);
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
+  const [updated, setUpdated] = useState(false)
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setCart(getCart().items || {});
-  }, []);
+    if(!updated){
+      setCart(getCart().items || {});
+    }
+  }, [updated]);
 
+  useEffect(() => {
+    setUpdated(true)
+  }, [])
+  
   useEffect(() => {
     if (code) {
       axios
@@ -86,6 +96,8 @@ function Cart() {
         .post("/api/users/orders",  {cart , table} )
         .then((res) => {
           console.log(res.data);
+          clearCart()
+          setUpdated(false)
         })
         .catch((err) => {
           console.log(err);
@@ -119,6 +131,16 @@ function Cart() {
       setLoading(true);
     }
   };
+
+  const handleChangeTable = () => {
+    let code = table
+    axios.post("/api/users/releive-table", {code}).then((res) => {
+      console.log(res.data)
+      dispatch(releiveTable())
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
 
   return (
     <UserLayout>
@@ -173,8 +195,13 @@ function Cart() {
               <Block>
                 {table ? (
                   <>
-                    <Block>
-                      <p className="font-bold">TABLE SELECTED</p>
+                    <Block className="flex gap-5">
+                      <p className="font-bold mt-1">TABLE SELECTED</p>
+                      <div className=" w-25">
+                        { !orderId &&
+                          <Button outline onClick={handleChangeTable}>Change Table</Button>
+                        }
+                      </div>
                     </Block>
                   </>
                 ) : (
@@ -244,6 +271,7 @@ function Cart() {
                             if (table) {
                               handleOrder();
                             } else {
+                              setToast(true)
                             }
                           }}
                         >
@@ -256,7 +284,10 @@ function Cart() {
               </Block>
             </>
           ) : (
-            <p>Your cart is empty.</p>
+            <div className="fixed inset-0 flex items-center justify-center flex-col">
+<div><img src="https://mir-s3-cdn-cf.behance.net/projects/404/95974e121862329.Y3JvcCw5MjIsNzIxLDAsMTM5.png" alt="" /></div>
+  
+</div>
           )}
         </>
       )}

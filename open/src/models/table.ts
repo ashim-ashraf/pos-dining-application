@@ -4,7 +4,21 @@ interface TableAttrs {
     id:string;
   seats: string;
   status?: string;
-  currentOrder?: object;
+  currentOrder?: {
+    _id:  mongoose.Types.ObjectId;
+    restaurantId: string;
+    items: {
+      _id: string;
+      itemName: string;
+      retailPrice: number;
+      description: string;
+      sellingPrice: number;
+      category: string;
+      image: string;
+      count: number;
+      orderStatus: string;
+    }[];
+  }
   PreviousOrders?: object;
 }
 
@@ -13,7 +27,21 @@ interface TableDoc extends mongoose.Document {
   _id:string;
   seats: string;
   status: string;
-  currentOrder: object;
+  currentOrder?: {
+    _id:  mongoose.Types.ObjectId;
+    restaurantId: string;
+    items: {
+      _id: string;
+      itemName: string;
+      retailPrice: number;
+      description: string;
+      sellingPrice: number;
+      category: string;
+      image: string;
+      count: number;
+      orderStatus: string;
+    }[];
+  };
   PreviousOrders: object;
 }
 
@@ -33,8 +61,21 @@ const tableSchema = new mongoose.Schema(
       default:"open"
     },
     currentOrder: {
-      type: Object,
-      default: {}
+      _id:  mongoose.Types.ObjectId,
+      restaurantId:  String ,
+      items: [
+        {
+          _id:  String, 
+          itemName:  String, 
+          retailPrice:  Number, 
+          description:  String, 
+          sellingPrice:  Number, 
+          category:  String, 
+          image:  String, 
+          count:  Number, 
+          orderStatus:  String, 
+        },
+      ],
     },
     PreviousOrders: {
       type: Object,

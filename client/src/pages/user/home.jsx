@@ -19,7 +19,7 @@ export default function Homepage() {
 
   useEffect(() => {
     axios
-      .get("/api/vendors/get-vendors")
+      .get("/api/users/get-vendors")
       .then((res) => {
         setRestaurants(res.data);
       })

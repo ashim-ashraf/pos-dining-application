@@ -6,6 +6,8 @@ import { Table } from "../models/table";
 import { Vendor } from "../models/vendor";
 import { TableCreatedPublisher } from "../events/publishers/table-created-publisher";
 import { natsWrapper } from "../nats-wrapper";
+import { VendorApprovalPublisher } from "../events/publishers/vendor-approval-publisher";
+import { Banner } from "../models/banner";
 
 export const AdminVerify = (req: Request, res: Response) => {
   res.send({ currentAdmin: req.currentAdmin || null });
@@ -104,7 +106,7 @@ export const getVendors = async (req: Request, res: Response) => {
 export const vendorApproval = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { currentStatus } = req.body;
-  console.log(currentStatus);
+
   try {
     // Find the vendor by ID and update the vendorStatus property
     const vendor = await Vendor.findByIdAndUpdate(
@@ -112,6 +114,11 @@ export const vendorApproval = async (req: Request, res: Response) => {
       { $set: { vendorStatus: currentStatus } },
       { new: true }
     );
+
+    await new VendorApprovalPublisher(natsWrapper.client).publish({
+      id: id,
+      currentStatus: currentStatus,
+    });
 
     res.json({ success: true, vendor });
   } catch (error) {
@@ -125,6 +132,27 @@ export const test = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-export const addBanner =  (req: Request, res: Response, next: NextFunction) => {
-  
+export const addBanner = async (req: Request, res: Response, next: NextFunction) => {
+  const { title , url} = req.body;
+  interface FileObject extends Express.Multer.File {
+    location: string;
+  }
+  const file = req.file as FileObject;
+  const image: string = file.location;
+  try {
+    const newBanner = new Banner({
+      title,
+      url,
+      image
+    });
+    await newBanner.save();
+    res.status(201).send({success:true});
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getBanners = async (req: Request, res: Response, next: NextFunction) => {
+  let banners = await Banner.find();
+  res.status(200).send(banners);
 }

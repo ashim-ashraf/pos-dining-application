@@ -17,7 +17,7 @@ function RestaurantDetailPage() {
 
   useEffect(() => {
     axios
-      .get(`/api/vendors/get-vendor/${restaurantId}`)
+      .get(`/api/users/get-vendor/${restaurantId}`)
       .then((res) => {
         setRestaurantDetails(res.data.vendorDetails);
         setMenu(res.data.menu);
@@ -46,7 +46,7 @@ function RestaurantDetailPage() {
             <p>{restaurantDetails.description}</p>
           </Block>
 
-          <MenuItemsList items={menu} restaurantId={restaurantDetails._id} />
+          <MenuItemsList items={menu} restaurantId={restaurantDetails.restaurantId} />
           <div>hi</div>
         </>
       </Page>

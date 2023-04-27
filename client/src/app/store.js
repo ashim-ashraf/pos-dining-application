@@ -23,4 +23,5 @@ const persistedReducer = persistReducer(presistConfig, reducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
+  devTools: true
 });

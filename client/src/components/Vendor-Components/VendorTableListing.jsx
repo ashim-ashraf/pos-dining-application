@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Toaster } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { CgSpinner } from "react-icons/cg";
 
 function VendorTable() {
   const [tables, setTables] = useState([]);
-  const [updated, setUpdated] = useState(false);
   const [currentTable, setCurrentTable] = useState(null);
   const [manageTable, setManageTable] = useState(false);
   const [tableNo, setTableNo] = useState("");
@@ -14,22 +13,20 @@ function VendorTable() {
   const vendor = useSelector((state) => state.vendor.vendor);
 
   useEffect(() => {
-    if (!updated) {
-      axios
-        .get("/api/vendors/get-tables")
-        .then((res) => {
-          setTables(res.data);
-          setUpdated(true);
-        })
-        .catch((err) => {
-          console.log("error", err);
-        });
-    }
-  }, [updated]);
+    getTables()
+  }, []);
 
-  useEffect(() => {
-    console.log(updated);
-  }, [updated]);
+  const getTables = () => {
+    axios
+    .get("/api/vendors/get-tables")
+    .then((res) => {
+      setTables(res.data);
+    })
+    .catch((err) => {
+      console.log("error", err);
+    });
+  }
+
 
   const handleTable = (table, tableNo) => {
     setCurrentTable(table);
@@ -45,7 +42,7 @@ function VendorTable() {
       .then((res) => {
         console.log(res.data);
         setCurrentTable(res.data);
-        setUpdated(false);
+        getTables()
         setLoading(false);
       })
       .catch((err) => {
@@ -87,20 +84,20 @@ function VendorTable() {
                   </div>
 
                   <div>
-                    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                           <tr>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                               Item name
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                               Status
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                               Category
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                               Action
                             </th>
                           </tr>
@@ -111,14 +108,14 @@ function VendorTable() {
                               (item, index) => {
                                 return (
                                   <>
-                                    <tr class="bg-white ">
+                                    <tr className="bg-white ">
                                       <th
                                         scope="row"
-                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                       >
                                         {item.itemName}
                                       </th>
-                                      <td class="px-6 py-4">
+                                      <td className="px-6 py-4">
                                         <span
                                           className={`inline-block h-3 w-3 rounded-full ${
                                             item.orderStatus === "delivered"
@@ -132,8 +129,8 @@ function VendorTable() {
                                         ></span>
                                         {item.orderStatus}
                                       </td>
-                                      <td class="px-6 py-4">{item.count}</td>
-                                      <td class="px-6 py-4">
+                                      <td className="px-6 py-4">{item.count}</td>
+                                      <td className="px-6 py-4">
                                         <div>
                                           <select
                                             id="dropdown"
@@ -149,10 +146,16 @@ function VendorTable() {
                                             <option value="">
                                               Change Status
                                             </option>
-                                            <option value="delivered">
+                                            <option value="Preparing">
+                                              Preparing
+                                            </option>
+                                            <option value="Ready for Delivery">
+                                              Ready for Delivery
+                                            </option>
+                                            <option value="Delivered">
                                               Delivered
                                             </option>
-                                            <option value="cancelled">
+                                            <option value="Cancelled">
                                               Cancelled
                                             </option>
                                           </select>
@@ -191,7 +194,11 @@ function VendorTable() {
                       tables.map((item, index) => {
                         return (
                           <div
-                            onClick={() => handleTable(item, index + 1)}
+                            onClick={() => {if(item?.currentOrder?.restaurantId === vendor.id){
+                              handleTable(item, index + 1)
+                            } else {
+                              toast.error("Not Available")
+                            }}}
                             className={`flex-col h-28 ${
                               item?.currentOrder?.restaurantId === vendor.id
                                 ? item.status === "booked" &&
@@ -257,7 +264,7 @@ function VendorTable() {
                       </span>
                     </li>
                     <li className="flex items-center mb-2">
-                      <div className="w-10 h-4  bg-gray-400 mr-2"></div>
+                      <div className="w-10 h-4  bg-white mr-2"></div>
                       <span className="text-gray-700 text-sm">
                         Tabel Unoccupied
                       </span>
