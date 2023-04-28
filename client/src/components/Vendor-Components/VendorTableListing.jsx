@@ -34,11 +34,11 @@ function VendorTable() {
     setManageTable(true);
   };
 
-  const handleStatusChange = (itemId, status) => {
+  const handleStatusChange = (entityId, status) => {
     setLoading(true);
     const tableId = currentTable._id;
     axios
-      .post("/api/vendors/manage-order-status", { tableId, itemId, status })
+      .post("/api/vendors/manage-order-status", { tableId, entityId, status })
       .then((res) => {
         console.log(res.data);
         setCurrentTable(res.data);
@@ -118,27 +118,28 @@ function VendorTable() {
                                       <td className="px-6 py-4">
                                         <span
                                           className={`inline-block h-3 w-3 rounded-full ${
-                                            item.orderStatus === "delivered"
+                                            item.orderStatus === "Delivered"
                                               ? "bg-green-500"
-                                              : item.orderStatus === "cancelled"
+                                              : item.orderStatus === "Cancelled"
                                               ? "bg-red-500"
-                                              : item.orderStatus === "preparing"
+                                              : item.orderStatus === "Preparing"
                                               ? "bg-orange-500"
                                               : "bg-slate-500"
                                           } text-transparent mr-2`}
                                         ></span>
                                         {item.orderStatus}
                                       </td>
-                                      <td className="px-6 py-4">{item.count}</td>
+                                      <td className="px-6 py-4 ">{item.count}</td>
                                       <td className="px-6 py-4">
-                                        <div>
+
+                                        { item?.orderStatus === "Cancelled"?(<div></div>): (<div>
                                           <select
                                             id="dropdown"
                                             className="focus:outline-none"
                                             value="Change Status"
                                             onChange={(e) =>
                                               handleStatusChange(
-                                                item._id,
+                                                item.entityId,
                                                 e.target.value
                                               )
                                             }
@@ -159,7 +160,8 @@ function VendorTable() {
                                               Cancelled
                                             </option>
                                           </select>
-                                        </div>
+                                        </div>)}
+                                        
                                       </td>
                                     </tr>
                                   </>

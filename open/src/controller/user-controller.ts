@@ -7,7 +7,8 @@ import mongoose from "mongoose";
 import { OrderCreatedPublisher } from "../events/publisher/order-created-publisher";
 import { Vendor } from "../models/vendor";
 import { v4 as uuidv4 } from "uuid";
-import { OrderStatusUpdatePublisher } from "../events/publisher/order-status-publisher";
+import { OrderItemCancelledPublisher } from "../events/publisher/order-cancelled-publisher";
+import { OrderPaymentUpdatePublisher } from "../events/publisher/order-payment-publisher";
 
 export const bookTable = async (req: Request, res: Response) => {
   //here code is sent from frontEnd by decoding QR the code is actually a tableid
@@ -18,28 +19,15 @@ export const bookTable = async (req: Request, res: Response) => {
       { $set: { status: "booked" } },
       { new: true }
     );
-    
+
     if (!table) {
       return res.status(404).send({ error: "Table not available for booking" });
     }
-    
+
     await new TableBookedPublisher(natsWrapper.client).publish({
       id: code,
       status: "booked",
     });
-
-    // Generate JWT
-    const userJwt = jwt.sign(
-      {
-        id: code,
-      },
-      process.env.JWT_KEY!
-    );
-
-    // Store it on session object
-    req.session = {
-      jwt: userJwt,
-    };
 
     let tableid = table.id;
     return res
@@ -159,8 +147,7 @@ export const createOrder = async (req: Request, res: Response) => {
 };
 
 export const cancelOrder = async (req: Request, res: Response) => {
-  const { entityId, tableId, status} = req.body;
-
+  const { entityId, tableId, status } = req.body;
 
   try {
     const table = await Table.findOneAndUpdate(
@@ -183,12 +170,11 @@ export const cancelOrder = async (req: Request, res: Response) => {
       }
     );
 
-
     if (!table) {
       return res.status(404).json({ message: "Table not found" });
     }
 
-    await new OrderStatusUpdatePublisher(natsWrapper.client).publish({
+    await new OrderItemCancelledPublisher(natsWrapper.client).publish({
       tableId: tableId,
       //itemId is now substituted with entityId while communicating
       itemId: entityId,
@@ -202,16 +188,39 @@ export const cancelOrder = async (req: Request, res: Response) => {
   }
 };
 
+export const orderPayment = async (req: Request, res: Response) => {
+  const { order, tableId } = req.body;
+
+  try {
+    const table = await Table.findOneAndUpdate(
+      { id: tableId },
+      {
+        $set: { status: "open" },
+        $unset: { currentOrder: {} },
+      },
+      { new: true }
+    );
+
+    await new OrderPaymentUpdatePublisher(natsWrapper.client).publish({
+      order:order,
+      tableId:tableId,
+    });
+
+    res.status(200).send(table);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal server error");
+  }
+};
+
 export const getOrders = async (req: Request, res: Response) => {
   const tableId = req.params.id;
-  console.log(tableId);
   try {
     const table = await Table.findOne({ id: tableId });
     if (!table) {
       return res.status(404).json({ message: "Table not found" });
     }
     const orders = table.currentOrder;
-    console.log(table);
     res.status(200).send(orders);
   } catch (error) {
     console.error(error);

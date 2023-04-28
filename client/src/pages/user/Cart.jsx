@@ -28,7 +28,7 @@ function Cart() {
     increaseCount,
     decreaseCount,
     calculateTotal,
-    clearCart,
+    clearCartItems,
   } = useCart();
   const [cart, setCart] = useState(getCart().items);
   const table = useSelector((state) => state.user.table);
@@ -96,7 +96,7 @@ function Cart() {
         .post("/api/users/orders",  {cart , table} )
         .then((res) => {
           console.log(res.data);
-          clearCart()
+          clearCartItems()
           setUpdated(false)
         })
         .catch((err) => {

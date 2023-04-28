@@ -250,22 +250,33 @@ res.status(200);
 }
 
 export const manageOrderStatus = async (req: Request, res: Response) => {
-  const { tableId, itemId, status } = req.body;
-  console.log(tableId, itemId, status);
+  const { tableId, entityId, status } = req.body;
+  console.log("in vendor controller", tableId, entityId, status);
 
   try {
     const table = await Table.findOneAndUpdate(
-      { _id: tableId, "currentOrder.items._id": itemId },
-      { $set: { "currentOrder.items.$.orderStatus": status } },
-      { new: true }
+      {
+        _id: tableId,
+        "currentOrder.items.entityId": entityId,
+      },
+      {
+        $set: {
+          "currentOrder.items.$[elem].orderStatus": status,
+        },
+      },
+      {
+        new: true,
+        arrayFilters: [
+          {
+            "elem.entityId": entityId,
+          },
+        ],
+      }
     );
-    if (!table) {
-      return res.status(404).json({ message: "Table not found" });
-    }
 
     await new OrderStatusUpdatePublisher(natsWrapper.client).publish({
       tableId: tableId,
-      itemId: itemId,
+      itemId: entityId,
       status: status,
     });
 

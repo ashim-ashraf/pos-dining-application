@@ -1,8 +1,6 @@
 import { Message } from "node-nats-streaming";
 import { Subjects, Listener, VendorPublishedEvent } from "@snackopedia/common";
-import { User } from "../../models/user";
 import { Vendor } from "../../models/vendor";
-import mongoose from "mongoose";
 
 export class VendorPublishedListener extends Listener<VendorPublishedEvent> {
   subject: Subjects.VendorPublished = Subjects.VendorPublished;

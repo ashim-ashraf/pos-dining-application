@@ -14,8 +14,6 @@ export class TableCreatedListener extends Listener<TableCreatedEvent> {
       id,
       seats,
       status,
-      currentOrder,
-      PreviousOrders,
     } = data;
 
     const table = Table.build({

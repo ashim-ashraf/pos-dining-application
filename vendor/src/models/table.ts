@@ -4,7 +4,7 @@ interface TableAttrs {
   seats: string;
   status?: string;
   currentOrder?: object;
-  PreviousOrders?: object;
+  previousOrders?: [];
 }
 
 interface TableDoc extends mongoose.Document {
@@ -12,7 +12,7 @@ interface TableDoc extends mongoose.Document {
   seats: string;
   status: string;
   currentOrder: object;
-  PreviousOrders: object;
+  previousOrders: [];
 }
 
 interface TableModel extends mongoose.Model<TableDoc> {
@@ -33,9 +33,8 @@ const tableSchema = new mongoose.Schema(
       type: Object,
       default: {}
     },
-    PreviousOrders: {
-      type: Object,
-      default: {}
+    previousOrders: {
+      type: [],
     },
   },
   {
