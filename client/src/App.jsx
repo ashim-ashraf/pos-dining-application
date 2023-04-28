@@ -25,6 +25,7 @@ import AdminBannerManagement from "./pages/admin/AdminBannerManagement";
 import Cart from "./pages/user/Cart";
 import Orders from "./pages/user/Orders";
 import OrderManagementPage from "./pages/vendor/OrderManagementPage";
+import Billing from "./pages/user/Billing";
 
 function App() {
   return (
@@ -36,6 +37,8 @@ function App() {
         <Route path="/restaurant/:restaurantId" element={<RestaurantDetailPage />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/orders" element={<Orders />} />
+        <Route path="/billing" element={<Billing />} />
+
 
 
         <Route element={<VendorIsLogged/>}>

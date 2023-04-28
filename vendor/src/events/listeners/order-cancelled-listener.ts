@@ -1,27 +1,27 @@
 import {
   BadRequestError,
   Listener,
-  OrderStatusUpdateEvent,
+  OrderItemCancelledEvent,
   Subjects,
 } from "@snackopedia/common";
 import { Table } from "../../models/table";
 import { Message } from "node-nats-streaming";
+const mongoose = require("mongoose");
 
-export class OrderStatusUpdateListener extends Listener<OrderStatusUpdateEvent> {
-  subject: Subjects.OrderUpdated = Subjects.OrderUpdated;
-  queueGroupName = "open-service";
+export class OrderItemCancelledListener extends Listener<OrderItemCancelledEvent> {
+  subject: Subjects.OrderCancelled = Subjects.OrderCancelled;
+  queueGroupName = "vendor-service";
 
-  async onMessage(data: OrderStatusUpdateEvent["data"], msg: Message) {
+  async onMessage(data: OrderItemCancelledEvent["data"], msg: Message) {
     const { tableId, itemId, status } = data;
     const entityId = itemId;
 
-    console.log("final listener",  tableId, itemId, status);
-    
+    console.log("in kkk", tableId, itemId, status);
 
     try {
       const table = await Table.findOneAndUpdate(
         {
-          id: tableId,
+          _id: tableId,
           "currentOrder.items.entityId": entityId,
         },
         {
@@ -38,10 +38,6 @@ export class OrderStatusUpdateListener extends Listener<OrderStatusUpdateEvent> 
           ],
         }
       );
-
-      if (!table) {
-        throw new BadRequestError("could not update status");
-      }
 
       msg.ack();
     } catch (error) {
