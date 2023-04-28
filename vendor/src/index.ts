@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import { natsWrapper } from "./nats-wrapper";
 import { app } from "./app";
-import { UserCreatedListener } from "./events/listeners/user-created-listener";
 import { TableBookedListener } from "./events/listeners/table-booked-listener";
 import { OrderCreatedListener } from "./events/listeners/order-created-listener";
 import { OrderItemCancelledListener } from "./events/listeners/order-cancelled-listener";
@@ -47,7 +46,6 @@ const start = async () => {
     process.on("SIGINT", () => natsWrapper.client.close());
     process.on("SIGTERM", () => natsWrapper.client.close());
 
-    new UserCreatedListener(natsWrapper.client).listen();
     new TableBookedListener(natsWrapper.client).listen();
     new OrderCreatedListener(natsWrapper.client).listen();
     new OrderItemCancelledListener(natsWrapper.client).listen();

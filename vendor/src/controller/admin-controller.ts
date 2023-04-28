@@ -66,7 +66,7 @@ export const addTable = async (req: Request, res: Response) => {
       seats: savedTable.seats,
       status: savedTable.status,
       currentOrder: savedTable.currentOrder,
-      PreviousOrders: savedTable.PreviousOrders,
+      PreviousOrders: savedTable.previousOrders,
     });
   } catch (err) {
     console.error(err);

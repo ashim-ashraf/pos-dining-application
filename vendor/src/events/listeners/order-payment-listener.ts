@@ -5,6 +5,7 @@ import {
   } from "@snackopedia/common";
   import { Table } from "../../models/table";
   import { Message } from "node-nats-streaming";
+import { Orders } from "../../models/orders";
   const mongoose = require("mongoose");
   
   export class OrderPaymentUpdateListener extends Listener<OrderPaymentUpdateEvent> {
@@ -13,19 +14,28 @@ import {
   
     async onMessage(data: OrderPaymentUpdateEvent["data"], msg: Message) {
       const { order, tableId  } = data;
-    
-  
-      
+
       try {
         const table = await Table.findOneAndUpdate(
             { _id: tableId },
             {
-              $push: { previousOrders: order },
               $set: { status: "open" },
               $unset: { currentOrder: {} },
             },
             { new: true }
           );
+          
+          Orders.findOneAndUpdate(
+            {},
+            { $push: { orders: order } },
+            { new: true, upsert: true }
+          )
+          .then(updatedDoc => {
+            console.log(updatedDoc);
+          })
+          .catch(error => {
+            console.error(error);
+          });
   
         msg.ack();
       } catch (error) {

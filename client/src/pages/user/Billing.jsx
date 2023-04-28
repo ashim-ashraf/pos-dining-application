@@ -9,12 +9,15 @@ import {
   userOrder,
 } from "../../features/authSlices/userSlice";
 import { useNavigate } from "react-router-dom";
+import useCart from "../../components/User-Components/Cart-Functions";
+
 
 function Billing() {
   const table = useSelector((state) => state.user.table);
   const [order, setOrder] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { clearCart } = useCart();
 
   useEffect(() => {
     getOrders();
@@ -52,9 +55,10 @@ function Billing() {
     axios
       .post("api/users/payment", { order, tableId })
       .then(() => {
-        dispatch(releiveTable())
-        dispatch(clearOrder())
-        navigate("/")
+        clearCart();
+        dispatch(releiveTable());
+        dispatch(clearOrder());
+        navigate("/");
       })
       .catch((err) => {
         console.log(err);

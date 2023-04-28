@@ -1,6 +1,5 @@
 import { Message } from "node-nats-streaming";
 import { Subjects, Listener, TableBookedEvent } from "@snackopedia/common";
-import { User } from "../../models/user";
 import { Table } from "../../models/table";
 
 export class TableBookedListener extends Listener<TableBookedEvent> {

@@ -29,19 +29,6 @@ export const bookTable = async (req: Request, res: Response) => {
       status: "booked",
     });
 
-    // Generate JWT
-    const userJwt = jwt.sign(
-      {
-        id: code,
-      },
-      process.env.JWT_KEY!
-    );
-
-    // Store it on session object
-    req.session = {
-      jwt: userJwt,
-    };
-
     let tableid = table.id;
     return res
       .status(200)
@@ -208,7 +195,6 @@ export const orderPayment = async (req: Request, res: Response) => {
     const table = await Table.findOneAndUpdate(
       { id: tableId },
       {
-        $push: { previousOrders: order },
         $set: { status: "open" },
         $unset: { currentOrder: {} },
       },

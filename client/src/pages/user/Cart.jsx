@@ -28,7 +28,6 @@ function Cart() {
     increaseCount,
     decreaseCount,
     calculateTotal,
-    clearCart,
     clearCartItems,
   } = useCart();
   const [cart, setCart] = useState(getCart().items);
