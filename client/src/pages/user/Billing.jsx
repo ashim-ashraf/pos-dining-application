@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Block, Button, Card } from "konsta/react";
 import {
   clearOrder,
+  ratingData,
   releiveTable,
   userOrder,
 } from "../../features/authSlices/userSlice";
@@ -34,6 +35,7 @@ function Billing() {
         order.items = filteredItems;
         console.log("filter", order);
         setOrder(order);
+        dispatch(ratingData(order))
       })
       .catch((err) => {
         console.log(err);
@@ -58,7 +60,7 @@ function Billing() {
         clearCart();
         dispatch(releiveTable());
         dispatch(clearOrder());
-        navigate("/");
+        navigate("/success");
       })
       .catch((err) => {
         console.log(err);

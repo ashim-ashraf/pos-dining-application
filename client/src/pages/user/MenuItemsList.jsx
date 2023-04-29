@@ -46,7 +46,6 @@ function MenuItemsList(props) {
 
   return (
     <List strongIos dividersIos>
-      <div ref={myDivRef}>hii</div>
       {category?.map((category) => (
         <div key={category}>
           <div className="flex w-full border-2 p-2 ">

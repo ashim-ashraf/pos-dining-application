@@ -21,7 +21,7 @@ function Orders() {
     axios
       .get(`/api/users/orders/${table}`)
       .then(async (res) => {
-        dispatch(userOrder(res.data._id));
+        dispatch(userOrder(res.data));
         await setOrder(res.data);
         const allCompleted = res.data.items.every((item) => {
           return (

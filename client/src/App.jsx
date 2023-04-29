@@ -26,6 +26,7 @@ import Cart from "./pages/user/Cart";
 import Orders from "./pages/user/Orders";
 import OrderManagementPage from "./pages/vendor/OrderManagementPage";
 import Billing from "./pages/user/Billing";
+import PaymentSuccessPage from "./pages/user/PaymentSuccessPage";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/billing" element={<Billing />} />
+        <Route path="/success" element={<PaymentSuccessPage />} />
 
 
 
@@ -52,7 +54,6 @@ function App() {
             <Route path="/vendors/home" element={<VendorLandingPage />} />
             <Route path="/vendors/table-management" element={<VendorTableManagement/>} />
             <Route path="/vendors/orders" element={<OrderManagementPage/>} />
-          
           </Route>
 
 
