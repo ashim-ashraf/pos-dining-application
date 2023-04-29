@@ -17,16 +17,39 @@ function VendorLogin() {
   const [showOTP, setShowOTP] = useState(false);
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
+  const [counter, setCounter] = useState(60);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-useEffect(() => {
-  recaptcha()
-}, [])
+// useEffect(() => {
+//   recaptcha()
+// }, [])
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+function resendotp() {
+  const phoneNumber = "+" + phone;
+  onSigninssubmit(phoneNumber)
+    .then(() => {
+      setCounter(60);
+    })
+    .catch((err) => {
+      console.log(err);
+    }); 
+}
+
+useEffect(() => {
+  let timer =
+    counter > 0 &&
+    setInterval(() => {
+      setCounter(counter - 1);
+    }, 1000);
+  return () => {
+    clearInterval(timer);
+  };
+}, [counter]);
+
+  const handleSubmit = () => {
+    recaptcha()
     try {
       if (!phone) {
         toast.error("Please fill in the credentials");
@@ -66,8 +89,8 @@ useEffect(() => {
   };
 
   function onOTPVerify() {
-    alert("HII")
-    alert(otp);
+  
+    
     console.log(window.confirmationResult)
     setLoading(true);
       window.confirmationResult
@@ -126,18 +149,47 @@ useEffect(() => {
                         required
                       />
                       <label>OTP sent to {phone}</label>
+                      <label>
+                          {counter > 0 ? (
+                            <div>Time Remainig {counter}</div>
+                          ) : (
+                            ""
+                          )}
+                        </label>
                     </div>
-                    <button
-                      onClick={onOTPVerify}
-                      className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg
+                    {!counter ? (
+                        <button
+                          onClick={resendotp}
+                          className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg
                    px-4 py-3 mt-6"
-                    >
-                      <span className="flex items-center justify-center w-full">
-                        {/* {loading && (
-                        <CgSpinner size={20} className="mt-1 animate-spin" />
-                      )} */}
-                      Verify OTP</span>
-                    </button>
+                        >
+                          <span className="flex items-center justify-center w-full">
+                            {loading && (
+                              <CgSpinner
+                                size={20}
+                                className="mt-1 animate-spin"
+                              />
+                            )}
+                            Resend OTP
+                          </span>
+                        </button>
+                      ) : (
+                        <button
+                          onClick={onOTPVerify}
+                          className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg
+                   px-4 py-3 mt-6"
+                        >
+                          <span className="flex items-center justify-center w-full">
+                            {loading && (
+                              <CgSpinner
+                                size={20}
+                                className="mt-1 animate-spin"
+                              />
+                            )}
+                            Verify OTP
+                          </span>
+                        </button>
+                      )}
                   </div>
                 ) : (
                   <div className="mt-6 ">

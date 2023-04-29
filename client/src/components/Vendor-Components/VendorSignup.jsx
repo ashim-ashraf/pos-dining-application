@@ -30,7 +30,7 @@ function VendorSignup() {
         setCounter(60);
       })
       .catch((err) => {
-        alert(err);
+        console.log(err);
       }); 
   }
 
@@ -88,7 +88,6 @@ function VendorSignup() {
 
   function onOTPVerify() {
     setLoading(true);
-    alert(otp);
     window.confirmationResult
       .confirm(otp)
       .then(async (res) => {

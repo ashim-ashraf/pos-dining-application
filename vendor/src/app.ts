@@ -4,6 +4,9 @@ import "express-async-errors";
 import { json } from "body-parser";
 import cookieSession from "cookie-session";
 
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean')
+
 import {
   currentVendor,
   currentAdmin,
@@ -21,6 +24,13 @@ const app = express();
 app.use(cors());
 app.set("trust proxy", true);
 app.use(json());
+
+//Data sanitization against NoSQL query injection 
+app.use(mongoSanitize());
+
+//Data Sanitization against site script XSS
+app.use(xss())
+
 app.use(
   cookieSession({
     signed: false,
