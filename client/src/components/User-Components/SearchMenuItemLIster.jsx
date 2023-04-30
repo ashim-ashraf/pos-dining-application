@@ -6,12 +6,10 @@ import {
     Sheet,
     Stepper,
     Toast,
-    Toolbar,
   } from "konsta/react";
   import React, { useEffect, useState } from "react";
   import useCart from "../../components/User-Components/Cart-Functions";
   import { Toaster } from "react-hot-toast";
-  import { Link } from "react-router-dom";
   
   function SearchMenuItemLIster(props) {
     const { items, restaurantId } = props;

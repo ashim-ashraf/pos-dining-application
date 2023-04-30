@@ -53,9 +53,9 @@ function Billing() {
   const handlePayment = () => {
     const tableId = table;
     const amountPayable = TotalPayable(order);
-    order.totalAmount = amountPayable;
+    
     axios
-      .post("api/users/payment", { order, tableId })
+      .post("api/users/payment", { order, tableId, amountPayable })
       .then(() => {
         clearCart();
         dispatch(releiveTable());

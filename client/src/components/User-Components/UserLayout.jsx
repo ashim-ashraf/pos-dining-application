@@ -3,12 +3,13 @@ import MobileNav from '../../pages/user/MobileNav'
 import { App, Page } from 'konsta/react'
 import MobileNavigation from './MobileNavigation'
 
+
 function UserLayout({children}) {
   return (
     <App theme="ios">
       <Page className="bg-white">
         <MobileNav />
-        {children}
+        {children}   
         <MobileNavigation />
       </Page>
     </App>

@@ -82,10 +82,10 @@ function MenuManagementForm() {
       });
   }
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormdata({ ...formdata, [name]: value });
-  };
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormdata({ ...formdata, [name]: value });
+    };
 
   function handleImageChange(event) {
     const { name } = event.target;
@@ -484,7 +484,7 @@ function MenuManagementForm() {
                             onClick={() => {
                               handleEditItem(item);
                             }}
-                            class="fa-regular fa-pen-to-square justify-center ml-auto"
+                            className="fa-regular fa-pen-to-square justify-center ml-auto"
                           ></i>
                         </div>
                       ))}

@@ -189,7 +189,9 @@ export const cancelOrder = async (req: Request, res: Response) => {
 };
 
 export const orderPayment = async (req: Request, res: Response) => {
-  const { order, tableId } = req.body;
+  const { order, tableId, amountPayable } = req.body;
+  order.totalAmount = amountPayable;
+  console.log(order);
 
   try {
     const table = await Table.findOneAndUpdate(
@@ -202,8 +204,8 @@ export const orderPayment = async (req: Request, res: Response) => {
     );
 
     await new OrderPaymentUpdatePublisher(natsWrapper.client).publish({
-      order:order,
-      tableId:tableId,
+      order: order,
+      tableId: tableId,
     });
 
     res.status(200).send(table);
@@ -236,8 +238,9 @@ export const getVendors = async (req: Request, res: Response) => {
 export const getVendorById = async (req: Request, res: Response) => {
   console.log("get details called");
   const vendorId = req.params.id;
+  console.log(vendorId);
 
-  const vendorDetails = await Vendor.findOne({ _id: vendorId });
+  const vendorDetails = await Vendor.findOne({ restaurantId: vendorId });
   const menu = vendorDetails?.menu;
 
   if (vendorDetails) {
