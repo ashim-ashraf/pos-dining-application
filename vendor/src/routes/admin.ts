@@ -21,7 +21,7 @@ const router = express.Router();
 
 router.get("/admin-verify", requireAdminAuth, AdminVerify);
 
-router.post("/signin", validateAdminSignin, validateRequest , adminSignin );
+router.post("/signin", validateAdminSignin , validateRequest , adminSignin );
 
 router.post("/add-table",  requireAdminAuth, addTable);
 
