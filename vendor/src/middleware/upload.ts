@@ -1,6 +1,6 @@
 import multerS3 from 'multer-s3';
 const multer = require('multer')
-const {S3Client} = require('@aws-sdk/client-s3')
+const {S3Client , DeleteObjectCommand} = require('@aws-sdk/client-s3')
 
 const s3 = new S3Client({
   region: 'ap-south-1',
@@ -21,5 +21,17 @@ const s3 = new S3Client({
       }
     }),
   });
-  
+
   module.exports=uploadS3;
+
+ export const deleteFile = async (filename: string) => {
+    const deleteParams = {
+      Bucket: 'yummersbucket',
+      Key: filename,
+    };
+    return s3.send(new DeleteObjectCommand(deleteParams));
+  };
+
+
+  
+ 

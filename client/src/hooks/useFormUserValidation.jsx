@@ -1,38 +1,39 @@
 /* eslint-disable no-lone-blocks */
 /* eslint-disable default-case */
 import React, { useEffect, useState } from 'react'
+import { isValidName, validateDescription, validatePhone } from '../validation/validation';
 
 const useFormUserValidation = (userData) => {
     const [errors, setErrors] = useState({
-        fname: "",
-        lname: "",
-        phone: "",
-        company: "",
-        password: "",
-        repeat_password: "",
-        email: ""
+        restaurantName: "",
+    liscenceNo: "",
+    description: "",
+    restaurantPhone: "",
+    address: "",
+    state: "",
+    pincode:"",
+    email:""
     });
 
-
     const handleChangeValidation = async (e) => {
-
         let { name, value } = e.target
         value = value.trim()
         validation(name, value)
     }
+
     const validation = (name, value) => {
 
         let error = "";
         switch (name) {
-            case 'fname': {
-                if (!value) {
-                    error = "First Name is Required"
+            case 'restaurantName': {
+                if (!isValidName(value)) {
+                    error = "Name is Required"
                 }
                 break;
             };
-            case 'lname': {
+            case 'liscenceNo': {
                 if (!value) {
-                    error = "Last Name is Required"
+                    error = "Liscence No is Required"
                 }
                 break;
             };
@@ -50,32 +51,42 @@ const useFormUserValidation = (userData) => {
             case 'phone': {
                 if (!value) {
                     error = "Registered Mobile is required"
-                } else if (value.length != 10) {
+                } else if (!validatePhone(value)) {
                     error = "Mobile number should be 10 digits"
                 }
                 break;
             };
-            case 'company': {
+            case 'restaurantPhone': {
                 if (!value) {
-                    error = "Company name is Required"
+                    error = "Registered Mobile is required"
+                } else if (!validatePhone(value)) {
+                    error = "Mobile number should be 10 digits"
                 }
                 break;
             };
-            case 'password': {
-                if (!value) {
-                    error = "Password is Required"
-                } else if (value.length < 6) {
-                    error = "Password needs to be 6 characters or more"
+            case 'description': {
+                if (!validateDescription(value)) {
+                    error = "Enter a valid Description"
                 }
                 break;
             };
-            case 'repeat_password': {
-                if (!value) {
-                    error = "Confirm password is Required"
-                } else if (userData.password != value) {
-                    error = "Passwords do not match"
+            case 'address': {
+                if (!isValidName(value)) {
+                    error = "Enter a valid Address "
                 }
                 break;
+            };
+            case 'state': {
+                if (!isValidName(value)) {
+                    error = "Enter a valid State "
+                }
+                break; 
+            };
+            case 'pincode': {
+                if (!value) {
+                    error = "Enter a valid pincode "
+                }
+                break; 
             }
         }
         setErrors((prevErrors) => ({
@@ -88,28 +99,27 @@ const useFormUserValidation = (userData) => {
         for (const key in errors) {
             if (errors.hasOwnProperty(key)) {
                 // console.log(`${key}: ${errors[key].length}`);
-                if (errors[key].length != 0) {
+                if (errors[key]?.length !== 0) {
                     return false
                 }
             }
         }
-        // console.log("Handle Function 222222222222222222222")
+        
 
         for (const key in userData) {
             if (userData.hasOwnProperty(key)) {
                 validation(key , userData[key])
-                if (userData[key].length == 0) {
+                if (userData[key]?.length === 0) {
                     flag = 1;
                 }
             }
         }
-        if(flag == 1)
+        if(flag === 1)
         {
             return false
         }else{
         return true
         }
-
     }
 
     return { handleChangeValidation, errors, handleNext }

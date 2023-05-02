@@ -21,6 +21,7 @@ function Orders() {
     axios
       .get(`/api/users/orders/${table}`)
       .then(async (res) => {
+        console.log(res.data)
         dispatch(userOrder(res.data));
         await setOrder(res.data);
         const allCompleted = res.data.items.every((item) => {
@@ -58,7 +59,7 @@ function Orders() {
   return (
     <UserLayout>
       <Block>
-        <table className="border-collapse w-full">
+        {order?.items.length > 0?(<><table className="border-collapse w-full">
           <thead>
             <tr>
               <th className=" px-4 py-2">Item Name</th>
@@ -105,7 +106,15 @@ function Orders() {
                 );
               })}
           </tbody>
-        </table>
+        </table></>):(<> <div className="fixed inset-0  flex items-center justify-center flex-col">
+              <div className="">
+                <img
+                  src="https://cdn.dribbble.com/userupload/2905354/file/original-92212c04a044acd88c69bedc56b3dda2.png?compress=1&resize=1200x900"
+                  alt=""
+                />
+              </div>
+            </div></>)}
+        
       </Block>
 
       <Block className="left-0 bottom-10 fixed">

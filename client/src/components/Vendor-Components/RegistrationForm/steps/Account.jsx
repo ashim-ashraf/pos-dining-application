@@ -8,14 +8,13 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 
 
-export default function Account({ SetValidate , check }) {
+export default function Account({userData,setUserData , handleChangeValidation, errors }) {
 
-  const { userData, setUserData } = useStepperContext();
+  // const { userData, setUserData } = useStepperContext();
   const [Restaurant, setRestaurant] = useState('')
   const vendorId = useSelector((state) => state.vendor.vendor.id);
 
   useEffect(() => {
-    console.log(vendorId);
     axios.get(`/api/vendors/listed-restaurant/${vendorId}`).then(async(res) => {
       console.log(res.data)
       setRestaurant(res.data)
@@ -26,76 +25,75 @@ export default function Account({ SetValidate , check }) {
   }, [])
 
   useEffect(() => {
-    console.log("called")
-    validateInputs();
-  }, [check])
+    console.log(errors)
+  }, [errors])
   
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
-    validateInputs();
-    console.log(validateInputs());
+    // validateInputs();
+    handleChangeValidation(e)
   };
 
 
-  const validateInputs = () => {
+  // const validateInputs = () => {
     
-    let errors = {};
-    if (!isValidName(userData.restaurantName)) {
-      errors.restaurantName = "Please enter a restaurant name";
-    }
+  //   let errors = {};
+  //   if (!isValidName(userData.restaurantName)) {
+  //     errors.restaurantName = "Please enter a restaurant name";
+  //   }
 
-    if (!userData.liscenceNo || !userData.liscenceNo.length === 6) {
-      errors.liscenceNo = "Please enter a valid license number";
-    }
+  //   if (!userData.liscenceNo || !userData.liscenceNo.length === 6) {
+  //     errors.liscenceNo = "Please enter a valid license number";
+  //   }
 
-    if (!validateDescription(userData.description)) {
-      errors.description = "Please enter a description";
-    }
+  //   if (!validateDescription(userData.description)) {
+  //     errors.description = "Please enter a description";
+  //   }
 
-    if (!isValidEmail(userData.email)) {
-      errors.email = "Please enter a restaurant email";
-    }
+  //   if (!isValidEmail(userData.email)) {
+  //     errors.email = "Please enter a restaurant email";
+  //   }
 
-    if (!validatePhone(userData.restaurantPhone) && !userData.restaurantPhone?.length === 10) {
-      errors.restaurantPhone = "Please enter a Restaurant phone number";
-    }
+  //   if (!validatePhone(userData.restaurantPhone) && !userData.restaurantPhone?.length === 10) {
+  //     errors.restaurantPhone = "Please enter a Restaurant phone number";
+  //   }
 
-    if (!isValidName(userData.address)) {
-      errors.address = "Please enter a address";
-    }
+  //   if (!isValidName(userData.address)) {
+  //     errors.address = "Please enter a address";
+  //   }
 
-    if (!isValidName(userData.state)) {
-      errors.state = "Please enter a state";
-    }
-    if (!userData.pincode) {
-      errors.pincode = "Please enter a pincode";
-    }
-    if (!userData.pincode?.length === 6) {
-      errors.pincode = "Please enter a valid pincode";
-    }
+  //   if (!isValidName(userData.state)) {
+  //     errors.state = "Please enter a state";
+  //   }
+  //   if (!userData.pincode) {
+  //     errors.pincode = "Please enter a pincode";
+  //   }
+  //   if (!userData.pincode?.length === 6) {
+  //     errors.pincode = "Please enter a valid pincode";
+  //   }
 
-    if (
-      isValidName(userData.restaurantName) &&
-      userData.liscenceNo &&
-      userData.liscenceNo?.length === 6 &&
-      validateDescription(userData.description) &&
-      isValidEmail(userData.email) &&
-      userData.email &&
-      validatePhone(userData.restaurantPhone) &&
-      userData.restaurantPhone?.length === 10 &&
-      isValidName(userData.address) &&
-      isValidName(userData.state) &&
-      userData.pincode &&
-      userData.pincode?.length === 6
-    ) {
-      SetValidate(true);
-    }
-    SetValidate(errors);
+  //   if (
+  //     isValidName(userData.restaurantName) &&
+  //     userData.liscenceNo &&
+  //     userData.liscenceNo?.length === 6 &&
+  //     validateDescription(userData.description) &&
+  //     isValidEmail(userData.email) &&
+  //     userData.email &&
+  //     validatePhone(userData.restaurantPhone) &&
+  //     userData.restaurantPhone?.length === 10 &&
+  //     isValidName(userData.address) &&
+  //     isValidName(userData.state) &&
+  //     userData.pincode &&
+  //     userData.pincode?.length === 6
+  //   ) {
+  //     SetValidate(true);
+  //   }
+  //   SetValidate(errors);
 
-    return errors;
-  };
+  //   return errors;
+  // };
 
 
   return (
@@ -118,7 +116,7 @@ export default function Account({ SetValidate , check }) {
             type="text"
             placeholder="Resto Cafe"
           />
-          {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
+          <p className="text-red-500 text-xs italic">{errors?.restaurantName}</p>
         </div>
         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <label

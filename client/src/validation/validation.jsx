@@ -4,7 +4,7 @@ export const validatePhone = (phone) => {
   if(!phone){
     return false
   }
-    const regex = /([0-9\s-]{7,})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/;
+    const regex = /([0-9\s-]{10,})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/;
     return regex.test(phone);
   };
   

@@ -8,6 +8,7 @@ import { BadRequestError } from "@snackopedia/common";
 import jwt from "jsonwebtoken";
 import { VendorPublisher } from "../events/publishers/vendor-publisher";
 import { VendorOpenStatusPublisher } from "../events/publishers/vendor-openstatus-publisher";
+import { deleteFile } from "../middleware/upload";
 
 export const getAllTables = async (req: Request, res: Response) => {
   console.log("get table route called ");
@@ -542,7 +543,7 @@ export const deleteS3image = async (req: Request, res: Response) => {
   const { imageUrl } = req.body;
 
   try {
-    // deleteFile(imageUrl);
+    deleteFile(imageUrl);
     res.status(200).send({ message: "image deleted successfully" });
   } catch (error) {
     res.status(500).send({ message: "could not delete image" });

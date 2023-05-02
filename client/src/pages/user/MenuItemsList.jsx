@@ -53,7 +53,7 @@ function MenuItemsList(props) {
             <div className="ml-5" id={category}>
               {category}
             </div>
-            <div className="ml-auto mr-5">here</div>
+            <div className="ml-auto mr-5"></div>
           </div>
           {items?.length > 0 &&
             items
