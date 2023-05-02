@@ -29,7 +29,7 @@ export default function Payment() {
 
   return (
     <div className="w-full border-dashed border-2 border-gray-400 py-12">
-      <label htmlFor="image-upload" className="block text-gray-700 font-bold mb-2">
+      <label htmlFor="image-upload" className="block text-gray-700 font-bold text-center mb-2">
         Select images to upload:
       </label>
       <div className="relative w-full h-12 rounded-lg overflow-hidden">
@@ -40,19 +40,13 @@ export default function Payment() {
           name="image"
           className="opacity-0 absolute left-0 top-0 w-full h-full cursor-pointer"
           onChange={handleImageChange}
-          multiple
+          single
         />
         <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center">
-          {selectedImages.length > 0 ? (
-            <div className="flex flex-wrap items-center justify-center h-full max-w-none">
-              {selectedImages.map((image, index) => (
-                <div key={index} className="w-max h-full mr-2 mb-2">
-                  <img src={image} alt={`Selected ${index}`} className="h-full max-w-none mx-2 my-1 object-contain" style={{ maxHeight: '300px', maxWidth: '400px' }}/>
-                </div>
-              ))}
-            </div>
+        {userData.image ? (
+            <img src={URL.createObjectURL(userData.image)} alt="Selected" className="h-full max-w-none mx-2 my-1 object-contain" style={{ maxHeight: '500px', maxWidth: '600px' }}/>
           ) : (
-            <span className="text-gray-700">No images selected</span>
+            <span className="text-gray-700">No image selected</span>
           )}
         </div>
       </div>

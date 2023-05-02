@@ -20,6 +20,8 @@ function MenuManagementForm() {
   const [menuManagement, setMenuManagement] = useState(false);
   const [editItemStatus, setEditItemStatus] = useState(false);
   const [editItem, seteditItem] = useState("");
+  const [showImage, setShowImage] = useState(false);
+  const [showPublishButton, setShowPublishButton] = useState(false);
   const userId = useSelector((state) => state.vendor.vendor.id);
 
   const handleCategorySubmit = (e) => {
@@ -31,12 +33,24 @@ function MenuManagementForm() {
         axios
           .post("/api/vendors/category", { userId, categoryName })
           .then(() => {
+            getCategories();
             console.log("category added");
           });
       }
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const checkApproval = () => {
+    axios
+      .get(`/api/vendors/vendor-approval/${userId}`)
+      .then((res) => {
+        setShowPublishButton(res.data);
+      })
+      .catch((err) => {
+        toast.error("Waiting for Approval");
+      });
   };
 
   useEffect(() => {
@@ -46,6 +60,7 @@ function MenuManagementForm() {
         withCredentials: true,
       })
       .then((res) => {
+        console.log(res.data);
         setMenu(res.data.menu);
       })
       .catch((error) => {
@@ -54,18 +69,24 @@ function MenuManagementForm() {
   }, [menuManagement, userId]);
 
   useEffect(() => {
+    checkApproval();
+    getCategories();
+  }, []);
+
+  const getCategories = () => {
     axios
       .get(`/api/vendors/category/${userId}`, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       })
       .then((res) => {
+        console.log(res.data);
         setCategory(res.data.categories);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, [userId, setCategory]);
+  };
 
   const handleDeleteCategory = (name) => {
     deleteCategory(name);
@@ -82,10 +103,10 @@ function MenuManagementForm() {
       });
   }
 
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      setFormdata({ ...formdata, [name]: value });
-    };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormdata({ ...formdata, [name]: value });
+  };
 
   function handleImageChange(event) {
     const { name } = event.target;
@@ -137,53 +158,67 @@ function MenuManagementForm() {
   };
 
   const editItemSubmit = () => {
-
-      try {
-        if (!isValidName(formdata.itemName)) {
-          toast.error("Enter Valid Item Name");
-        } else if (!validateDescription(formdata.description)) {
-          toast.error("Enter Valid Description");
-        } else if (!validateDropdown(formdata.category)) {
-          toast.error("Select Valid Category");
-        } else if (!validatePrice(formdata.retailPrice)) {
-          toast.error("Enter Valid Retail Price");
-        } else if (!validatePrice(formdata.sellingPrice)) {
-          toast.error("Enter Valid Selling Price");
-        } else if (formdata.retailPrice < formdata.sellingPrice) {
-          toast.error("Enter Valid Selling Price");
-        } 
-        // else if (!validateImage(formdata.image)) {
-        //   toast.error("Select a valid image for upload");
-        // } 
-        else {
-          formdata.userId = userId;
-          console.log("before submission", formdata);
-          const submitFormData = new FormData();
-          for (const key in formdata) {
-            submitFormData.append(key, formdata[key]);
-          }
-  
-          axios
-            .post("/api/vendors/edit-menuItem", submitFormData)
-            .then((response) => {
-              if (response.data.success) {
-                setMenuManagement(false);
-                setFormdata({});
-              }
-            })
-            .catch(async (err) => {
-              console.log(err);
-            });
+    try {
+      if (!isValidName(formdata.itemName)) {
+        toast.error("Enter Valid Item Name");
+      } else if (!validateDescription(formdata.description)) {
+        toast.error("Enter Valid Description");
+      } else if (!validateDropdown(formdata.category)) {
+        toast.error("Select Valid Category");
+      } else if (!validatePrice(formdata.retailPrice)) {
+        toast.error("Enter Valid Retail Price");
+      } else if (!validatePrice(formdata.sellingPrice)) {
+        toast.error("Enter Valid Selling Price");
+      } else if (formdata.retailPrice < formdata.sellingPrice) {
+        toast.error("Enter Valid Selling Price");
+      } else if (!showImage) {
+        // debugger;
+        //validate the image
+        if (!validateImage(formdata.image)) {
+          toast.error("Enter a valid image");
+        } else {
+          editpost();
         }
-      } catch (error) {
-        console.log(error);
+      } else {
+        editpost();
       }
-  }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //form data appending and api call after edit validations
+  const editpost = () => {
+    formdata.userId = userId;
+    console.log("before submission", formdata);
+    const submitFormData = new FormData();
+    for (const key in formdata) {
+      submitFormData.append(key, formdata[key]);
+    }
+
+    axios
+      .post("/api/vendors/edit-menuItem", submitFormData)
+      .then((response) => {
+        if (response.data.success) {
+          setMenuManagement(false);
+          setFormdata({});
+        }
+      })
+      .catch(async (err) => {
+        console.log(err);
+      });
+  };
+
+  const deletImage = (deletedImage) => {
+    delete formdata.image;
+    setShowImage(false);
+  };
 
   const publishRestaurant = () => {
     axios
-      .get(`/api/vendors/publish-vendors/${userId}`)
-      .then(() => {
+      .post(`/api/vendors/publish-vendors/${userId}`)
+      .then((res) => {
+        console.log(res.data);
         toast.success("vendor published");
       })
       .catch((err) => {
@@ -196,10 +231,12 @@ function MenuManagementForm() {
     seteditItem(item);
     setFormdata(item);
     setMenuManagement(true);
+    setShowImage(true);
   };
 
   return (
     <>
+      <Toaster toastOptions={{ duration: 4000 }} />
       {menuManagement ? (
         <div className="flex flex-col ">
           <div className="flex justify-between items-center border-b-2 pb-2 mb-4">
@@ -215,7 +252,6 @@ function MenuManagementForm() {
               </button>
             </div>
           </div>
-          <Toaster toastOptions={{ duration: 4000 }} />
           <h1 className="text-xl font-bold mt-8 text-center">
             Menu Management
           </h1>
@@ -311,7 +347,7 @@ function MenuManagementForm() {
                     type="text"
                     placeholder="Resto Cafe"
                   />
-                  {/* {formdata["itemName"] && formdata["_id"] ? (
+                  {showImage ? (
                     <div className="mt-7">
                       <div className=" flex ">
                         <div className="relative">
@@ -321,7 +357,7 @@ function MenuManagementForm() {
                             className="w-40 h-16 object-cover rounded-lg"
                           />
                           <button
-                            // onClick={onClose}
+                            onClick={() => deletImage(formdata.image)}
                             className="absolute top-0 right-0 p-2 m-2 bg-white rounded-full"
                           >
                             <svg
@@ -342,7 +378,7 @@ function MenuManagementForm() {
                         </div>
                       </div>
                     </div>
-                  ) : ( */}
+                  ) : (
                     <>
                       <label
                         className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-2"
@@ -358,7 +394,7 @@ function MenuManagementForm() {
                         onChange={handleImageChange}
                       />
                     </>
-                  {/* )} */}
+                  )}
                 </div>
               </div>
 
@@ -446,13 +482,15 @@ function MenuManagementForm() {
         <section>
           <div className="flex justify-between items-center border-b-2 pb-2 mb-4">
             <div className="flex flex-row ml-auto">
-              <button
-                onClick={publishRestaurant}
-                className="bg-emerald-700 hover:bg-green-600 text-white font-bold py-2 mx-6 mt-2 rounded w-full"
-              >
-                Publish Restaurant
-              </button>
-              <button
+              {showPublishButton ? (
+                <>
+                <button
+                  onClick={publishRestaurant}
+                  className="bg-emerald-700 hover:bg-green-600 text-white font-bold py-2 mx-6 mt-2 rounded w-full"
+                >
+                  Publish Menu
+                </button>
+                <button
                 onClick={(e) => {
                   setMenuManagement(true);
                 }}
@@ -460,6 +498,12 @@ function MenuManagementForm() {
               >
                 Menu management
               </button>
+              </>
+              ) : (
+                <div>Waiting Approval</div>
+              )}
+
+              
             </div>
           </div>
           <div className="flex flex-col ">

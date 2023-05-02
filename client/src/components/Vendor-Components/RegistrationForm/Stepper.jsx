@@ -70,7 +70,7 @@ const Stepper = ({ steps, currentStep }) => {
         className={
           index !== newStep.length - 1
             ? "w-full flex items-center"
-            : "flex items-center"
+            : " flex items-center"
         }
       >
         <div className="relative flex flex-col items-center text-teal-600">

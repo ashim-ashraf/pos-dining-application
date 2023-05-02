@@ -13,25 +13,30 @@ function VendorTable() {
   const vendor = useSelector((state) => state.vendor.vendor);
 
   useEffect(() => {
-    getTables()
+    getTables();
   }, []);
 
   const getTables = () => {
     axios
-    .get("/api/vendors/get-tables")
-    .then((res) => {
-      setTables(res.data);
-    })
-    .catch((err) => {
-      console.log("error", err);
-    });
-  }
+      .get("/api/vendors/get-tables")
+      .then((res) => {
+        setTables(res.data);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
 
-
-  const handleTable = (table, tableNo) => {
+  const handleTable = async(table, tableNo) => {
+    try {
+      await getTables();
     setCurrentTable(table);
     setTableNo(tableNo);
     setManageTable(true);
+    } catch (error) {
+      toast.error("Couldn't Load Table data")
+    }
+    
   };
 
   const handleStatusChange = (entityId, status) => {
@@ -42,7 +47,7 @@ function VendorTable() {
       .then((res) => {
         console.log(res.data);
         setCurrentTable(res.data);
-        getTables()
+        getTables();
         setLoading(false);
       })
       .catch((err) => {
@@ -83,9 +88,9 @@ function VendorTable() {
                     </span>
                   </div>
 
-                  <div>
-                    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                  <div className="">
+                    <div className="relative shadow-md sm:rounded-lg">
+                      <table className="  w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                           <tr>
                             <th scope="col" className="px-6 py-3">
@@ -129,39 +134,43 @@ function VendorTable() {
                                         ></span>
                                         {item.orderStatus}
                                       </td>
-                                      <td className="px-6 py-4 ">{item.count}</td>
+                                      <td className="px-6 py-4 ">
+                                        {item.count}
+                                      </td>
                                       <td className="px-6 py-4">
-
-                                        { item?.orderStatus === "Cancelled"?(<div></div>): (<div>
-                                          <select
-                                            id="dropdown"
-                                            className="focus:outline-none"
-                                            value="Change Status"
-                                            onChange={(e) =>
-                                              handleStatusChange(
-                                                item.entityId,
-                                                e.target.value
-                                              )
-                                            }
-                                          >
-                                            <option value="">
-                                              Change Status
-                                            </option>
-                                            <option value="Preparing">
-                                              Preparing
-                                            </option>
-                                            <option value="Ready for Delivery">
-                                              Ready for Delivery
-                                            </option>
-                                            <option value="Delivered">
-                                              Delivered
-                                            </option>
-                                            <option value="Cancelled">
-                                              Cancelled
-                                            </option>
-                                          </select>
-                                        </div>)}
-                                        
+                                        {item?.orderStatus === "Cancelled" ? (
+                                          <div></div>
+                                        ) : (
+                                          <div>
+                                            <select
+                                              id="dropdown"
+                                              className="focus:outline-none"
+                                              value="Change Status"
+                                              onChange={(e) =>
+                                                handleStatusChange(
+                                                  item.entityId,
+                                                  e.target.value
+                                                )
+                                              }
+                                            >
+                                              <option value="">
+                                                Change Status
+                                              </option>
+                                              <option value="Preparing">
+                                                Preparing
+                                              </option>
+                                              <option value="Ready for Delivery">
+                                                Ready for Delivery
+                                              </option>
+                                              <option value="Delivered">
+                                                Delivered
+                                              </option>
+                                              <option value="Cancelled">
+                                                Cancelled
+                                              </option>
+                                            </select>
+                                          </div>
+                                        )}
                                       </td>
                                     </tr>
                                   </>
@@ -196,11 +205,15 @@ function VendorTable() {
                       tables.map((item, index) => {
                         return (
                           <div
-                            onClick={() => {if(item?.currentOrder?.restaurantId === vendor.id){
-                              handleTable(item, index + 1)
-                            } else {
-                              toast.error("Not Available")
-                            }}}
+                            onClick={() => {
+                              if (
+                                item?.currentOrder?.restaurantId === vendor.id
+                              ) {
+                                handleTable(item, index + 1);
+                              } else {
+                                toast.error("Not Available");
+                              }
+                            }}
                             className={`flex-col h-28 ${
                               item?.currentOrder?.restaurantId === vendor.id
                                 ? item.status === "booked" &&

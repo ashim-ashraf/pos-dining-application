@@ -2,7 +2,9 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
   isValidName,
+  
   validateImage,
+  
   validateUrl,
 } from "../../validation/validation";
 import { Toaster, toast } from "react-hot-toast";

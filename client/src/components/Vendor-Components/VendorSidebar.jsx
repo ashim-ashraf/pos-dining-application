@@ -76,7 +76,7 @@ export default function VendorSidebar() {
             <hr className="my-4 md:min-w-full" />
             {/* Heading */}
             <div className="flex space-x-2 items-center ">
-            <i class="fa-solid fa-chart-line"></i>
+            <i className="fa-solid fa-chart-line"></i>
             <Link to="/vendors/dashboard" className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 no-underline">
               Dashboard
             </Link>
@@ -87,7 +87,7 @@ export default function VendorSidebar() {
             <hr className="my-4 md:min-w-full" />
             {/* Heading */}
             <div className="flex space-x-2 items-center ">
-            <i class="fa-solid fa-table-columns"></i>
+            <i className="fa-solid fa-table-columns"></i>
             <Link to="/vendors/table-management" className=" md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1  no-underline">
               Tables
             </Link>
@@ -98,7 +98,7 @@ export default function VendorSidebar() {
             <hr className="my-4 md:min-w-full" />
             {/* Heading */}
             <div className="flex space-x-2 items-center ">
-            <i class="fa-solid fa-square-caret-down"></i>
+            <i className="fa-solid fa-square-caret-down"></i>
             <Link to="/vendors/menu" className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1  no-underline">
               Menu
             </Link>
@@ -108,7 +108,7 @@ export default function VendorSidebar() {
             <hr className="my-4 md:min-w-full" />
             {/* Heading */}
             <div className="flex space-x-1 items-center ">
-            <i class="fa-solid fa-arrow-up-short-wide"></i>
+            <i className="fa-solid fa-arrow-up-short-wide"></i>
             <Link to="/vendors/orders" className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1  no-underline">
               Orders
             </Link>

@@ -48,9 +48,9 @@ app.all("*", async (req, res) => {
   throw new NotFoundError();
 });
 
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  console.log(err);
-});
+// app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+//   console.log(err);
+// });
 
 app.use(errorHandler);
 

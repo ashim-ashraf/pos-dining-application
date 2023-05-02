@@ -32,7 +32,7 @@ function Cart() {
   } = useCart();
   const [cart, setCart] = useState(getCart().items);
   const table = useSelector((state) => state.user.table);
-  const orderId = useSelector((state) => state.user.orderId)
+  const orderId = useSelector((state) => state.user.orderId);
   const [toast, setToast] = useState(false);
   const [errorToast, setErrorToast] = useState(false);
   const [actionScan, setActionScan] = useState(false);
@@ -42,19 +42,19 @@ function Cart() {
   const [capturedImageDataUrl, setCapturedImageDataUrl] = useState(null);
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
-  const [updated, setUpdated] = useState(false)
+  const [updated, setUpdated] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if(!updated){
+    if (!updated) {
       setCart(getCart().items || {});
     }
   }, [updated]);
 
   useEffect(() => {
-    setUpdated(true)
-  }, [])
-  
+    setUpdated(true);
+  }, []);
+
   useEffect(() => {
     if (code) {
       axios
@@ -70,7 +70,7 @@ function Cart() {
           setErrorToast(true);
         });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code]);
 
   useEffect(() => {
@@ -91,13 +91,13 @@ function Cart() {
 
   const handleOrder = () => {
     if (table) {
-      const cart = localStorage.getItem('cart');
+      const cart = localStorage.getItem("cart");
       axios
-        .post("/api/users/orders",  {cart , table} )
+        .post("/api/users/orders", { cart, table })
         .then((res) => {
           console.log(res.data);
-          clearCartItems()
-          setUpdated(false)
+          clearCartItems();
+          setUpdated(false);
         })
         .catch((err) => {
           console.log(err);
@@ -120,7 +120,7 @@ function Cart() {
         console.error("Error opening webcam:", error);
       });
   };
-
+  
   const handleErrorFile = (error) => {
     console.log(error);
   };
@@ -133,14 +133,17 @@ function Cart() {
   };
 
   const handleChangeTable = () => {
-    let code = table
-    axios.post("/api/users/releive-table", {code}).then((res) => {
-      console.log(res.data)
-      dispatch(releiveTable())
-    }).catch((err) => {
-      console.log(err)
-    })
-  }
+    let code = table;
+    axios
+      .post("/api/users/releive-table", { code })
+      .then((res) => {
+        console.log(res.data);
+        dispatch(releiveTable());
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <UserLayout>
@@ -198,9 +201,11 @@ function Cart() {
                     <Block className="flex gap-5">
                       <p className="font-bold mt-1">TABLE SELECTED</p>
                       <div className=" w-25">
-                        { !orderId &&
-                          <Button outline onClick={handleChangeTable}>Change Table</Button>
-                        }
+                        {!orderId && (
+                          <Button outline onClick={handleChangeTable}>
+                            Change Table
+                          </Button>
+                        )}
                       </div>
                     </Block>
                   </>
@@ -225,9 +230,7 @@ function Cart() {
                   <tbody>
                     {Object.keys(cart).map((key) => (
                       <tr key={key}>
-                        <td className=" px-4 py-2">
-                          {cart[key].itemName}
-                        </td>
+                        <td className=" px-4 py-2">{cart[key].itemName}</td>
                         <td className=" px-4 py-2">
                           <Stepper
                             value={cart[key].count}
@@ -239,9 +242,7 @@ function Cart() {
                           />
                         </td>
                         <td className=" px-4 py-2">
-                          {"₹" +
-                            cart[key].count *
-                              cart[key].sellingPrice}
+                          {"₹" + cart[key].count * cart[key].sellingPrice}
                         </td>
                       </tr>
                     ))}
@@ -271,7 +272,7 @@ function Cart() {
                             if (table) {
                               handleOrder();
                             } else {
-                              setToast(true)
+                              setToast(true);
                             }
                           }}
                         >
@@ -285,9 +286,13 @@ function Cart() {
             </>
           ) : (
             <div className="fixed inset-0 flex items-center justify-center flex-col">
-<div><img src="https://mir-s3-cdn-cf.behance.net/projects/404/95974e121862329.Y3JvcCw5MjIsNzIxLDAsMTM5.png" alt="" /></div>
-  
-</div>
+              <div>
+                <img
+                  src="https://mir-s3-cdn-cf.behance.net/projects/404/95974e121862329.Y3JvcCw5MjIsNzIxLDAsMTM5.png"
+                  alt=""
+                />
+              </div>
+            </div>
           )}
         </>
       )}
@@ -297,7 +302,13 @@ function Cart() {
         position="left"
         opened={errorToast}
         button={
-          <Button rounded clear small inline onClick={() => setErrorToast(false)}>
+          <Button
+            rounded
+            clear
+            small
+            inline
+            onClick={() => setErrorToast(false)}
+          >
             Close
           </Button>
         }

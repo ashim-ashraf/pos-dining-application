@@ -49,16 +49,27 @@ export const validatePhone = (phone) => {
   }
 
   export function validateImage(file) {
+    // Check if the file exists
     if (!file) {
       return false;
     }
-    const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.webp)$/i;
-    if (!allowedExtensions.exec(file.name)) {
+  
+    // Check if the file is an image
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
       return false;
-    } else {
-      return true;
     }
+  
+    // Check if the file size is within the limit
+    const maxSize = 1024 * 1024; // 1 MB
+    if (file.size > maxSize) {
+      return false;
+    }
+  
+    // If all checks pass, return valid as true
+    return true;
   }
+  
   
 
   export function validateUrl(url) {

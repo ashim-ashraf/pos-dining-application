@@ -1,8 +1,11 @@
 import axios from "axios";
 import { Block, List, ListItem } from "konsta/react";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Rate from "./StarRating";
+import { clearOrder, clearRatingData, releiveTable } from "../../features/authSlices/userSlice";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function Notification() {
   const [visible, setVisible] = useState(true);
@@ -10,9 +13,12 @@ function Notification() {
   const [ratings, setRatings] = useState([]);
   const order = useSelector((state) => state.user.dataForRating);
   const [formdata, setFormdata] = useState({});
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const restaurantId = order.restaurantId;
+   
     axios
       .get(`/api/users/get-vendor/${restaurantId}`)
       .then((res) => {
@@ -42,9 +48,14 @@ function Notification() {
   };
 
   const handleSubmit = () => {
-    axios.post("/api/users/restaurant-rating", {formdata, ratings}).then(() => {
+    const restaurantId = order.restaurantId
+    axios.post("/api/users/restaurant-rating", {restaurantId,formdata, ratings}).then((res) => {
       console.log(res)
-      //dispatch
+      toast.success("Review Submitted");
+      dispatch(clearRatingData())
+      setTimeout(() => {
+        navigate('/');
+      }, 2000)
     }).catch((error) => {
       console.log(error)
     })
@@ -52,6 +63,7 @@ function Notification() {
 
   return (
     <Block>
+
       <div className="mt-4 items-center justify-center ">
         <div className="bg-white p-6  md:mx-auto">
           <svg

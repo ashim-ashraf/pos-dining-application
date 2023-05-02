@@ -1,20 +1,20 @@
 import { useState } from "react";
-import { Stepper } from "konsta/react";
 import StepperControl from "./RegistrationForm/StepperControl";
 import Account from "./RegistrationForm/steps/Account";
-import Details from "./RegistrationForm/steps/Details";
 import Payment from "./RegistrationForm/steps/Payment";
 import Final from "./RegistrationForm/steps/Final";
 import { UseContextProvider } from "../../contexts/StepperContext";
+import Stepper from "./RegistrationForm/Stepper";
+import { toast } from "react-hot-toast";
 
   
 
 function  RegistrationForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [validate,SetValidate]=useState('')
+  const [check, setCheck] = useState(false)
   const steps = [
     "Restaurant Info",
-    "Type and Timing",
     "Upload Images",
     "Complete",
   ];
@@ -22,25 +22,27 @@ function  RegistrationForm() {
   const displayStep = (step) => {
     switch (step) {
       case 1:
-        return <Account SetValidate={SetValidate}/>;
+        return <Account SetValidate={SetValidate} check />;
       case 2:
-        return <Details />;
-      case 3:
         return <Payment />;
-      case 4:
+      case 3:
         return <Final />;
       default:
     }
   };
 
   const handleClick = (direction) => {
+    console.log(direction);
     let newStep = currentStep;
 
     // direction === "next" ? newStep++ : newStep--;
     if(direction === "next"){
+      setCheck(!check)
       console.log(validate)
-      alert(validate)
-      newStep++
+      if (validate && Object.keys(validate).length === 0) {
+        newStep++
+      }
+      toast.error("Invalid Inputs")
     }else{
       newStep--
     }

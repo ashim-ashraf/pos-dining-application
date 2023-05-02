@@ -9,6 +9,7 @@ import { Vendor } from "../models/vendor";
 import { v4 as uuidv4 } from "uuid";
 import { OrderItemCancelledPublisher } from "../events/publisher/order-cancelled-publisher";
 import { OrderPaymentUpdatePublisher } from "../events/publisher/order-payment-publisher";
+import { BadRequestError } from "@snackopedia/common";
 
 export const bookTable = async (req: Request, res: Response) => {
   //here code is sent from frontEnd by decoding QR the code is actually a tableid
@@ -231,7 +232,9 @@ export const getOrders = async (req: Request, res: Response) => {
 };
 
 export const getVendors = async (req: Request, res: Response) => {
-  let vendors = await Vendor.find({ vendorStatus: true });
+  let vendors = await Vendor.find({
+    $and: [{ vendorStatus: true }, { openStatus: true }],
+  });
   res.status(200).send(vendors);
 };
 
@@ -243,9 +246,53 @@ export const getVendorById = async (req: Request, res: Response) => {
   const vendorDetails = await Vendor.findOne({ restaurantId: vendorId });
   const menu = vendorDetails?.menu;
 
+  const updatedMenu = menu?.map((item:any) => {
+    if (!item.ratings || item.ratings.length === 0) {
+      return item;
+    }
+    const totalRatings = item.ratings.reduce((acc:number, rating:number) => acc + rating, 0);
+    const averageRating = Number((totalRatings / item.ratings.length).toFixed(1)) ;
+    return { ...item, averagerating: averageRating };
+  });
+
+
   if (vendorDetails) {
-    res.status(200).send({ vendorDetails, menu });
+    res.status(200).send({ vendorDetails, menu:updatedMenu });
   } else {
     res.status(400).send({ success: false });
   }
+};
+
+export const addUserRating = async (req: Request, res: Response) => {
+  const { restaurantId, formdata, ratings } = req.body;
+
+  const review = {
+    username: formdata.username,
+    feedback: formdata.feedback,
+  };
+
+  try {
+    const vendor = await Vendor.updateOne(
+      { restaurantId: restaurantId },
+      { $push: { reviews: review } }
+    );
+
+ interface Rating {
+    id: string;
+    rating: number;
+  }
+
+    ratings.forEach(async(elem:Rating) => {
+      await Vendor.updateOne(
+        { restaurantId: restaurantId ,  "menu._id": elem.id },
+        { $push: { "menu.$.ratings": elem.rating } }
+      );
+    });
+
+    res.status(200).send({ message: "User Review submitted" });
+  } catch (error) {
+    console.log(error);
+    throw new BadRequestError("Could not update the review");
+  }
+
 };

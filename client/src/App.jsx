@@ -51,7 +51,7 @@ function App() {
           <Route element={<VendorCheckLogin/>}>
             <Route path="/vendors/menu" element={<CategoryManagementPage />} />
             <Route path="/vendors/registration"element={<VendorRegistrationPage />}/>
-            <Route path="/vendors/home" element={<VendorLandingPage />} />
+            <Route path="/vendors/dashboard" element={<VendorLandingPage />} />
             <Route path="/vendors/table-management" element={<VendorTableManagement/>} />
             <Route path="/vendors/orders" element={<OrderManagementPage/>} />
           </Route>

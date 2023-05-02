@@ -6,17 +6,17 @@ import { useStepperContext } from "../../../../contexts/StepperContext";
 export default function Final() {
   const { userData, setUserData } = useStepperContext();
   const [success, setSuccess] = useState(false)
-  const admin = useSelector((state) => state.vendor)
+  const vendorId = useSelector((state) => state.vendor.vendor.id);
 
   const onSubmit = async () => {
-    userData.userId = admin.admin.id; 
+    userData.userId = vendorId; 
     const formData = new FormData();  
     
     for (const key in userData) {
     formData.append(key, userData[key]);
     }
     
-    axios.post("/api/vendors/registration", formData)
+    axios.post("/api/vendors/editregistration", formData)
       .then((response) => {
         setSuccess(true)
       })
