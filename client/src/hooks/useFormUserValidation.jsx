@@ -9,6 +9,7 @@ const useFormUserValidation = (userData) => {
     liscenceNo: "",
     description: "",
     restaurantPhone: "",
+    restaurantType:"",
     address: "",
     state: "",
     pincode:"",
@@ -64,6 +65,14 @@ const useFormUserValidation = (userData) => {
                 }
                 break;
             };
+            case 'restaurantType' :{
+                if(!value){
+                    error = "Restaurant type is required"
+                } else if (!isValidName(value)){
+                    error = 'Enter a valid Restaurant type'
+                }
+                break;
+            }
             case 'description': {
                 if (!validateDescription(value)) {
                     error = "Enter a valid Description"

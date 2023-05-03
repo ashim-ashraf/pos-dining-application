@@ -156,9 +156,6 @@ export const editVendorRegistration = async (req: Request, res: Response) => {
     restaurantType,
     state,
     userId,
-    workingDays,
-    openingTime,
-    closingTime,
     image,
   } = req.body;
 
@@ -190,9 +187,6 @@ export const editVendorRegistration = async (req: Request, res: Response) => {
         restaurantName,
         restaurantType,
         state,
-        workingDays,
-        openingTime,
-        closingTime,
         image: Img,
       },
     },

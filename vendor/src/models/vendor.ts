@@ -61,11 +61,6 @@ const vendorSchema = new mongoose.Schema(
       type: String,
     },
     restaurantType: String,
-    restaurantAddress: {
-      address: String,
-      pincode: Number,
-      state: String,
-    },
     email: {
       type: String,
       trim: true,
@@ -86,9 +81,6 @@ const vendorSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    workingDays: Object,
-    openingTime: Object,
-    closingTime: Object,
     image: Array,
     category: {
       type: [String],
@@ -104,7 +96,7 @@ const vendorSchema = new mongoose.Schema(
     },
     address:String,
     state: String,
-    zip: String,
+    pincode: String,
   },
   {
     toJSON: {

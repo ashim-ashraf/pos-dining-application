@@ -11,17 +11,18 @@ import useFormImageValidation from "../../hooks/useFormImageValidation";
 
   
 
-function  RegistrationForm({email}) {
+function  RegistrationForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [userData, setUserData] = useState({
-    restaurantName: "asdf",
-    liscenceNo: "132312",
-    description: "asfd fsad sfad sfad sadf",
-    restaurantPhone: "1323123121",
-    address: "asdf",
-    state: "safd",
-    pincode:"132312",
-    email:"afsd@fsda.com"
+    restaurantName: "",
+    liscenceNo: "",
+    description: "",
+    restaurantPhone: "",
+    restaurantType:"",
+    address: "",
+    state: "",
+    pincode:"",
+    email:"",
 });   
 const [image, setImage] = useState(null)
   
