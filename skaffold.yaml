@@ -32,4 +32,12 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
+    - image: pos/chat
+      context: chat
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
     

@@ -6,7 +6,6 @@ const Stepper = ({ steps, currentStep }) => {
 
   const updateStep = (stepNumber, steps) => {
     const newSteps = [...steps];
-    console.log(newSteps);
     let count = 0;
     while (count < newSteps.length) {
       //current step
@@ -70,7 +69,7 @@ const Stepper = ({ steps, currentStep }) => {
         className={
           index !== newStep.length - 1
             ? "w-full flex items-center"
-            : "flex items-center"
+            : " flex items-center"
         }
       >
         <div className="relative flex flex-col items-center text-teal-600">

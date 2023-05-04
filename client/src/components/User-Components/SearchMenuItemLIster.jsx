@@ -6,12 +6,10 @@ import {
     Sheet,
     Stepper,
     Toast,
-    Toolbar,
   } from "konsta/react";
   import React, { useEffect, useState } from "react";
   import useCart from "../../components/User-Components/Cart-Functions";
   import { Toaster } from "react-hot-toast";
-  import { Link } from "react-router-dom";
   
   function SearchMenuItemLIster(props) {
     const { items, restaurantId } = props;
@@ -125,19 +123,19 @@ import {
         >
           <Block>
             <div>
-              <div class="max-w-sm rounded overflow-hidden shadow-lg">
+              <div className="max-w-sm rounded overflow-hidden shadow-lg">
                 <img
-                  class="w-full"
+                  className="w-full"
                   src={currentItem?.image}
                   alt="Sunset in the mountains"
                 />
-                <div class="px-6 py-4">
-                  <div class="font-bold text-xl mb-2">{currentItem?.itemName}</div>
-                  <p class="text-gray-700 text-base">
+                <div className="px-6 py-4">
+                  <div className="font-bold text-xl mb-2">{currentItem?.itemName}</div>
+                  <p className="text-gray-700 text-base">
                     {currentItem?.description}
                   </p>
                 </div>
-                <div class="px-6 pt-4 pb-2">
+                <div className="px-6 pt-4 pb-2">
                  
                 </div>
               </div>

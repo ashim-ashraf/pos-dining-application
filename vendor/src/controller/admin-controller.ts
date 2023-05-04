@@ -39,13 +39,9 @@ export const adminSignin = (req: Request, res: Response) => {
       process.env.JWT_ADMIN_KEY!
     );
 
-    // Store it on session object
-    res.cookie('adminJWT', adminJWT, {
-      httpOnly: true, // cookie cannot be accessed by client-side scripts
-      secure: true, // cookie will only be sent over HTTPS
-      sameSite: 'none', // cookie can be sent to a different origin
-      maxAge: 24 * 60 * 60 * 1000 // cookie will expire after 1 day
-    });
+    req.session = {
+      Adminjwt: adminJWT,
+    };
 
     res.sendStatus(201);
   } else {

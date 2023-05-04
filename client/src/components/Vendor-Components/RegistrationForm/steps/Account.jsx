@@ -2,74 +2,60 @@
 import { Toaster } from "react-hot-toast";
 import { isValidEmail, isValidName, validateDescription, validatePhone } from "../../../../validation/validation";
 import { useStepperContext } from "../../../../contexts/StepperContext";
+import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 
-export default function Account({ SetValidate }) {
-  const { userData, setUserData } = useStepperContext();
+export default function Account({userData,setUserData , handleChangeValidation, errors }) {
+
+  // const { userData, setUserData } = useStepperContext();
+  // const [Restaurant, setRestaurant] = useState('')
+  const vendorId = useSelector((state) => state.vendor.vendor.id);
+
+  useEffect(() => {
+    axios.get(`/api/vendors/listed-restaurant/${vendorId}`).then(async(res) => {
+      console.log(res.data)
+      // setRestaurant(res.data)
+      const {
+        restaurantName,
+        liscenceNo,
+        description,
+        restaurantPhone,
+        restaurantType,
+        address,
+        state,
+        pincode,
+        email,
+      } = res.data;
+      await setUserData({restaurantName: restaurantName,
+      liscenceNo: liscenceNo,
+      description: description,
+      restaurantPhone: restaurantPhone,
+      restaurantType:restaurantType,
+      address: address,
+      state: state,
+      pincode:pincode,
+      email:email});
+    }).catch(() => {
+      console.log("restaurant not listed")
+    });
+  }, [])
+
+  useEffect(() => {
+    console.log(errors)
+  }, [errors])
+  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
-    validateInputs();
-    console.log(userData);
+    handleChangeValidation(e)
   };
 
-  const validateInputs = () => {
-    let errors = {};
-    if (!isValidName(userData.restaurantName)) {
-      errors.restaurantName = "Please enter a restaurant name";
-    }
 
-    if (!userData.liscenceNo || !userData.liscenceNo.length === 6) {
-      errors.liscenceNo = "Please enter a valid license number";
-    }
 
-    if (!validateDescription(userData.description)) {
-      errors.description = "Please enter a description";
-    }
-
-    if (!isValidEmail(userData.email)) {
-      errors.email = "Please enter a restaurant email";
-    }
-
-    if (!validatePhone(userData.restaurantPhone) && !userData.restaurantPhone?.length === 10) {
-      errors.restaurantPhone = "Please enter a Restaurant phone number";
-    }
-
-    if (!isValidName(userData.address)) {
-      errors.address = "Please enter a address";
-    }
-
-    if (!isValidName(userData.state)) {
-      errors.state = "Please enter a state";
-    }
-    if (!userData.pincode) {
-      errors.pincode = "Please enter a pincode";
-    }
-    if (!userData.pincode?.length === 6) {
-      errors.pincode = "Please enter a valid pincode";
-    }
-
-    if (
-      isValidName(userData.restaurantName) &&
-      userData.liscenceNo &&
-      userData.liscenceNo?.length === 6 &&
-      validateDescription(userData.description) &&
-      isValidEmail(userData.email) &&
-      userData.email &&
-      validatePhone(userData.restaurantPhone) &&
-      userData.restaurantPhone?.length === 10 &&
-      isValidName(userData.address) &&
-      isValidName(userData.state) &&
-      userData.pincode &&
-      userData.pincode?.length === 6
-    ) {
-      SetValidate(true);
-    }
-    SetValidate(errors);
-    return errors;
-  };
-
-  
 
   return (
     <div className="flex flex-col ">
@@ -91,7 +77,7 @@ export default function Account({ SetValidate }) {
             type="text"
             placeholder="Resto Cafe"
           />
-          {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
+          <p className="text-red-500 text-xs italic">{errors?.restaurantName}</p>
         </div>
         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <label
@@ -109,11 +95,12 @@ export default function Account({ SetValidate }) {
             type="text"
             placeholder="862342"
           />
-          {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
+            <p className="text-red-500 text-xs italic">{errors?.liscenceNo}</p>
         </div>
       </div>
       <div className="flex flex-wrap -mx-3 mb-4">
-        <div className="w-full px-3">
+      <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+        <div className="w-full ">
           <label
             className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
             for="grid-password"
@@ -129,9 +116,30 @@ export default function Account({ SetValidate }) {
             type="text"
             placeholder="What the best you provide"
           />
-          <p className="text-gray-600 text-xs italic">
+            <p className="text-red-500 text-xs italic">{errors?.description}</p>
+          {/* <p className="text-gray-600 text-xs italic">
             Make it as long and as crazy as you'd like
-          </p>
+          </p> */}
+        </div>
+        </div>
+        <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+          <label
+            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+            for="grid-first-name"
+          >
+            Restaurant Type
+          </label>
+
+          <input
+            className="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+            id="grid-first-name"
+            name="restaurantType"
+            onChange={handleChange}
+            value={userData["restaurantType"] || ""}
+            type="text"
+            placeholder="Resto Cafe"
+          />
+            <p className="text-red-500 text-xs italic">{errors?.restaurantType}</p>
         </div>
       </div>
       <div className="flex flex-wrap -mx-3 mb-4">
@@ -151,6 +159,7 @@ export default function Account({ SetValidate }) {
             type="text"
             placeholder="RestoCafe@gmail.com"
           />
+            <p className="text-red-500 text-xs italic">{errors?.email}</p>
           {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
         </div>
         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
@@ -169,6 +178,7 @@ export default function Account({ SetValidate }) {
             type="text"
             placeholder="9994442211"
           />
+            <p className="text-red-500 text-xs italic">{errors?.restaurantPhone}</p>
           {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
         </div>
       </div>
@@ -189,6 +199,7 @@ export default function Account({ SetValidate }) {
             value={userData["address"] || ""}
             placeholder="Albuquerque"
           />
+            <p className="text-red-500 text-xs italic">{errors?.address}</p>
         </div>
         <div className="w-full md:w-1/3 px-3  md:mb-0">
           <label
@@ -206,6 +217,7 @@ export default function Account({ SetValidate }) {
             value={userData["state"] || ""}
             placeholder="Albuquerque"
           />
+            <p className="text-red-500 text-xs italic">{errors?.state}</p>
         </div>
         <div className="w-full md:w-1/3 px-3 md:mb-0">
           <label
@@ -223,8 +235,19 @@ export default function Account({ SetValidate }) {
             value={userData["pincode"] || ""}
             placeholder="90210"
           />
+            <p className="text-red-500 text-xs italic">{errors?.pincode}</p>
         </div>
       </div>
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+

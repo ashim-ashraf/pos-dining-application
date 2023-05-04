@@ -4,14 +4,19 @@ import { BadRequestError, requireVendorAuth } from "@snackopedia/common";
 import {
   addCategory,
   checkVendor,
+  checkVendorApproval,
   createMenuItem,
   deleteCategory,
+  deleteS3image,
   editItem,
+  editVendorRegistration,
+  getAllOrders,
   getAllTables,
   getAllVendors,
   getCategoryById,
   getMenuByVendorId,
   getVendorById,
+  handleShopOpenStatus,
   listedVendor,
   manageOrderStatus,
   publishVendor,
@@ -31,32 +36,42 @@ router.post("/signup", vendorSignup);
 
 router.post("/signin", vendorSignin);
 
-router.post("/registration", upload.array("image"), vendorRegistration);
-
 router.post("/signout", vendorSignout);
+
+router.post("/registration",requireVendorAuth, upload.single("image"), vendorRegistration);
+
+router.post("/editregistration",requireVendorAuth, upload.single("image"), editVendorRegistration )
 
 router.get("/get-vendor/:id", getVendorById);
 
-router.get("/menu/:id", getMenuByVendorId);
+router.get("/vendor-approval/:restaurantId",requireVendorAuth, checkVendorApproval)
+
+router.get("/menu/:id",requireVendorAuth, getMenuByVendorId);
 
 router.post("/check-vendor", checkVendor);
 
-router.get("/publish-vendors/:id", publishVendor);
+router.post("/publish-vendors/:id",requireVendorAuth, publishVendor);
+
+router.put("/shop-status/:restaurantId",requireVendorAuth, handleShopOpenStatus)
 
 router.get("/get-vendors", getAllVendors);
 
 router.get("/listed-restaurant/:id", listedVendor);
 
-router.post("/create-menuItem", upload.single("image"), createMenuItem);
+router.post("/create-menuItem",requireVendorAuth, upload.single("image"), createMenuItem);
 
-router.post("/edit-menuItem", test, upload.single("image"), editItem);
+router.post("/edit-menuItem", requireVendorAuth, upload.single("image"), editItem);
 
-router.post("/category", addCategory);
+router.post("/category",requireVendorAuth, addCategory);
 
-router.get("/category/:id", getCategoryById);
+router.get("/category/:id",requireVendorAuth, getCategoryById);
 
-router.delete("/categories/:userId/:categoryName", deleteCategory);
+router.delete("/categories/:userId/:categoryName",requireVendorAuth, deleteCategory);
 
 router.post("/manage-order-status", requireVendorAuth, manageOrderStatus);
+
+router.post("/delete-image",requireVendorAuth, deleteS3image)
+
+router.get('/get-orders/:id',requireVendorAuth, getAllOrders)
 
 export { router as vendorRouter };

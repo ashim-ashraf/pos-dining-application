@@ -16,10 +16,10 @@ function VendorLandingPage() {
 
   useEffect(() => {
     console.log(vendorId);
-    axios.get(`/api/vendors/listed-restaurant/${vendorId}`).then((res) => {
+    axios.get(`/api/vendors/listed-restaurant/${vendorId}`).then(async(res) => {
       console.log(res.data)
       setRestaurant(res.data)
-      setShowRegistration(true);
+      await setShowRegistration(true);
     }).catch(() => {
       console.log("restaurant not listed")
     });

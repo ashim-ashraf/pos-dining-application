@@ -7,8 +7,12 @@ import mongoose from "mongoose";
 import { BadRequestError } from "@snackopedia/common";
 import jwt from "jsonwebtoken";
 import { VendorPublisher } from "../events/publishers/vendor-publisher";
+import { VendorOpenStatusPublisher } from "../events/publishers/vendor-openstatus-publisher";
+import { deleteFile } from "../middleware/upload";
+import { Orders } from "../models/orders";
 
 export const getAllTables = async (req: Request, res: Response) => {
+  console.log("get table route called ");
   let tables = await Table.find();
   if (!tables) {
     res.status(404).send({ error: "No data found" });
@@ -19,8 +23,6 @@ export const getAllTables = async (req: Request, res: Response) => {
 export const vendorSignup = async (req: Request, res: Response) => {
   const { userName, user } = req.body;
 
-  console.log(user.phoneNumber, userName);
-
   let name = userName;
   let phone = user.phoneNumber;
 
@@ -28,8 +30,6 @@ export const vendorSignup = async (req: Request, res: Response) => {
     name,
     phone,
   });
-
-  console.log(vendor);
 
   let existingVendor = await Vendor.findOne({ phone });
   if (existingVendor) {
@@ -61,34 +61,32 @@ export const vendorSignup = async (req: Request, res: Response) => {
   };
 
   res.status(201).send(vendorDetails);
-}
+};
 
-export const vendorSignin =   async (req: Request, res: Response) => {
-    
+export const vendorSignin = async (req: Request, res: Response) => {
   const { user } = req.body;
-  console.log(user.phoneNumber);
 
   let phone = user.phoneNumber;
   let existingVendor = await Vendor.findOne({ phone });
   if (!existingVendor) {
-    throw new BadRequestError("User not found")
+    throw new BadRequestError("User not found");
   }
 
   // Generate JWT
-    const vendorJwt = jwt.sign(
-      {
-        id: existingVendor.id,
-        phone: existingVendor.phone,
-      },
-      process.env.JWT_VENDOR_KEY!
-    );
+  const vendorJwt = jwt.sign(
+    {
+      id: existingVendor.id,
+      phone: existingVendor.phone,
+    },
+    process.env.JWT_VENDOR_KEY!
+  );
 
-    req.session = {
-      Vendorjwt: vendorJwt,
-    };
+  req.session = {
+    Vendorjwt: vendorJwt,
+  };
 
-    res.status(201).send(existingVendor);
-  }
+  res.status(201).send(existingVendor);
+};
 
 export const vendorRegistration = async (req: Request, res: Response) => {
   const {
@@ -107,14 +105,12 @@ export const vendorRegistration = async (req: Request, res: Response) => {
     closingTime,
   } = req.body;
 
-
   interface FileObject extends Express.Multer.File {
     location: string;
   }
 
-  
   const file = req.file as FileObject;
-  const image : string = file.location;
+  const image: string = file.location;
 
   const pincodeNumber = parseInt(pincode);
   const restaurantPhoneNumer = parseInt(restaurantPhone);
@@ -142,48 +138,118 @@ export const vendorRegistration = async (req: Request, res: Response) => {
     { new: true }
   );
 
-  console.log(updatedDoc);
-
-  if(updatedDoc?.restaurantName){
+  if (updatedDoc?.restaurantName) {
     res.status(200).send(updatedDoc);
-  }else {
-    res.status(400).send({success:false})
+  } else {
+    res.status(400).send({ success: false });
   }
-}
+};
+
+export const editVendorRegistration = async (req: Request, res: Response) => {
+  const {
+    address,
+    description,
+    email,
+    liscenceNo,
+    restaurantPhone,
+    pincode,
+    restaurantName,
+    restaurantType,
+    state,
+    userId,
+    image,
+  } = req.body;
+
+  interface FileObject extends Express.Multer.File {
+    location: string;
+  }
+  var Img: any;
+  const file = req.file as FileObject;
+  if (file) {
+    Img = file.location;
+  } else {
+    Img = image;
+  }
+
+  const pincodeNumber = parseInt(pincode);
+  const restaurantPhoneNumer = parseInt(restaurantPhone);
+  const liscenceNoNumber = parseInt(liscenceNo);
+
+  let updatedDoc = await Vendor.findOneAndUpdate(
+    { _id: userId },
+    {
+      $set: {
+        address,
+        description,
+        email,
+        liscenceNo: liscenceNoNumber,
+        restaurantPhone: restaurantPhoneNumer,
+        pincode: pincodeNumber,
+        restaurantName,
+        restaurantType,
+        state,
+        image: Img,
+      },
+    },
+    { new: true }
+  );
+
+  if (updatedDoc?.restaurantName) {
+    res.status(200).send(updatedDoc);
+  } else {
+    res.status(400).send({ success: false });
+  }
+};
 
 export const vendorSignout = (req: Request, res: Response) => {
   req.session = null;
-  res.send({})
-}
+  res.send({});
+};
 
 export const getVendorById = async (req: Request, res: Response) => {
-  console.log("get details called");
   const vendorId = req.params.id;
 
   const vendorDetails = await Vendor.findOne({ _id: vendorId });
-  const menu = vendorDetails?.menu 
+  const menu = vendorDetails?.menu;
 
   if (vendorDetails) {
-    res.status(200).send({vendorDetails,menu});
+    res.status(200).send({ vendorDetails, menu });
   } else {
     res.status(400).send({ success: false });
+  }
+};
+
+export const checkVendorApproval = async (req: Request, res: Response) => {
+  const vendorId = req.params.restaurantId;
+  console.log("fasdfsadfasdf");
+  const vendorDetails = await Vendor.findOne({ _id: vendorId });
+  if (!vendorDetails) {
+    throw new BadRequestError("Vendor Not found by id");
+  }
+  const approval = vendorDetails.vendorStatus;
+  console.log("aaaaaaaaaaaaaaaaa", approval);
+
+  if (approval) {
+    res.status(200).send(approval);
+  } else {
+    res.status(400).send(approval);
   }
 };
 
 export const getAllVendors = async (req: Request, res: Response) => {
   let vendors = await Vendor.find();
   res.status(200).send(vendors);
-}
+};
 
 export const listedVendor = async (req: Request, res: Response) => {
-  const  vendorId  = req.params.id;
-  const vendorDetails = await Vendor.findOne({ _id: vendorId})
-  if(vendorDetails?.restaurantName){
-      res.status(200).send(vendorDetails)
+  const vendorId = req.params.id;
+  const vendorDetails = await Vendor.findOne({ _id: vendorId });
+  if (vendorDetails?.restaurantName) {
+    res.status(200).send(vendorDetails);
   } else {
-      res.status(400);
+    res.status(400);
   }
-}
+};
 
 export const checkVendor = async (req: Request, res: Response) => {
   const { phone } = req.body;
@@ -196,7 +262,7 @@ export const checkVendor = async (req: Request, res: Response) => {
   } else {
     res.status(201).send(existingVendor);
   }
-}
+};
 
 export const getMenuByVendorId = async (req: Request, res: Response) => {
   const userId = req.params.id;
@@ -212,11 +278,11 @@ export const getMenuByVendorId = async (req: Request, res: Response) => {
     console.log(error);
     res.status(400).send({ error: "menu not found" });
   }
-}
+};
 
 export const publishVendor = async (req: Request, res: Response) => {
-  console.log("publish vendor route called")
- const vendorId = req.params.id;
+  console.log("publish vendor route called");
+  const vendorId = req.params.id;
 
   const vendor = await Vendor.findOne({ _id: vendorId });
   if (!vendor) {
@@ -224,34 +290,55 @@ export const publishVendor = async (req: Request, res: Response) => {
   }
 
   try {
-    console.log("publisher reached")
-      await new VendorPublisher(natsWrapper.client).publish({
-          id:vendor._id,
-          name: vendor.name,
-          restaurantName: vendor.restaurantName,
-          description: vendor.description,
-          restaurantAddress: vendor.restaurantAddress,
-          email: vendor.email,
-          phone: vendor.phone,
-          liscenceNo: vendor.liscenceNo,
-          vendorStatus: vendor.vendorStatus,
-          image: vendor.image,
-          restaurantType: vendor.restaurantType,
-          restaurantPhone: vendor.restaurantPhone,
-          category: vendor.category,
-          menu: vendor.menu,
-        });
+    await new VendorPublisher(natsWrapper.client).publish({
+      id: vendor._id,
+      name: vendor.name,
+      restaurantName: vendor.restaurantName,
+      description: vendor.description,
+      restaurantAddress: vendor.restaurantAddress,
+      email: vendor.email,
+      phone: vendor.phone,
+      liscenceNo: vendor.liscenceNo,
+      vendorStatus: vendor.vendorStatus,
+      image: vendor.image,
+      restaurantType: vendor.restaurantType,
+      restaurantPhone: vendor.restaurantPhone,
+      category: vendor.category,
+      menu: vendor.menu,
+    });
+
+    res.status(200).send({ message: "vendor published" });
   } catch (error) {
-      console.log("publish failed", error);
+    throw new BadRequestError("publish failed");
   }
-  
-res.status(200);
-  
-}
+};
+
+export const handleShopOpenStatus = async (req: Request, res: Response) => {
+  const { restaurantId } = req.params;
+  const { status } = req.body;
+
+  try {
+    // Find the vendor by ID and update the vendorStatus property
+    const vendor = await Vendor.findByIdAndUpdate(
+      restaurantId,
+      { $set: { openStatus: status } },
+      { new: true }
+    );
+
+    await new VendorOpenStatusPublisher(natsWrapper.client).publish({
+      restaurantId: restaurantId,
+      status: status,
+    });
+
+    res.status(200).send({ message: "status changed successfully" });
+  } catch (error) {
+    console.error(error);
+    res.json({ success: false, error });
+  }
+};
 
 export const manageOrderStatus = async (req: Request, res: Response) => {
   const { tableId, entityId, status } = req.body;
-  console.log("in vendor controller", tableId, entityId, status);
 
   try {
     const table = await Table.findOneAndUpdate(
@@ -287,7 +374,15 @@ export const manageOrderStatus = async (req: Request, res: Response) => {
   }
 };
 
-export const createMenuItem =  async (req: Request, res: Response) => {
+export const getAllOrders = async (req: Request, res: Response) => {
+  const restaurantId = req.params.id;
+
+  const orders = await Orders.find();
+
+  console.log();
+};
+
+export const createMenuItem = async (req: Request, res: Response) => {
   const {
     _id,
     itemName,
@@ -297,14 +392,14 @@ export const createMenuItem =  async (req: Request, res: Response) => {
     category,
     userId,
   } = req.body;
-  
+
   interface FileObject extends Express.Multer.File {
     location: string;
   }
-  
-    const file = req.file as FileObject;
-    const image : string = file.location;
-  
+
+  const file = req.file as FileObject;
+  const image: string = file.location;
+
   const newMenuItem = {
     _id: _id ? mongoose.Types.ObjectId(_id) : new mongoose.Types.ObjectId(),
     itemName: String(itemName),
@@ -331,75 +426,68 @@ export const createMenuItem =  async (req: Request, res: Response) => {
       );
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 
   res.status(200).send({ success: true });
-}
+};
 
+export const editItem = async (req: Request, res: Response) => {
+  const {
+    _id,
+    itemName,
+    retailPrice,
+    description,
+    sellingPrice,
+    category,
+    userId,
+    image,
+  } = req.body;
 
-export const editItem = async( req:Request, res:Response) => {
-  
-    const {
-      _id,
-      itemName,
-      retailPrice,
-      description,
-      sellingPrice,
-      category,
-      userId,
-      image,
-    } = req.body;
-    
-    interface FileObject extends Express.Multer.File {
-      location: string;
+  interface FileObject extends Express.Multer.File {
+    location: string;
+  }
+  var Img: any;
+  const file = req.file as FileObject;
+  if (file) {
+    Img = file.location;
+  } else {
+    Img = image;
+  }
+
+  const newMenuItem = {
+    _id: _id ? mongoose.Types.ObjectId(_id) : new mongoose.Types.ObjectId(),
+    itemName: String(itemName),
+    retailPrice: Number(retailPrice),
+    description: String(description),
+    sellingPrice: Number(sellingPrice),
+    category: String(category),
+    image: Img,
+  };
+
+  try {
+    let vendor;
+    if (_id) {
+      vendor = await Vendor.findOneAndUpdate(
+        { _id: userId, "menu._id": newMenuItem._id },
+        { $set: { "menu.$": newMenuItem } },
+        { new: true }
+      );
+    } else {
+      vendor = await Vendor.findOneAndUpdate(
+        { _id: userId },
+        { $push: { menu: newMenuItem } },
+        { new: true }
+      );
     }
-    console.log("aaaaaaaaaa",req.file)
-var Img:any;
-      const file = req.file as FileObject;
-      if(file){
+  } catch (error) {
+    console.log(error);
+  }
 
-         Img  = file.location;
+  res.status(200).send({ success: true });
+};
 
-      }else {
-         Img = image
-      }
-      
-     
-    const newMenuItem = {
-      _id: _id ? mongoose.Types.ObjectId(_id) : new mongoose.Types.ObjectId(),
-      itemName: String(itemName),
-      retailPrice: Number(retailPrice),
-      description: String(description),
-      sellingPrice: Number(sellingPrice),
-      category: String(category),
-      image:Img,
-    };
-  
-    try {
-      let vendor;
-      if (_id) {
-        vendor = await Vendor.findOneAndUpdate(
-          { _id: userId, "menu._id": newMenuItem._id },
-          { $set: { "menu.$": newMenuItem } },
-          { new: true }
-        );
-      } else {
-        vendor = await Vendor.findOneAndUpdate(
-          { _id: userId },
-          { $push: { menu: newMenuItem } },
-          { new: true }
-        );
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  
-    res.status(200).send({ success: true });
-  
-}
-
-export const  addCategory =  async( req:Request, res:Response) => {
+export const addCategory = async (req: Request, res: Response) => {
   let { userId, categoryName } = req.body;
   console.log(userId, categoryName);
 
@@ -422,9 +510,9 @@ export const  addCategory =  async( req:Request, res:Response) => {
   } catch (error) {
     console.log(error);
   }
-}
+};
 
-export const getCategoryById = async( req:Request, res:Response) => {
+export const getCategoryById = async (req: Request, res: Response) => {
   const userId = req.params.id;
   console.log("get called", userId);
 
@@ -439,9 +527,9 @@ export const getCategoryById = async( req:Request, res:Response) => {
     console.log(error);
     res.status(400).send({ error: "category not found" });
   }
-}
+};
 
-export const deleteCategory = async( req:Request, res:Response) => {
+export const deleteCategory = async (req: Request, res: Response) => {
   const { userId, categoryName } = req.params;
   console.log(categoryName);
 
@@ -452,6 +540,15 @@ export const deleteCategory = async( req:Request, res:Response) => {
   // .catch((err) => {
   //   console.log(err);
   // });
-}
+};
 
+export const deleteS3image = async (req: Request, res: Response) => {
+  const { imageUrl } = req.body;
 
+  try {
+    deleteFile(imageUrl);
+    res.status(200).send({ message: "image deleted successfully" });
+  } catch (error) {
+    res.status(500).send({ message: "could not delete image" });
+  }
+};

@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { bookTable, cancelOrder, createOrder, getOrders, getVendorById, getVendors, orderPayment, releiveTable } from "../controller/user-controller";
+import { addUserRating, bookTable, cancelOrder, createOrder, getOrders, getVendorById, getVendors,  orderPayment, releiveTable } from "../controller/user-controller";
 import { requireTableAuth } from "@snackopedia/common";
 
 const router = express.Router();
@@ -19,5 +19,9 @@ router.get("/orders/:id", getOrders)
 router.get("/get-vendors", getVendors);
 
 router.get("/get-vendor/:id", getVendorById);
+
+router.post("/restaurant-rating" , addUserRating )
+
+
 
 export { router as userRouter };

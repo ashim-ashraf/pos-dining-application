@@ -76,6 +76,7 @@ export class VendorPublishedListener extends Listener<VendorPublishedEvent> {
 
       try {
         await vendor.save();
+        console.log("new vendor published")
       } catch (error) {
         console.log(error);
       }

@@ -16,6 +16,7 @@ interface VendorAttrs {
   restaurantPhone?: number;
   category?: object;
   menu?: [{}];
+  openStatus?:boolean;
 }
 
 // An interface that describes the properties
@@ -41,6 +42,7 @@ export interface VendorDoc extends mongoose.Document {
   restaurantPhone: number;
   category: object;
   menu: [{}];
+  openStatus:boolean;
 }
 
 const vendorSchema = new mongoose.Schema(
@@ -59,11 +61,6 @@ const vendorSchema = new mongoose.Schema(
       type: String,
     },
     restaurantType: String,
-    restaurantAddress: {
-      address: String,
-      pincode: Number,
-      state: String,
-    },
     email: {
       type: String,
       trim: true,
@@ -84,9 +81,6 @@ const vendorSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    workingDays: Object,
-    openingTime: Object,
-    closingTime: Object,
     image: Array,
     category: {
       type: [String],
@@ -96,6 +90,13 @@ const vendorSchema = new mongoose.Schema(
       type: [{}],
       default: [],
     },
+    openStatus:{
+      type: Boolean,
+      default: false,
+    },
+    address:String,
+    state: String,
+    pincode: String,
   },
   {
     toJSON: {

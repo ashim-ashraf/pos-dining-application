@@ -3,20 +3,21 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useStepperContext } from "../../../../contexts/StepperContext";
 
-export default function Final() {
-  const { userData, setUserData } = useStepperContext();
+export default function Final({userData, image}) {
+
   const [success, setSuccess] = useState(false)
-  const admin = useSelector((state) => state.vendor)
+  const vendorId = useSelector((state) => state.vendor.vendor.id);
 
   const onSubmit = async () => {
-    userData.userId = admin.admin.id; 
+    userData.userId = vendorId; 
+    userData.image = image;
     const formData = new FormData();  
     
     for (const key in userData) {
     formData.append(key, userData[key]);
     }
     
-    axios.post("/api/vendors/registration", formData)
+    axios.post("/api/vendors/editregistration", formData)
       .then((response) => {
         setSuccess(true)
       })
@@ -62,7 +63,7 @@ export default function Final() {
         <div className="text-lg font-semibold text-gray-500">
           Your Request has been Submitted. Awaiting Approval
         </div>
-        <a className="mt-10" href="/vendors/home">
+        <a className="mt-10" href="/vendors/dashboard">
           <button className="h-10 px-5 text-green-700 transition-colors duration-150 border border-gray-300 rounded-lg focus:shadow-outline hover:bg-green-500 hover:text-green-100 on">
             Close
           </button>

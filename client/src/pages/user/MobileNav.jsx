@@ -8,7 +8,7 @@ function MobileNav() {
     <div>
         <Navbar
           title="Yummers"
-          className="bg-orange-600"
+          className="bg-emerald-500"
         />
     </div>
   )

@@ -22,6 +22,10 @@ export default function Homepage() {
       });
   }, []);
 
+  useEffect(() => {
+    console.log(restaurants);
+  }, [restaurants]);
+
   const handleclick = (restaurantId) => {
     navigate(`/restaurant/${restaurantId}`);
   };
@@ -37,7 +41,7 @@ export default function Homepage() {
         .includes(searchQuery.toLowerCase()) ||
       restaurant.restaurantType
         .toLowerCase()
-        .includes(searchQuery.toLowerCase()) 
+        .includes(searchQuery.toLowerCase())
     );
   });
 
@@ -72,33 +76,31 @@ export default function Homepage() {
           </form>
         </Block>
         {searchQuery ? (
-          
-            <Block>
-              {filteredRestaurants.map((restaurants, index) => (
-                <div key={index}>
-                  <List strongIos outlineIos className="-mt-2">
-                    <ListItem
-                      link
-                      chevronMaterial={false}
-                      title={restaurants.restaurantName}
-                      // after="$22"
-                      subtitle={restaurants.restaurantType}
-                      text={restaurants.description}
-                      media={
-                        <img
-                          className="ios:rounded-lg material:rounded-full ios:w-20 material:w-10"
-                          src={restaurants?.image}
-                          width="80"
-                          alt="demo"
-                        />
-                      }
-                      onClick={() => handleclick(restaurants.id)}
-                    />
-                  </List>
-                </div>
-              ))}
-            </Block>
-         
+          <Block>
+            {filteredRestaurants.map((restaurants, index) => (
+              <div key={index}>
+                <List strongIos outlineIos className="-mt-2">
+                  <ListItem
+                    link
+                    chevronMaterial={false}
+                    title={restaurants.restaurantName}
+                    // after="$22"
+                    subtitle={restaurants.restaurantType}
+                    text={restaurants.description}
+                    media={
+                      <img
+                        className="ios:rounded-lg material:rounded-full ios:w-20 material:w-10"
+                        src={restaurants?.image}
+                        width="80"
+                        alt="demo"
+                      />
+                    }
+                    onClick={() => handleclick(restaurants.restaurantId)}
+                  />
+                </List>
+              </div>
+            ))}
+          </Block>
         ) : (
           <div>
             <Block>
@@ -125,7 +127,7 @@ export default function Homepage() {
                           alt="demo"
                         />
                       }
-                      onClick={() => handleclick(restaurants.id)}
+                      onClick={() => handleclick(restaurants.restaurantId)}
                     />
                   </List>
                 </div>

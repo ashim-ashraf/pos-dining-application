@@ -27,6 +27,7 @@ import Orders from "./pages/user/Orders";
 import OrderManagementPage from "./pages/vendor/OrderManagementPage";
 import Billing from "./pages/user/Billing";
 import PaymentSuccessPage from "./pages/user/PaymentSuccessPage";
+import ChatLayout from "./components/Chat-Components/ChatLayout";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
         <Route path="/orders" element={<Orders />} />
         <Route path="/billing" element={<Billing />} />
         <Route path="/success" element={<PaymentSuccessPage />} />
+        <Route path="/chat" element={<ChatLayout />} />
 
 
 
@@ -51,7 +53,7 @@ function App() {
           <Route element={<VendorCheckLogin/>}>
             <Route path="/vendors/menu" element={<CategoryManagementPage />} />
             <Route path="/vendors/registration"element={<VendorRegistrationPage />}/>
-            <Route path="/vendors/home" element={<VendorLandingPage />} />
+            <Route path="/vendors/dashboard" element={<VendorLandingPage />} />
             <Route path="/vendors/table-management" element={<VendorTableManagement/>} />
             <Route path="/vendors/orders" element={<OrderManagementPage/>} />
           </Route>

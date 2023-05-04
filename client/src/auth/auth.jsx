@@ -4,9 +4,9 @@ import { Navigate, Outlet } from "react-router-dom";
 import { adminLogout } from "../features/authSlices/adminSlice";
 
 
-  function AdminCheckLogin() {
-    const dispatch = useDispatch();
-    axios.get("/api/admin/admin-verify").then((res) =>{
+function AdminCheckLogin() {
+  const dispatch = useDispatch();
+  axios.get("/api/admin/admin-verify").then((res) =>{
       console.log(res)
     }).catch(() => {
       dispatch(adminLogout())
@@ -19,6 +19,12 @@ import { adminLogout } from "../features/authSlices/adminSlice";
   }
 
 function  AdminIsLogged(){
+  const dispatch = useDispatch();
+  axios.get("/api/admin/admin-verify").then((res) =>{
+      console.log(res)
+    }).catch(() => {
+      dispatch(adminLogout())
+    })
     const admin=useSelector((state)=>state.admin)
     console.log(admin);
     return(
@@ -36,7 +42,7 @@ function VendorCheckLogin() {
 function  VendorIsLogged(){
     const vendor=useSelector((state)=>state.vendor)
     return(
-      vendor.isLoggedIn?<Navigate to='/vendors/home' />:<Outlet/>
+      vendor.isLoggedIn?<Navigate to='/vendors/dashboard' />:<Outlet/>
     )
   }
 

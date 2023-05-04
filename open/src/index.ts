@@ -5,6 +5,7 @@ import { VendorPublishedListener } from "./events/listener/vendor-publlished-lis
 import { TableCreatedListener } from "./events/listener/table-created-listener";
 import { OrderStatusUpdateListener } from "./events/listener/order-status-update-listener";
 import { VendorApprovalListener } from "./events/listener/vendor-approval-listener";
+import { VendorOpenStatusListener } from "./events/listener/vendor-openstatus-listener";
 
 const start = async () => {
   if (!process.env.JWT_KEY) {
@@ -40,6 +41,7 @@ const start = async () => {
     new TableCreatedListener(natsWrapper.client).listen();
     new OrderStatusUpdateListener(natsWrapper.client).listen();
     new VendorApprovalListener(natsWrapper.client).listen();
+    new VendorOpenStatusListener(natsWrapper.client).listen();
 
     await mongoose.connect(process.env.MONGO_URI, {
       dbName:'pos',

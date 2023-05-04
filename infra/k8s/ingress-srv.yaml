@@ -36,6 +36,13 @@ spec:
                 name: vendor-srv
                 port:
                   number: 3000
+          - path: /api/chat/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: chat-srv
+                port:
+                  number: 3000
           - path: /?(.*)
             pathType: Prefix
             backend:

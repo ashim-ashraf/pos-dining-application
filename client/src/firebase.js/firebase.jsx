@@ -34,7 +34,6 @@ export function recaptcha() {
 }
 
 export function onSigninssubmit(phonenumber) {
-  alert(phonenumber)
   const appVerifier = window.recaptchaVerifier;
   return new Promise((resolve, reject) => {
     signInWithPhoneNumber(auth, phonenumber, appVerifier)

@@ -69,6 +69,7 @@ useEffect(() => {
                   toast.success("OTP sended successfully!");
                   setShowOTP(true);
                   setLoading(false);
+                  setCounter(60);
                 })
                 .catch((error) => {
                   toast.error(error.code);
@@ -89,8 +90,6 @@ useEffect(() => {
   };
 
   function onOTPVerify() {
-  
-    
     console.log(window.confirmationResult)
     setLoading(true);
       window.confirmationResult
@@ -102,7 +101,7 @@ useEffect(() => {
           console.log(response);
           dispatch(vendorLogin(response.data));
           setLoading(false);
-          navigate("/vendors/home");
+          navigate("/vendors/dashboard");
         });
       })
       .catch((err) => {
