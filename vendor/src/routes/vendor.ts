@@ -10,6 +10,7 @@ import {
   deleteS3image,
   editItem,
   editVendorRegistration,
+  getAllOrders,
   getAllTables,
   getAllVendors,
   getCategoryById,
@@ -70,5 +71,7 @@ router.delete("/categories/:userId/:categoryName",requireVendorAuth, deleteCateg
 router.post("/manage-order-status", requireVendorAuth, manageOrderStatus);
 
 router.post("/delete-image",requireVendorAuth, deleteS3image)
+
+router.get('/get-orders/:id',requireVendorAuth, getAllOrders)
 
 export { router as vendorRouter };

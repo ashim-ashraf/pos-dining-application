@@ -35,6 +35,11 @@ function MenuItemsList(props) {
     }
   };
 
+  for(let i=0 ; i<items?.length ; i++){
+    console.log("for",items[i].averagerating)
+
+  }
+
   useEffect(() => {
     console.log(category, "gsaddfasdf");
     setCart(getCart().items);
@@ -47,6 +52,7 @@ function MenuItemsList(props) {
 
   return (
     <List strongIos dividersIos>
+      
       {category?.map((category) => (
         <div key={category}>
           <div className="flex w-full border-2 p-2 ">
@@ -55,11 +61,15 @@ function MenuItemsList(props) {
             </div>
             <div className="ml-auto mr-5"></div>
           </div>
+          
           {items?.length > 0 &&
             items
               .filter((item) => item.category === category)
               .map((item, index) => (
+            
+               
                 <>
+                
                   <div key={index} className="rounded-lg">
                     <ListItem
                       className=""
@@ -140,16 +150,8 @@ function MenuItemsList(props) {
                       </div>
                     )}
                   </div>
-                  {console.log("here", item.averagerating)}
                   <div className="ml-auto ">
-                    <Star
-                      stars={
-                        item.averagerating === null &&
-                        item.averagerating === undefined
-                          ? 1
-                          : item.averagerating
-                      } 
-                    />
+                    {item.averagerating?(<Star stars= {item.averagerating} reviews={item?.ratings.length}  />):("")}
                   </div>
                 </>
               ))}

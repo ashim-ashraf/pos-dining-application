@@ -9,6 +9,7 @@ import jwt from "jsonwebtoken";
 import { VendorPublisher } from "../events/publishers/vendor-publisher";
 import { VendorOpenStatusPublisher } from "../events/publishers/vendor-openstatus-publisher";
 import { deleteFile } from "../middleware/upload";
+import { Orders } from "../models/orders";
 
 export const getAllTables = async (req: Request, res: Response) => {
   console.log("get table route called ");
@@ -220,13 +221,13 @@ export const getVendorById = async (req: Request, res: Response) => {
 
 export const checkVendorApproval = async (req: Request, res: Response) => {
   const vendorId = req.params.restaurantId;
-console.log("fasdfsadfasdf")
+  console.log("fasdfsadfasdf");
   const vendorDetails = await Vendor.findOne({ _id: vendorId });
   if (!vendorDetails) {
     throw new BadRequestError("Vendor Not found by id");
   }
   const approval = vendorDetails.vendorStatus;
-console.log("aaaaaaaaaaaaaaaaa", approval);
+  console.log("aaaaaaaaaaaaaaaaa", approval);
 
   if (approval) {
     res.status(200).send(approval);
@@ -371,6 +372,14 @@ export const manageOrderStatus = async (req: Request, res: Response) => {
     console.error(error);
     return res.status(500).json({ message: "Something went wrong" });
   }
+};
+
+export const getAllOrders = async (req: Request, res: Response) => {
+  const restaurantId = req.params.id;
+
+  const orders = await Orders.find();
+
+  console.log();
 };
 
 export const createMenuItem = async (req: Request, res: Response) => {

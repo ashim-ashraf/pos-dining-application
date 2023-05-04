@@ -5,6 +5,7 @@ interface OrdersAttrs {
 }
 
 interface OrdersDoc extends mongoose.Document {
+  items: any;
   orders:[]
 }
 

@@ -72,14 +72,14 @@ const {imageErrors , imageHandleNext} = useFormImageValidation(image)
 };
 
   return (
-    <div className=" mx-auto rounded-2xl bg-white pb-2 shadow-2xl md:w-full">
+    <div className=" mx-auto rounded-2xl bg-white pb-2 shadow-2xl  md:w-full">
       {/* Stepper */}
-      <div className='bg-white  mt-10  items-center  rounded-3xl shadow-2xl shadow-purple-500 p-2 py-'>
+      <div className='bg-white    items-center  rounded-3xl  p-2 py-'>
                         <div className='text-center'>
                             <h1 className='text-transparent tracking-wide font-ubuntu
-                         md:text-2xl text-l bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600' >Registeration Page</h1>
+                         md:text-2xl text-l bg-clip-text bg-gradient-to-r  to-pink-600' >Registeration Page</h1>
                         </div>
-                        <div className="horizontal container mt-5 md:px-32">
+                        <div className="horizontal container  md:px-32">
                             <Stepper steps={steps} currentStep={currentStep} />
 
                             <div className="my-10 p-10 ">
@@ -90,10 +90,10 @@ const {imageErrors , imageHandleNext} = useFormImageValidation(image)
                         {currentStep !== steps.length && (
 
 
-                            <div className="container mt-4 mb-8 flex justify-around">
+                            <div className="container mb-8 flex justify-around">
                                 <button
                                     onClick={() => handleClick()}
-                                    className={`cursor-pointer rounded-xl border-2 border-slate-300 bg-white py-2 px-4 font-semibold uppercase text-purple-600 transition duration-200 ease-in-out hover:bg-purple-600 hover:text-white  ${currentStep === 1 ? " cursor-not-allowed opacity-50 " : ""
+                                    className={`cursor-pointer rounded-xl border-2 border-slate-300 bg-white py-2 px-4 font-semibold uppercase text-emerald-600 transition duration-200 ease-in-out hover:bg-emerald-600 hover:text-white  ${currentStep === 1 ? " cursor-not-allowed opacity-50 " : ""
                                         }`}
                                 >
                                     Back
@@ -101,11 +101,11 @@ const {imageErrors , imageHandleNext} = useFormImageValidation(image)
                                 <div className='flex '>
                                     <button
                                         onClick={() => handleClick("skip")}
-                                        className={`cursor-pointer rounded-lg bg-purple-500 py-2 px-4 font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-fuchsia-700 hover:text-white ${currentStep == 3 ? "block" : "hidden"}`}
+                                        className={`cursor-pointer rounded-lg bg-emerald-500 py-2 px-4 font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-fuchsia-700 hover:text-white ${currentStep == 3 ? "block" : "hidden"}`}
                                     >Skip </button>
                                     <button
                                         onClick={() => handleClick("next")}
-                                        className="cursor-pointer rounded-lg bg-purple-500 py-2 px-4 font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-fuchsia-700 hover:text-white"
+                                        className="cursor-pointer rounded-lg bg-emerald-500 py-2 px-4 font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-fuchsia-700 hover:text-white"
                                     >
                                         {currentStep === steps.length - 1 ? "Confirm" : "Next"}
                                     </button>
