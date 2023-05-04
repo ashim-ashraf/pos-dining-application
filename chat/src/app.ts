@@ -14,9 +14,8 @@ import {
   NotFoundError,
 } from "@snackopedia/common";
 
+import { chatRouter } from "./routes/chat";
 
-import { vendorRouter } from "./routes/vendor";
-import { adminRouter } from "./routes/admin";
 const cors = require("cors");
 const https = require('https');
 
@@ -40,16 +39,11 @@ app.use(
 app.use(currentVendor);
 app.use(currentAdmin);
 
-app.use("/api/vendors", vendorRouter);
-app.use("/api/admin", adminRouter);
+app.use("/api/chat", chatRouter);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError();
 });
-
-// app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-//   console.log(err);
-// });
 
 app.use(errorHandler);
 

@@ -1,0 +1,47 @@
+{
+  "name": "auth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./src/index.ts"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./src/test/setup.ts"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@snackopedia/common": "^1.0.45",
+    "@types/cookie-session": "^2.0.42",
+    "@types/express": "^4.17.12",
+    "@types/jsonwebtoken": "^8.5.1",
+    "aws-sdk": "^2.1348.0",
+    "body-parser": "^1.20.2",
+    "cookie-session": "^1.4.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-validator": "^6.11.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.11",
+    "node-nats-streaming": "^0.3.2",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.2.4",
+    "xss-clean": "^0.1.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.4.0",
+    "@types/supertest": "^2.0.12",
+    "mongodb-memory-server": "^8.11.5",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.0.5"
+  }
+}
