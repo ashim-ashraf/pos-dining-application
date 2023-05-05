@@ -25,7 +25,7 @@ spec:
             - name: NATS_CLUSTER_ID
               value: pos
             - name: MONGO_URI
-              value: 'mongodb://chat-mongo-srv:27017/chat'
+              value: 'mongodb+srv://ashim_ashraf:j2EAqwP8RYZ1S98n@cultstore.otypapd.mongodb.net/?retryWrites=true&w=majority'
 ---
 apiVersion: v1
 kind: Service

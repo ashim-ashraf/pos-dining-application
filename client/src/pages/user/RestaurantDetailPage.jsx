@@ -1,22 +1,17 @@
 import axios from "axios";
 import {
   App,
-  Badge,
   Block,
   BlockTitle,
-  Fab,
   List,
   ListItem,
   Page,
 } from "konsta/react";
-import { BsJournalBookmarkFill } from "react-icons/bs";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import MobileNav from "./MobileNav";
 import MenuItemsList from "./MenuItemsList";
 import MobileNavigation from "../../components/User-Components/MobileNavigation";
-import { useDispatch } from "react-redux";
-import { releiveTable } from "../../features/authSlices/userSlice";
 import SearchMenuItemLIster from "../../components/User-Components/SearchMenuItemLIster";
 import UserLayout from "../../components/User-Components/UserLayout";
 
@@ -27,8 +22,6 @@ function RestaurantDetailPage() {
   const [category, setCategory] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [showReviews, setShowReviews] = useState(false);
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     console.log("useEffect1")
@@ -125,7 +118,7 @@ function RestaurantDetailPage() {
                 <input
                   type="text"
                   className="block w-full flex-1 py-2 px-3 focus:outline-none"
-                  placeholder="Start Typing..."
+                  placeholder="Search Foods"
                   value={searchQuery}
                   onChange={handleSearchInputChange}
                 />

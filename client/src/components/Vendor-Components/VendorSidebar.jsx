@@ -19,7 +19,7 @@ export default function VendorSidebar() {
           {/* Brand */}
           <Link
             className="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-2 px-0"
-            to="/"
+            to="/vendors/dashboard"
           >
             Yummers
           </Link>
@@ -45,7 +45,7 @@ export default function VendorSidebar() {
                 <div className="w-6/12">
                   <Link
                     className="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
-                    to="/"
+                    to="/vendors/dashboard"
                   >
                     Yummers
                   </Link>
@@ -111,6 +111,16 @@ export default function VendorSidebar() {
             <i className="fa-solid fa-arrow-up-short-wide"></i>
             <Link to="/vendors/orders" className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1  no-underline">
               Orders
+            </Link>
+            </div>
+
+            {/* Divider */}
+            <hr className="my-4 md:min-w-full" />
+            {/* Heading */}
+            <div className="flex space-x-1 items-center ">
+            <i className="fa-solid fa-arrow-up-short-wide"></i>
+            <Link to="/vendors/chat" className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1  no-underline">
+              Chats
             </Link>
             </div>
             

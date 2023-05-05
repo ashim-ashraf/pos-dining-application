@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useStepperContext } from "../../../../contexts/StepperContext";
 
 export default function Final({userData, image}) {
 
@@ -28,6 +27,7 @@ export default function Final({userData, image}) {
 
   useEffect(() => {
    onSubmit()   
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   
   return (

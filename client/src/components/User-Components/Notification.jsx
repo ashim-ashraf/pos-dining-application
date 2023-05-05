@@ -3,12 +3,11 @@ import { Block, List, ListItem } from "konsta/react";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Rate from "./StarRating";
-import { clearOrder, clearRatingData, releiveTable } from "../../features/authSlices/userSlice";
+import { clearRatingData } from "../../features/authSlices/userSlice";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 function Notification() {
-  const [visible, setVisible] = useState(true);
   const [restaurantName, setRestaurantName] = useState("");
   const [ratings, setRatings] = useState([]);
   const order = useSelector((state) => state.user.dataForRating);
@@ -27,6 +26,7 @@ function Notification() {
       .catch((err) => {
         console.log(err);
       });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

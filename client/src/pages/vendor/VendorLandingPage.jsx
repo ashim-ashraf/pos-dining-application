@@ -23,6 +23,7 @@ function VendorLandingPage() {
     }).catch(() => {
       console.log("restaurant not listed")
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   
 

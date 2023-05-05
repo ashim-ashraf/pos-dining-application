@@ -37,7 +37,6 @@ function Cart() {
   const [errorToast, setErrorToast] = useState(false);
   const [actionScan, setActionScan] = useState(false);
   const [scanningStatus, setScanningStatus] = useState(false);
-  const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [isImageCaptured, setIsImageCaptured] = useState(false);
   const [capturedImageDataUrl, setCapturedImageDataUrl] = useState(null);
   const [code, setCode] = useState("");

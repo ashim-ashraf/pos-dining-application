@@ -1,9 +1,7 @@
 import { useState } from "react";
-import StepperControl from "./RegistrationForm/StepperControl";
 import Account from "./RegistrationForm/steps/Account";
 import Payment from "./RegistrationForm/steps/Payment";
 import Final from "./RegistrationForm/steps/Final";
-import { UseContextProvider } from "../../contexts/StepperContext";
 import Stepper from "./RegistrationForm/Stepper";
 import { toast } from "react-hot-toast";
 import useFormUserValidation from "../../hooks/useFormUserValidation";
@@ -101,7 +99,7 @@ const {imageErrors , imageHandleNext} = useFormImageValidation(image)
                                 <div className='flex '>
                                     <button
                                         onClick={() => handleClick("skip")}
-                                        className={`cursor-pointer rounded-lg bg-emerald-500 py-2 px-4 font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-fuchsia-700 hover:text-white ${currentStep == 3 ? "block" : "hidden"}`}
+                                        className={`cursor-pointer rounded-lg bg-emerald-500 py-2 px-4 font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-fuchsia-700 hover:text-white ${currentStep === 3 ? "block" : "hidden"}`}
                                     >Skip </button>
                                     <button
                                         onClick={() => handleClick("next")}

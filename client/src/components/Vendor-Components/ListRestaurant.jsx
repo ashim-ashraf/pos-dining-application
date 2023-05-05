@@ -8,11 +8,12 @@ import { Link } from "react-router-dom";
 function ListRestaurant({ Restaurant }) {
   const [openStatus, setOpenStatus] = useState(false);
   const [showPublishButton, setShowPublishButton] = useState(false);
-  const userId = useSelector((state) => state.vendor.vendor.id);
+  const vendorId = useSelector((state) => state.vendor.vendor.id);
 
   useEffect(() => {
     checkApproval();
     setOpenStatus(Restaurant.openStatus);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleShopStatus = (restaurantId, status) => {
@@ -30,7 +31,7 @@ function ListRestaurant({ Restaurant }) {
 
   const checkApproval = () => {
     axios
-      .get(`/api/vendors/vendor-approval/${userId}`)
+      .get(`/api/vendors/vendor-approval/${vendorId}`)
       .then((res) => {
         setShowPublishButton(res.data);
       })

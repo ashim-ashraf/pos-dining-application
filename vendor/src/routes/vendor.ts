@@ -15,6 +15,7 @@ import {
   getAllVendors,
   getCategoryById,
   getMenuByVendorId,
+  getTableById,
   getVendorById,
   handleShopOpenStatus,
   listedVendor,
@@ -31,6 +32,8 @@ const upload = require("../middleware/upload");
 const router = express.Router();
 
 router.get("/get-tables", requireVendorAuth, getAllTables);
+
+router.get("/get-table/:id",requireVendorAuth, getTableById )
 
 router.post("/signup", vendorSignup);
 

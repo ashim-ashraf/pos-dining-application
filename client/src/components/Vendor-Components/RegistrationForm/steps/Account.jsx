@@ -1,9 +1,6 @@
 
 import { Toaster } from "react-hot-toast";
-import { isValidEmail, isValidName, validateDescription, validatePhone } from "../../../../validation/validation";
-import { useStepperContext } from "../../../../contexts/StepperContext";
-import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
@@ -41,6 +38,7 @@ export default function Account({userData,setUserData , handleChangeValidation, 
     }).catch(() => {
       console.log("restaurant not listed")
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

@@ -7,7 +7,6 @@ import {
   clearOrder,
   ratingData,
   releiveTable,
-  userOrder,
 } from "../../features/authSlices/userSlice";
 import { useNavigate } from "react-router-dom";
 import useCart from "../../components/User-Components/Cart-Functions";
@@ -22,6 +21,7 @@ function Billing() {
 
   useEffect(() => {
     getOrders();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getOrders = () => {

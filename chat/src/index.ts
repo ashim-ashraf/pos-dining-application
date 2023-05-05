@@ -30,7 +30,7 @@ const start = async () => {
     process.on("SIGTERM", () => natsWrapper.client.close());
 
     await mongoose.connect(process.env.MONGO_URI, {
-      dbName:'pos-vendor',
+      dbName:'pos-chat',
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false 
