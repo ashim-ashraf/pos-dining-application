@@ -33,7 +33,7 @@ const router = express.Router();
 
 router.get("/get-tables", requireVendorAuth, getAllTables);
 
-router.get("/get-table/:id",requireVendorAuth, getTableById )
+router.get("/get-table/:id",requireVendorAuth, getTableById );
 
 router.post("/signup", vendorSignup);
 

@@ -12,7 +12,6 @@ import { deleteFile } from "../middleware/upload";
 import { Orders } from "../models/orders";
 
 export const getAllTables = async (req: Request, res: Response) => {
-  console.log("get table route called ");
   let tables = await Table.find();
   if (!tables) {
     res.status(404).send({ error: "No data found" });
@@ -21,7 +20,7 @@ export const getAllTables = async (req: Request, res: Response) => {
 };
 
 export const getTableById =async (req:Request, res:Response) => {
-  let tableId = req.params;
+  let tableId = req.params.id;
 try{
   let table = await Table.findById(tableId);
   if(!table){
