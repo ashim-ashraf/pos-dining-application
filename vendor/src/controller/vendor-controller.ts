@@ -20,6 +20,21 @@ export const getAllTables = async (req: Request, res: Response) => {
   res.status(200).send(tables);
 };
 
+export const getTableById =async (req:Request, res:Response) => {
+  let tableId = req.params;
+try{
+  let table = await Table.findById(tableId);
+  if(!table){
+    throw new BadRequestError("Table Not Found")
+  }
+
+  res.status(200).send(table)
+} catch (error) {
+  res.status(500).send({message: "could not find the table"})
+}
+
+}
+
 export const vendorSignup = async (req: Request, res: Response) => {
   const { userName, user } = req.body;
 

@@ -18,8 +18,6 @@ function MenuManagementForm() {
   const [formdata, setFormdata] = useState({});
   const [menu, setMenu] = useState([]);
   const [menuManagement, setMenuManagement] = useState(false);
-  const [editItemStatus, setEditItemStatus] = useState(false);
-  const [editItem, seteditItem] = useState("");
   const [showImage, setShowImage] = useState(false);
   const [showPublishButton, setShowPublishButton] = useState(false);
   const userId = useSelector((state) => state.vendor.vendor.id);
@@ -71,6 +69,7 @@ function MenuManagementForm() {
   useEffect(() => {
     checkApproval();
     getCategories();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getCategories = () => {
@@ -227,8 +226,6 @@ function MenuManagementForm() {
   };
 
   const handleEditItem = (item) => {
-    setEditItemStatus(true);
-    seteditItem(item);
     setFormdata(item);
     setMenuManagement(true);
     setShowImage(true);

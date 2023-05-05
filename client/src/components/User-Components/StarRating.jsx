@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FaStar } from "react-icons/fa";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 
@@ -32,6 +31,7 @@ const Rate = ({ count, rating, color, onRating }) => {
           onMouseLeave={() => setHoverRating(0)}
         />
       ));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count, rating, hoverRating]);
 
   return <div>{starRating}</div>;

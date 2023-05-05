@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import { auth, onSigninssubmit, recaptcha } from "../../firebase.js/firebase";
+import { onSigninssubmit, recaptcha } from "../../firebase.js/firebase";
 import { toast, Toaster } from "react-hot-toast";
 import { CgSpinner } from "react-icons/cg";
 import axios from "axios";

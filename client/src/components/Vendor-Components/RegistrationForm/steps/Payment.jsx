@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { useStepperContext } from "../../../../contexts/StepperContext";
 import { Toaster } from "react-hot-toast";
 
 export default function Payment({image, setImage, imageErrors}) {
  
-  const [selectedImages, setSelectedImages] = useState([]);
+  const [ setSelectedImages] = useState([]);
 
   function handleImageChange(event) {
     const file = event.target.files[0];

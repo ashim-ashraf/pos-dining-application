@@ -1,6 +1,6 @@
 import { Icon, Tabbar, TabbarLink } from 'konsta/react'
-import React, { useState } from 'react'
-import { CgHome, CgSearch, CgShoppingBag } from 'react-icons/cg';
+import React from 'react'
+import { CgHome,  CgShoppingBag } from 'react-icons/cg';
 import { IoCart } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 

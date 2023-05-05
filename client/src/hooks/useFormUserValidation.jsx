@@ -1,6 +1,6 @@
 /* eslint-disable no-lone-blocks */
 /* eslint-disable default-case */
-import React, { useEffect, useState } from 'react'
+import {  useState } from 'react'
 import { isValidName, validateDescription, validatePhone } from '../validation/validation';
 
 const useFormUserValidation = (userData) => {

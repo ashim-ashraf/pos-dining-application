@@ -21,6 +21,7 @@ import {
   
     useEffect(() => {
       setCart(getCart().items);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
   
     const isItemInCart = (itemId) => {

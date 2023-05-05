@@ -15,6 +15,7 @@ function VendorSignup() {
   const [showOTP, setShowOTP] = useState(false);
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
+  // eslint-disable-next-line no-unused-vars
   const [user, setUser] = useState(null);
   const [userName, setUserName] = useState("");
   const [counter, setCounter] = useState(60);

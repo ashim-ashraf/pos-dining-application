@@ -7,7 +7,7 @@ import {
   Stepper,
   Toast,
 } from "konsta/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect,  useState } from "react";
 import useCart from "../../components/User-Components/Cart-Functions";
 import { Toaster } from "react-hot-toast";
 import { BsJournalBookmarkFill } from "react-icons/bs";
@@ -26,8 +26,6 @@ function MenuItemsList(props) {
     setShowListStatus(!showListStatus);
   };
 
-  const myDivRef = useRef(null);
-
   const scrollToDiv = (id) => {
     const element = document.getElementById(id);
     if (element) {
@@ -43,6 +41,7 @@ function MenuItemsList(props) {
   useEffect(() => {
     console.log(category, "gsaddfasdf");
     setCart(getCart().items);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const isItemInCart = (itemId) => {
