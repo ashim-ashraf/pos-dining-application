@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 import { natsWrapper } from "./nats-wrapper";
 import { app } from "./app";
 
+import { Server } from "socket.io";
+const http = require('http');
+const server = http.createServer(app);
+const io = new Server(server);
+
 const start = async () => {
   if (!process.env.MONGO_URI) {
     throw new Error("MONGO_URI must be defined");
@@ -39,6 +44,10 @@ const start = async () => {
   } catch (err) {
     console.error(err);
   }
+
+  io.on('connection', (socket) => {
+    console.log('a user connected');
+  });
 
   app.listen(3000, () => {
     console.log("Listening on port 3000!!!!!!!!");

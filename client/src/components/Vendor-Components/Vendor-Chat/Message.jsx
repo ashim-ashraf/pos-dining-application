@@ -2,8 +2,6 @@ import React from "react";
 
 function Message({message, ownMessage}) {
 
-  console.log(ownMessage)
-
   return (
     
       <div className="chat-message">
