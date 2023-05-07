@@ -3,15 +3,27 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import ChatLIst from "./ChatLIst";
 import Message from "./Message";
-import { current } from "@reduxjs/toolkit";
+import {io} from "socket.io-client";
+
 
 function VendorChatLayout() {
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null)
   const [messages, setMessages] = useState(null)
   const [newMessage, setNewMessage] = useState('')
+  const [socket, setSocket] = useState(null)
   const vendorId = useSelector((state) => state.vendor.vendor.id);
   const scrollRef = useRef() 
+
+  // useEffect(() => {
+  //   setSocket(io('https://pos.com:3000'))
+  // }, [])
+
+  // useEffect(() => {
+  //   socket?.on("welcome",message => {
+  //     console.log(message)
+  //   })
+  // }, [socket])
 
   useEffect(() => {
     const getConversations = async () => {

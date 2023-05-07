@@ -1,12 +1,26 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 interface OrdersAttrs {
-  orders: []
+  restaurantId:string,
+  orders: [{
+    _id: String,
+    items: [],
+    restaurantId: String,
+    totalAmount: Number,
+    createdAt:string
+}],
+
 }
 
 interface OrdersDoc extends mongoose.Document {
-  items: any;
-  orders:[]
+  restaurantId:string,
+  orders: [{
+    _id: String,
+    items: [],
+    restaurantId: String,
+    totalAmount: Number,
+    createdAt:string
+}],
 }
 
 interface OrdersModel extends mongoose.Model<OrdersDoc> {
@@ -15,10 +29,17 @@ interface OrdersModel extends mongoose.Model<OrdersDoc> {
 
 const ordersSchema = new mongoose.Schema(
   {
-    orders:{
-      type:Array,
-      default:[]
-    }
+    restaurantId: String,
+    orders: [{
+        _id: String,
+        items: Array,
+        restaurantId: String,
+        totalAmount: Number,
+        createdAt: {
+          type: Date,
+          default: Date.now
+        }
+    }],
   },
   {
     toJSON: {
@@ -33,6 +54,6 @@ ordersSchema.statics.build = (attrs: OrdersAttrs) => {
   return new Orders(attrs);
 };
 
-const Orders = mongoose.model<OrdersDoc, OrdersModel>('Orders', ordersSchema);
+const Orders = mongoose.model<OrdersDoc, OrdersModel>("Orders", ordersSchema);
 
 export { Orders };

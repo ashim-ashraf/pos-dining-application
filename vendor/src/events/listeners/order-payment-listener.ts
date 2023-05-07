@@ -13,7 +13,7 @@ import { Orders } from "../../models/orders";
     queueGroupName = "vendor-service";
   
     async onMessage(data: OrderPaymentUpdateEvent["data"], msg: Message) {
-      const { order, tableId  } = data;
+      const { order, tableId, restaurantId } = data;
 
       try {
         const table = await Table.findOneAndUpdate(
@@ -26,7 +26,7 @@ import { Orders } from "../../models/orders";
           );
           
           Orders.findOneAndUpdate(
-            {},
+            { restaurantId: restaurantId },
             { $push: { orders: order } },
             { new: true, upsert: true }
           )

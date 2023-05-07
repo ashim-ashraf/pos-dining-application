@@ -2,6 +2,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 import { adminLogout } from "../features/authSlices/adminSlice";
+import { vendorLogout } from "../features/authSlices/vendorSlice";
 
 
 function AdminCheckLogin() {
@@ -33,6 +34,12 @@ function  AdminIsLogged(){
   }
 
 function VendorCheckLogin() {
+  const dispatch = useDispatch();
+  axios.get("/api/vendors/vendor-verify").then((res) =>{
+    console.log(res)
+  }).catch(() => {
+    dispatch(vendorLogout())
+  })
     const vendor = useSelector((state) => state.vendor);
     return (
       vendor.isLoggedIn?<Outlet/>:<Navigate to='/vendors/login'/>
@@ -40,6 +47,12 @@ function VendorCheckLogin() {
   }
 
 function  VendorIsLogged(){
+  const dispatch = useDispatch();
+  axios.get("/api/vendors/vendor-verify").then((res) =>{
+    console.log(res)
+  }).catch(() => {
+    dispatch(vendorLogout())
+  })
     const vendor=useSelector((state)=>state.vendor)
     return(
       vendor.isLoggedIn?<Navigate to='/vendors/dashboard' />:<Outlet/>

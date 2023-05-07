@@ -3,6 +3,7 @@ import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { CgSpinner } from "react-icons/cg";
+import { saveAs } from 'file-saver';
 
 function VendorTable() {
   const [tables, setTables] = useState([]);
@@ -27,16 +28,15 @@ function VendorTable() {
       });
   };
 
-  const handleTable = async(table, tableNo) => {
+  const handleTable = async (table, tableNo) => {
     try {
       await getTables();
-    setCurrentTable(table);
-    setTableNo(tableNo);
-    setManageTable(true);
+      setCurrentTable(table);
+      setTableNo(tableNo);
+      setManageTable(true);
     } catch (error) {
-      toast.error("Couldn't Load Table data")
+      toast.error("Couldn't Load Table data");
     }
-    
   };
 
   const handleStatusChange = (entityId, status) => {
@@ -52,6 +52,21 @@ function VendorTable() {
       })
       .catch((err) => {
         console.log(err);
+      });
+  };
+
+  const generateBill = () => {
+    axios
+      .get(`/api/vendors/generate-bill/${currentTable._id}/${currentTable.currentOrder.restaurantId}`, {
+        responseType: 'blob'
+      })
+      .then((response) => {
+        console.log(response.data)
+        const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
+        saveAs(pdfBlob, 'test.pdf');
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 
@@ -188,6 +203,12 @@ function VendorTable() {
                     Status : {currentTable?.status}
                   </div>
                   <div className="font-bold">Seats : {currentTable?.seats}</div>
+                  <button
+                    className="bg-emerald-700 hover:bg-green-600 text-white font-bold py-2  mt-2 rounded w-full"
+                    onClick={generateBill}
+                  >
+                    Generate Bill
+                  </button>
                 </div>
               </div>
             </div>
