@@ -29,11 +29,20 @@ function Billing() {
       .get(`/api/users/orders/${table}`)
       .then(async (res) => {
         let order = res.data;
-        const filteredItems = order.items.filter(
-          (item) => item.orderStatus !== "Cancelled"
-        );
+        const filteredItems = order.items
+        .filter(item => item.orderStatus !== 'Cancelled')
+        .reduce((acc, curr) => {
+          const existingItem = acc.find(item => item._id === curr._id);
+          if (existingItem) {
+            existingItem.count += curr.count;
+          } else {
+            acc.push(curr);
+          }
+          return acc;
+        }, []);
         order.items = filteredItems;
         console.log("filter", order);
+
         setOrder(order);
         dispatch(ratingData(order))
       })

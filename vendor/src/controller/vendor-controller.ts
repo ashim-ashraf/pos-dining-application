@@ -11,8 +11,8 @@ import { VendorOpenStatusPublisher } from "../events/publishers/vendor-openstatu
 import { deleteFile } from "../middleware/upload";
 import { Orders } from "../models/orders";
 
-const fs = require('fs');
-const PDFDocument = require('pdfkit');
+const fs = require("fs");
+const PDFDocument = require("pdfkit");
 
 export const vendorVerify = (req: Request, res: Response) => {
   res.send({ currentVendor: req.currentVendor || null });
@@ -42,62 +42,202 @@ export const getTableById = async (req: Request, res: Response) => {
 
 export const getTableBill = async (req: Request, res: Response) => {
   const tableId = req.params.tableId;
-  const restaurantId = req.params.restaurantId
+  const restaurantId = req.params.restaurantId;
 
-  interface Order {
-    _id: string;
-    // other fields
-  }
+
+
+ 
 
   try {
     let table = await Table.findById(tableId);
     if (!table) {
       throw new BadRequestError("Table Not Found");
     }
-    console.log("table",table)
+    console.log("table", table);
 
-    let vendor = await Vendor.findById(restaurantId)
+    let vendor = await Vendor.findById(restaurantId);
     if (!vendor) {
       throw new BadRequestError("Vendor Not Found");
     }
-    console.log('vendor', vendor)
+    console.log("vendor", vendor);
+
+    interface Item {
+      _id: string;
+      entityId: string;
+      itemName: string;
+      retailPrice: number;
+      description: string;
+      sellingPrice: number;
+      category: string;
+      image: string;
+      count: number;
+      orderStatus: string;
+    }
     
-    const order = table.currentOrder as Order
+
+    interface Order {
+      _id: string;
+      items: Item[];
+    }
+    
+    const order = table.currentOrder as Order;
+
+    
+    const filteredItems = order.items
+    .filter(item => item.orderStatus !== 'Cancelled')
+    .reduce<Item[]>((acc, curr) => {
+      const existingItem = acc.find(item => item._id === curr._id);
+      if (existingItem) {
+        existingItem.count += curr.count;
+      } else {
+        acc.push(curr);
+      }
+      return acc;
+    }, []);
+
+    const subtotal = calculateSubtotal(filteredItems);
+
+    function calculateSubtotal(items: Item[]): number {
+      return items.reduce((acc, curr) => acc + (curr.sellingPrice * curr.count), 0);
+    }
+
+    console.log("filtered ",filteredItems)
+
     const invoiceName = order._id;
 
-    const doc = new PDFDocument({ margin: 50 });
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename=test.pdf');    
-  doc.pipe(res);
+    //doc functions
+    
+    
 
-    doc.fillColor('#444444')
-		.fontSize(20)
-		.text(vendor.restaurantName, 110, 57)
-		.fontSize(10)
-		.text("Yummers Food Court", 200, 65, { align: 'right' })
-		.text('Kochi, Kerala', 200, 80, { align: 'right' })
-		.moveDown();
-    
-    
-    doc.text(`Invoice Number: ${order._id}`, 50, 200)
-		.text(`Invoice Date: ${new Date()}`, 50, 215)
-		.moveDown();
+    const doc = new PDFDocument({ size: "A4", margin: 50 });
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", "attachment; filename=test.pdf");
+    doc.pipe(res);
 
-    doc.fontSize(
-      10,
-    ).text(
-      'Thank you. Visit Again',
-      50,
-      780,
-      { align: 'center', width: 500 },
-    );
-    
+    doc
+      .fillColor("#444444")
+      .fontSize(20)
+      .text(vendor.restaurantName, 110, 57)
+      .fontSize(10)
+      .text("Yummers Food Court", 200, 65, { align: "right" })
+      .text("Kochi, Kerala", 200, 80, { align: "right" })
+      .moveDown();
+
+    generateHr(doc,185);
+
+    doc
+      .text(`Invoice Number: ${order._id}`, 50, 200)
+      .text(`Invoice Date: ${new Date()}`, 50, 215)
+      .moveDown();
+
+      generateHr(doc, 230);
+   
+    // doc
+    //   .fontSize(10)
+    //   .text("Thank you. Visit Again", 50, 780, { align: "center", width: 500 });
+
+      
+      function generateHr(doc:any, y:number) {
+        doc
+          .strokeColor("#aaaaaa")
+          .lineWidth(1)
+          .moveTo(50, y)
+          .lineTo(550, y)
+          .stroke();
+      }
+
+      try {
+        generateInvoiceTable(doc, filteredItems);
+        function generateInvoiceTable(doc : any, order: any) {
+          let i;
+          const invoiceTableTop = 330;
+        
+          doc.font("Helvetica-Bold");
+          generateTableRow(
+            doc,
+            invoiceTableTop,
+            "Item",
+            "Unit Price",
+            "Quantity",
+            "Line Total"
+          );
+          generateHr(doc, invoiceTableTop + 20);
+          doc.font("Helvetica");
+        
+          for (i = 0; i < order.length; i++) {
+            const item = order[i];
+            const position = invoiceTableTop + (i + 1) * 30;
+            generateTableRow(
+              doc,
+              position,
+              item.itemName,
+              item.sellingPrice.toString(),
+              item.count.toString(),
+              (item.sellingPrice * item.count).toString(),
+            );
+        
+            generateHr(doc, position + 20);
+          }
+        
+          const subtotalPosition = invoiceTableTop + (i + 1) * 30;
+          generateTableRow(
+            doc,
+            subtotalPosition,
+            "",
+            "",
+            "Total",
+            subtotal.toString(),
+          );
+        
+          // const paidToDatePosition = subtotalPosition + 20;
+          // generateTableRow(
+          //   doc,
+          //   paidToDatePosition,
+          //   "",
+          //   "",
+          //   "Paid To Date",
+          //   "",
+          //   formatCurrency(invoice.paid)
+          // );
+        
+          // const duePosition = paidToDatePosition + 25;
+          // doc.font("Helvetica-Bold");
+          // generateTableRow(
+          //   doc,
+          //   duePosition,
+          //   "",
+          //   "",
+          //   "Balance Due",
+          //   "",
+          //   formatCurrency(invoice.subtotal - invoice.paid)
+          // );
+          doc.font("Helvetica");
+        }
   
-  doc.end();
+      } catch (error) {
+        console.log(error)
+      }
 
+      
+      function generateTableRow(
+        doc : any,
+        y: number,
+        item: string,
+        unitPrice: string,
+        quantity : string,
+        lineTotal: string
+      ) {
+        doc
+          .fontSize(10)
+          .text(item, 50, y)
+          .text(unitPrice, 150, y, { width: 90, align: "right" })
+          .text(quantity, 280, y, { width: 90, align: "right" })
+          .text(lineTotal, 0, y, { align: "right" });
+      }
 
+    doc.end();
   } catch (error) {
-    res.status(400).send({message: "Bill generation failed"})
+    res.status(400).send({ message: "Bill generation failed" });
   }
 };
 
