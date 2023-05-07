@@ -193,6 +193,7 @@ export const orderPayment = async (req: Request, res: Response) => {
   const { order, tableId, amountPayable } = req.body;
   order.totalAmount = amountPayable;
   console.log(order);
+  const restaurantId = order.restaurantId;
 
   try {
     const table = await Table.findOneAndUpdate(
@@ -207,6 +208,7 @@ export const orderPayment = async (req: Request, res: Response) => {
     await new OrderPaymentUpdatePublisher(natsWrapper.client).publish({
       order: order,
       tableId: tableId,
+      restaurantId:restaurantId,
     });
 
     res.status(200).send(table);

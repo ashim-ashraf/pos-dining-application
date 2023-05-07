@@ -9,7 +9,7 @@ function UserLayout({children}) {
   return (
     <App theme="ios">
       <Page className="bg-white">
-      <Toaster toastOptions={{ duration: 4000 }} />
+      {/* <Toaster toastOptions={{ duration: 4000 }} /> */}
         <MobileNav />
         {children}   
         <MobileNavigation />

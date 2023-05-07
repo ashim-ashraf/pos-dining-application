@@ -4,12 +4,19 @@ import { OrderStatusUpdatePublisher } from "../events/publishers/order-status-pu
 import { natsWrapper } from "../nats-wrapper";
 import { Vendor } from "../models/vendor";
 import mongoose from "mongoose";
-import { BadRequestError } from "@snackopedia/common";
+import { BadRequestError, CustomError } from "@snackopedia/common";
 import jwt from "jsonwebtoken";
 import { VendorPublisher } from "../events/publishers/vendor-publisher";
 import { VendorOpenStatusPublisher } from "../events/publishers/vendor-openstatus-publisher";
 import { deleteFile } from "../middleware/upload";
 import { Orders } from "../models/orders";
+
+const fs = require('fs');
+const PDFDocument = require('pdfkit');
+
+export const vendorVerify = (req: Request, res: Response) => {
+  res.send({ currentVendor: req.currentVendor || null });
+};
 
 export const getAllTables = async (req: Request, res: Response) => {
   let tables = await Table.find();
@@ -19,20 +26,80 @@ export const getAllTables = async (req: Request, res: Response) => {
   res.status(200).send(tables);
 };
 
-export const getTableById =async (req:Request, res:Response) => {
+export const getTableById = async (req: Request, res: Response) => {
   let tableId = req.params.id;
-try{
-  let table = await Table.findById(tableId);
-  if(!table){
-    throw new BadRequestError("Table Not Found")
+  try {
+    let table = await Table.findById(tableId);
+    if (!table) {
+      throw new BadRequestError("Table Not Found");
+    }
+
+    res.status(200).send(table);
+  } catch (error) {
+    res.status(500).send({ message: "could not find the table" });
+  }
+};
+
+export const getTableBill = async (req: Request, res: Response) => {
+  const tableId = req.params.tableId;
+  const restaurantId = req.params.restaurantId
+
+  interface Order {
+    _id: string;
+    // other fields
   }
 
-  res.status(200).send(table)
-} catch (error) {
-  res.status(500).send({message: "could not find the table"})
-}
+  try {
+    let table = await Table.findById(tableId);
+    if (!table) {
+      throw new BadRequestError("Table Not Found");
+    }
+    console.log("table",table)
 
-}
+    let vendor = await Vendor.findById(restaurantId)
+    if (!vendor) {
+      throw new BadRequestError("Vendor Not Found");
+    }
+    console.log('vendor', vendor)
+    
+    const order = table.currentOrder as Order
+    const invoiceName = order._id;
+
+    const doc = new PDFDocument({ margin: 50 });
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=test.pdf');    
+  doc.pipe(res);
+
+    doc.fillColor('#444444')
+		.fontSize(20)
+		.text(vendor.restaurantName, 110, 57)
+		.fontSize(10)
+		.text("Yummers Food Court", 200, 65, { align: 'right' })
+		.text('Kochi, Kerala', 200, 80, { align: 'right' })
+		.moveDown();
+    
+    
+    doc.text(`Invoice Number: ${order._id}`, 50, 200)
+		.text(`Invoice Date: ${new Date()}`, 50, 215)
+		.moveDown();
+
+    doc.fontSize(
+      10,
+    ).text(
+      'Thank you. Visit Again',
+      50,
+      780,
+      { align: 'center', width: 500 },
+    );
+    
+  
+  doc.end();
+
+
+  } catch (error) {
+    res.status(400).send({message: "Bill generation failed"})
+  }
+};
 
 export const vendorSignup = async (req: Request, res: Response) => {
   const { userName, user } = req.body;
@@ -391,9 +458,14 @@ export const manageOrderStatus = async (req: Request, res: Response) => {
 export const getAllOrders = async (req: Request, res: Response) => {
   const restaurantId = req.params.id;
 
-  const orders = await Orders.find();
-
-  console.log();
+  try {
+    const orders = await Orders.find({ restaurantId });
+    res.status(200).send(orders);
+  } catch (error) {
+    res
+      .status(404)
+      .send({ message: "Orders matching with the vendor not found" });
+  }
 };
 
 export const createMenuItem = async (req: Request, res: Response) => {

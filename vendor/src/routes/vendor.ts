@@ -15,6 +15,7 @@ import {
   getAllVendors,
   getCategoryById,
   getMenuByVendorId,
+  getTableBill,
   getTableById,
   getVendorById,
   handleShopOpenStatus,
@@ -25,15 +26,20 @@ import {
   vendorSignin,
   vendorSignout,
   vendorSignup,
+  vendorVerify,
 } from "../controller/vendor-controller";
 import { test } from "../controller/admin-controller";
 
 const upload = require("../middleware/upload");
 const router = express.Router();
 
+router.get("/vendor-verify", requireVendorAuth, vendorVerify)
+
 router.get("/get-tables", requireVendorAuth, getAllTables);
 
 router.get("/get-table/:id",requireVendorAuth, getTableById );
+
+router.get("/generate-bill/:tableId/:restaurantId",requireVendorAuth, getTableBill)
 
 router.post("/signup", vendorSignup);
 
@@ -76,5 +82,6 @@ router.post("/manage-order-status", requireVendorAuth, manageOrderStatus);
 router.post("/delete-image",requireVendorAuth, deleteS3image)
 
 router.get('/get-orders/:id',requireVendorAuth, getAllOrders)
+
 
 export { router as vendorRouter };

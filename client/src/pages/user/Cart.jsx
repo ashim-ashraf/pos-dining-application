@@ -17,6 +17,7 @@ import axios from "axios";
 import QrReader from "react-qr-scanner";
 import { bookedTable } from "../../features/authSlices/userSlice";
 import { releiveTable } from "../../features/authSlices/userSlice";
+import { Toaster } from "react-hot-toast";
 
 function Cart() {
   const videoRef = useRef(null);
@@ -97,6 +98,7 @@ function Cart() {
           console.log(res.data);
           clearCartItems();
           setUpdated(false);
+          toast.success("Order successful")
         })
         .catch((err) => {
           console.log(err);
@@ -145,7 +147,8 @@ function Cart() {
   };
 
   return (
-    <UserLayout>
+    <UserLayout>  
+      <Toaster toastOptions={{ duration: 4000 }} />
       {scanningStatus ? (
         <>
           {loading ? (

@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
 import { natsWrapper } from "./nats-wrapper";
 import { app } from "./app";
+import { Socket } from "socket.io";
 
-import { Server } from "socket.io";
-const http = require('http');
-const server = http.createServer(app);
-const io = new Server(server);
+// const io = require("socket.io")(8900,{
+//     cors:{
+//       origin:"https://pos.com:3000"
+//     }
+//   })
 
 const start = async () => {
   if (!process.env.MONGO_URI) {
@@ -41,14 +43,17 @@ const start = async () => {
       useFindAndModify: false 
     });
     console.log("Connected to MongoDb");
+
+  //   await io.on("connection", (socket: Socket) => {
+  //     console.log("user connected")
+  //     io.emit("welcome", "hello this is socket server")
+  // })
+  
   } catch (err) {
     console.error(err);
   }
 
-  io.on('connection', (socket) => {
-    console.log('a user connected');
-  });
-
+ 
   app.listen(3000, () => {
     console.log("Listening on port 3000!!!!!!!!");
   });
