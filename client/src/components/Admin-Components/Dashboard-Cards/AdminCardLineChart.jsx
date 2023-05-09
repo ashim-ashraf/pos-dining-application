@@ -2,7 +2,7 @@ import React, { useEffect  } from "react";
 import Chart from "chart.js";
 
 
-export default function CardLineChart({data}) {
+export default function AdminCardLineChart({data}) {
 
 
   useEffect(() => {

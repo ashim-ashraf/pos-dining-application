@@ -10,8 +10,11 @@ import { VendorPublisher } from "../events/publishers/vendor-publisher";
 import { VendorOpenStatusPublisher } from "../events/publishers/vendor-openstatus-publisher";
 import { deleteFile } from "../middleware/upload";
 import { Orders } from "../models/orders";
-import { getCurrentDayData, getCurrentMonthData } from "../helpers/vendor-helpers";
-
+import {
+  getCurrentDayData,
+  getCurrentMonthData,
+  getMonthlyDataForYear,
+} from "../helpers/vendor-helpers";
 
 const fs = require("fs");
 const PDFDocument = require("pdfkit");
@@ -46,10 +49,6 @@ export const getTableBill = async (req: Request, res: Response) => {
   const tableId = req.params.tableId;
   const restaurantId = req.params.restaurantId;
 
-
-
- 
-
   try {
     let table = await Table.findById(tableId);
     if (!table) {
@@ -75,41 +74,40 @@ export const getTableBill = async (req: Request, res: Response) => {
       count: number;
       orderStatus: string;
     }
-    
 
     interface Order {
       _id: string;
       items: Item[];
     }
-    
+
     const order = table.currentOrder as Order;
 
-    
     const filteredItems = order.items
-    .filter(item => item.orderStatus !== 'Cancelled')
-    .reduce<Item[]>((acc, curr) => {
-      const existingItem = acc.find(item => item._id === curr._id);
-      if (existingItem) {
-        existingItem.count += curr.count;
-      } else {
-        acc.push(curr);
-      }
-      return acc;
-    }, []);
+      .filter((item) => item.orderStatus !== "Cancelled")
+      .reduce<Item[]>((acc, curr) => {
+        const existingItem = acc.find((item) => item._id === curr._id);
+        if (existingItem) {
+          existingItem.count += curr.count;
+        } else {
+          acc.push(curr);
+        }
+        return acc;
+      }, []);
 
     const subtotal = calculateSubtotal(filteredItems);
 
     function calculateSubtotal(items: Item[]): number {
-      return items.reduce((acc, curr) => acc + (curr.sellingPrice * curr.count), 0);
+      return items.reduce(
+        (acc, curr) => acc + curr.sellingPrice * curr.count,
+        0
+      );
     }
 
-    console.log("filtered ",filteredItems)
+    console.log("filtered ", filteredItems);
 
     const invoiceName = order._id;
 
     //doc functions
-    
-    
 
     const doc = new PDFDocument({ size: "A4", margin: 50 });
     res.setHeader("Content-Type", "application/pdf");
@@ -125,117 +123,114 @@ export const getTableBill = async (req: Request, res: Response) => {
       .text("Kochi, Kerala", 200, 80, { align: "right" })
       .moveDown();
 
-    generateHr(doc,185);
+    generateHr(doc, 185);
 
     doc
       .text(`Invoice Number: ${order._id}`, 50, 200)
       .text(`Invoice Date: ${new Date()}`, 50, 215)
       .moveDown();
 
-      generateHr(doc, 230);
-   
+    generateHr(doc, 230);
+
     // doc
     //   .fontSize(10)
     //   .text("Thank you. Visit Again", 50, 780, { align: "center", width: 500 });
 
-      
-      function generateHr(doc:any, y:number) {
-        doc
-          .strokeColor("#aaaaaa")
-          .lineWidth(1)
-          .moveTo(50, y)
-          .lineTo(550, y)
-          .stroke();
-      }
+    function generateHr(doc: any, y: number) {
+      doc
+        .strokeColor("#aaaaaa")
+        .lineWidth(1)
+        .moveTo(50, y)
+        .lineTo(550, y)
+        .stroke();
+    }
 
-      try {
-        generateInvoiceTable(doc, filteredItems);
-        function generateInvoiceTable(doc : any, order: any) {
-          let i;
-          const invoiceTableTop = 330;
-        
-          doc.font("Helvetica-Bold");
+    try {
+      generateInvoiceTable(doc, filteredItems);
+      function generateInvoiceTable(doc: any, order: any) {
+        let i;
+        const invoiceTableTop = 330;
+
+        doc.font("Helvetica-Bold");
+        generateTableRow(
+          doc,
+          invoiceTableTop,
+          "Item",
+          "Unit Price",
+          "Quantity",
+          "Line Total"
+        );
+        generateHr(doc, invoiceTableTop + 20);
+        doc.font("Helvetica");
+
+        for (i = 0; i < order.length; i++) {
+          const item = order[i];
+          const position = invoiceTableTop + (i + 1) * 30;
           generateTableRow(
             doc,
-            invoiceTableTop,
-            "Item",
-            "Unit Price",
-            "Quantity",
-            "Line Total"
+            position,
+            item.itemName,
+            item.sellingPrice.toString(),
+            item.count.toString(),
+            (item.sellingPrice * item.count).toString()
           );
-          generateHr(doc, invoiceTableTop + 20);
-          doc.font("Helvetica");
-        
-          for (i = 0; i < order.length; i++) {
-            const item = order[i];
-            const position = invoiceTableTop + (i + 1) * 30;
-            generateTableRow(
-              doc,
-              position,
-              item.itemName,
-              item.sellingPrice.toString(),
-              item.count.toString(),
-              (item.sellingPrice * item.count).toString(),
-            );
-        
-            generateHr(doc, position + 20);
-          }
-        
-          const subtotalPosition = invoiceTableTop + (i + 1) * 30;
-          generateTableRow(
-            doc,
-            subtotalPosition,
-            "",
-            "",
-            "Total",
-            subtotal.toString(),
-          );
-        
-          // const paidToDatePosition = subtotalPosition + 20;
-          // generateTableRow(
-          //   doc,
-          //   paidToDatePosition,
-          //   "",
-          //   "",
-          //   "Paid To Date",
-          //   "",
-          //   formatCurrency(invoice.paid)
-          // );
-        
-          // const duePosition = paidToDatePosition + 25;
-          // doc.font("Helvetica-Bold");
-          // generateTableRow(
-          //   doc,
-          //   duePosition,
-          //   "",
-          //   "",
-          //   "Balance Due",
-          //   "",
-          //   formatCurrency(invoice.subtotal - invoice.paid)
-          // );
-          doc.font("Helvetica");
+
+          generateHr(doc, position + 20);
         }
-  
-      } catch (error) {
-        console.log(error)
-      }
 
-      
-      function generateTableRow(
-        doc : any,
-        y: number,
-        item: string,
-        unitPrice: string,
-        quantity : string,
-        lineTotal: string
-      ) {
-        doc
-          .fontSize(10)
-          .text(item, 50, y)
-          .text(unitPrice, 150, y, { width: 90, align: "right" })
-          .text(quantity, 280, y, { width: 90, align: "right" })
-          .text(lineTotal, 0, y, { align: "right" });
+        const subtotalPosition = invoiceTableTop + (i + 1) * 30;
+        generateTableRow(
+          doc,
+          subtotalPosition,
+          "",
+          "",
+          "Total",
+          subtotal.toString()
+        );
+
+        // const paidToDatePosition = subtotalPosition + 20;
+        // generateTableRow(
+        //   doc,
+        //   paidToDatePosition,
+        //   "",
+        //   "",
+        //   "Paid To Date",
+        //   "",
+        //   formatCurrency(invoice.paid)
+        // );
+
+        // const duePosition = paidToDatePosition + 25;
+        // doc.font("Helvetica-Bold");
+        // generateTableRow(
+        //   doc,
+        //   duePosition,
+        //   "",
+        //   "",
+        //   "Balance Due",
+        //   "",
+        //   formatCurrency(invoice.subtotal - invoice.paid)
+        // );
+        doc.font("Helvetica");
       }
+    } catch (error) {
+      console.log(error);
+    }
+
+    function generateTableRow(
+      doc: any,
+      y: number,
+      item: string,
+      unitPrice: string,
+      quantity: string,
+      lineTotal: string
+    ) {
+      doc
+        .fontSize(10)
+        .text(item, 50, y)
+        .text(unitPrice, 150, y, { width: 90, align: "right" })
+        .text(quantity, 280, y, { width: 90, align: "right" })
+        .text(lineTotal, 0, y, { align: "right" });
+    }
 
     doc.end();
   } catch (error) {
@@ -783,19 +778,17 @@ export const deleteS3image = async (req: Request, res: Response) => {
 
 export const getCardStatistics = async (req: Request, res: Response) => {
   //sales today
-  //revenue today 
+  //revenue today
   //monthly sale
   //monthly revenue
 
   const restaurantId = req.params.restaurantId;
-  const today:Date = new Date()
-  const previousDay = new Date(today.setDate(today.getDate() - 1));
 
   try {
     const [currentDayData, currentMonthData] = await Promise.all([
       getCurrentDayData(restaurantId),
       getCurrentMonthData(restaurantId),
-    ])
+    ]);
 
     // Send response with data
     res.status(200).send({
@@ -806,4 +799,34 @@ export const getCardStatistics = async (req: Request, res: Response) => {
     console.error(error);
     res.status(500).send({ message: "Internal Server Error" });
   }
-}
+};
+
+export const getLineChartStatistics = async (req: Request, res: Response) => {
+  const restaurantId = req.params.restaurantId;
+
+  try {
+    interface Order {
+      _id: string;
+      noOfOrders: number;
+      totalAmount: number;
+    }
+    const currentYearData: unknown[] = await getMonthlyDataForYear(
+      restaurantId
+    );
+
+    const orderData: number[] = (currentYearData as Order[]).map((item) =>
+      item ? item.noOfOrders : 0
+    );
+    console.log(orderData);
+
+    const revenueData: number[] = (currentYearData as Order[]).map((item) =>
+      item ? item.totalAmount : 0
+    );
+    console.log(revenueData);
+    
+
+    res.status(200).send({orderData, revenueData});
+  } catch (error) {
+    res.status(404).send({ message: "Data not found" });
+  }
+};
