@@ -6,7 +6,9 @@ function OrderManagementPage() {
   return (
     <>
       <VendorLayout>
+      <div className="px-4 pt-24 md:px-10 mx-auto w-full -m-24 ">
         <ManageOrders />
+      </div>
       </VendorLayout>
     </>
   );

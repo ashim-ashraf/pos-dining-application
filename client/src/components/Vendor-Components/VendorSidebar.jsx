@@ -1,9 +1,11 @@
 /*eslint-disable*/
 import React from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 export default function VendorSidebar() {
   const [collapseShow, setCollapseShow] = React.useState("hidden");
+  const vendorName = useSelector((state) =>  state.vendor.vendor.restaurantName)
   return (
     <>
       <nav className="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-green-100 flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6">
@@ -21,7 +23,7 @@ export default function VendorSidebar() {
             className="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-2 px-0"
             to="/vendors/dashboard"
           >
-            Yummers
+            {vendorName}
           </Link>
           {/* User */}
           <ul className="md:hidden items-center flex flex-wrap list-none">
@@ -47,7 +49,7 @@ export default function VendorSidebar() {
                     className="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
                     to="/vendors/dashboard"
                   >
-                    Yummers
+                    {vendorName}
                   </Link>
                 </div>
                 <div className="w-6/12 flex justify-end">
@@ -118,9 +120,19 @@ export default function VendorSidebar() {
             <hr className="my-4 md:min-w-full" />
             {/* Heading */}
             <div className="flex space-x-1 items-center ">
-            <i className="fa-solid fa-arrow-up-short-wide"></i>
+            <i className="fa-solid fa-comments"></i>
             <Link to="/vendors/chat" className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1  no-underline">
               Chats
+            </Link>
+            </div>
+
+             {/* Divider */}
+             <hr className="my-4 md:min-w-full" />
+            {/* Heading */}
+            <div className="flex space-x-1 items-center ">
+            <i className="fa-solid fa-user"></i>
+            <Link to="/vendors/profile" className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1  no-underline">
+              Profile
             </Link>
             </div>
             

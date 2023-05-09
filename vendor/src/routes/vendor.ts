@@ -13,6 +13,7 @@ import {
   getAllOrders,
   getAllTables,
   getAllVendors,
+  getCardStatistics,
   getCategoryById,
   getMenuByVendorId,
   getTableBill,
@@ -82,6 +83,8 @@ router.post("/manage-order-status", requireVendorAuth, manageOrderStatus);
 router.post("/delete-image",requireVendorAuth, deleteS3image)
 
 router.get('/get-orders/:id',requireVendorAuth, getAllOrders)
+
+router.get("/card-stats/:restaurantId", getCardStatistics)
 
 
 export { router as vendorRouter };
