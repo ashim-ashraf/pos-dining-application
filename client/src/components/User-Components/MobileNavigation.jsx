@@ -42,6 +42,8 @@ function MobileNavigation() {
       }
     />
   </Tabbar></div>
+
+  
   )
 }
 

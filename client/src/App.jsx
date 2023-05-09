@@ -29,6 +29,7 @@ import Billing from "./pages/user/Billing";
 import PaymentSuccessPage from "./pages/user/PaymentSuccessPage";
 import UserChat from "./pages/user/UserChat";
 import VendorChat from "./pages/vendor/VendorChat";
+import VendorDashboard from "./pages/vendor/VendorDashboard";
 
 function App() {
   return (
@@ -52,19 +53,16 @@ function App() {
           </Route>
 
           <Route element={<VendorCheckLogin/>}>
+            <Route path="/vendors/dashboard" element={<VendorDashboard />} />
             <Route path="/vendors/menu" element={<CategoryManagementPage />} />
             <Route path="/vendors/registration"element={<VendorRegistrationPage />}/>
-            <Route path="/vendors/dashboard" element={<VendorLandingPage />} />
+            <Route path="/vendors/profile" element={<VendorLandingPage />} />
             <Route path="/vendors/table-management" element={<VendorTableManagement/>} />
             <Route path="/vendors/orders" element={<OrderManagementPage/>} />
             <Route path="/vendors/chat" element={<VendorChat/>} />
-
           </Route>
 
-
           {/* admin routes */}
-
-          
           <Route element={<AdminIsLogged />}>
             <Route path="/admin/login" element={< AdminLoginPage />} />
         </Route>

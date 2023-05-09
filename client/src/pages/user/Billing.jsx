@@ -10,6 +10,7 @@ import {
 } from "../../features/authSlices/userSlice";
 import { useNavigate } from "react-router-dom";
 import useCart from "../../components/User-Components/Cart-Functions";
+import { saveAs } from 'file-saver';
 
 
 function Billing() {
@@ -18,6 +19,7 @@ function Billing() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { clearCart } = useCart();
+  
 
   useEffect(() => {
     getOrders();
@@ -76,6 +78,21 @@ function Billing() {
       });
   };
 
+  const generateBill = () => {
+    axios
+      .get(`/api/vendors/generate-bill/${table}/${order.restaurantId}`, {
+        responseType: 'blob'
+      })
+      .then((response) => {
+        console.log(response.data)
+        const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
+        saveAs(pdfBlob, 'test.pdf');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <UserLayout>
       <Card outline header="Bill Details" footer="" headerDivider footerDivider>
@@ -131,13 +148,20 @@ function Billing() {
             <tr>
               <td className=" px-4 py-2">
                 {order?.items.length > 0 ? (
-                  <Button
+                  <>                  <Button
                     onClick={() => handlePayment()}
                     className="bg-orange-700 text-white px-4 py-2 mt-1 rounded"
                     to={"/billing"}
                   >
                     Pay
                   </Button>
+                  <Button
+                  onClick={() => generateBill()}
+                  className="bg-orange-700 text-white px-4 py-2 mt-2 rounded"
+                >
+                  Generate Bill
+                </Button>
+                </>
                 ) : (
                   ""
                 )}

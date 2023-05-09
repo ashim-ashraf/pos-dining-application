@@ -8,13 +8,14 @@ function VendorLayout({children}) {
     <VendorSidebar/>
     <div className="relative md:ml-64 bg-blueGray-100 ">
     <VendorNavbar/>
-      
-      <div className="px-4 pt-24 md:px-10 mx-auto w-full -m-24 ">
       {children}
-      </div>
     </div>
   </>
   )
 }
 
 export default VendorLayout
+
+
+// <div className="px-4 pt-24 md:px-10 mx-auto w-full -m-24 ">
+//       </div>

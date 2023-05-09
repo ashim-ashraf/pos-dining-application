@@ -4,12 +4,14 @@ import { OrderStatusUpdatePublisher } from "../events/publishers/order-status-pu
 import { natsWrapper } from "../nats-wrapper";
 import { Vendor } from "../models/vendor";
 import mongoose from "mongoose";
-import { BadRequestError, CustomError } from "@snackopedia/common";
+import { BadRequestError } from "@snackopedia/common";
 import jwt from "jsonwebtoken";
 import { VendorPublisher } from "../events/publishers/vendor-publisher";
 import { VendorOpenStatusPublisher } from "../events/publishers/vendor-openstatus-publisher";
 import { deleteFile } from "../middleware/upload";
 import { Orders } from "../models/orders";
+import { getCurrentDayData, getCurrentMonthData } from "../helpers/vendor-helpers";
+
 
 const fs = require("fs");
 const PDFDocument = require("pdfkit");
@@ -778,3 +780,30 @@ export const deleteS3image = async (req: Request, res: Response) => {
     res.status(500).send({ message: "could not delete image" });
   }
 };
+
+export const getCardStatistics = async (req: Request, res: Response) => {
+  //sales today
+  //revenue today 
+  //monthly sale
+  //monthly revenue
+
+  const restaurantId = req.params.restaurantId;
+  const today:Date = new Date()
+  const previousDay = new Date(today.setDate(today.getDate() - 1));
+
+  try {
+    const [currentDayData, currentMonthData] = await Promise.all([
+      getCurrentDayData(restaurantId),
+      getCurrentMonthData(restaurantId),
+    ])
+
+    // Send response with data
+    res.status(200).send({
+      currentDayData: currentDayData,
+      currentMonthData: currentMonthData,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+}
