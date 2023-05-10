@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
-import CardStats from "./CardStats";
+
 import { useSelector } from "react-redux";
 import axios from "axios";
+import AdminCardStats from "./AdminCardStats";
 
 // components
 
 
-export default function HeaderStats() {
-  const restaurantId = useSelector((state) => state.vendor.vendor._id)
-  const [currentDay, setCurrentDay] = useState({})
-  const [currentMonth, setCurrentMonth] = useState({})
+export default function AdminHeaderStats() {
+
+  const [statistics, setStatistics] = useState({})
 
   useEffect(() => {
-    axios.get(`/api/vendors/card-stats/${restaurantId}`).then((res) => {
-      setCurrentDay(res.data.currentDayData)
-      setCurrentMonth(res.data.currentMonthData)
+    axios.get("/api/admin/card-stats").then((res) => {
+      console.log(res.data)
+      setStatistics(res.data)
     }).catch((error) => {
       console.log(error)
     })
@@ -23,27 +23,27 @@ export default function HeaderStats() {
   return (
     <>
       {/* Header */}
-      <div className="relative bg-lightBlue-600 md:pb-12 pt-12">
+      <div className="relative md:pb-12 pt-12">
         <div className="px-4 md:px-10 mx-auto w-full">
           <div>
             {/* Card stats */}
-            <div className="flex flex-wrap">
-              <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
-                <CardStats
-                  statSubtitle="Sales Today"
-                  statTitle={currentDay?.noOfOrders}
+            <div className="flex flex-wrap ">
+              <div className="w-full lg:w-6/12 xl:w-3/12 px-4 ">
+                <AdminCardStats
+                  statSubtitle="Top Seller"
+                  statTitle={statistics?.topSeller?.restaurantName}
                   statArrow="up"
-                  statPercent="3.48"
+                  statPercent={statistics?.topSeller?.totalOrders}
                   statPercentColor="text-emerald-500"
-                  statDescripiron="Since last day"
+                  statDescripiron="orders for the month"
                   statIconName="far fa-chart-bar"
                   statIconColor="bg-red-500"
                 />
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
-                <CardStats
-                  statSubtitle="Revenue Today"
-                  statTitle={currentDay?.totalAmount}
+                <AdminCardStats
+                  statSubtitle={"Sale -" + statistics?.topSeller?.restaurantName}
+                  statTitle={statistics?.topSeller?.totalOrders}
                   statArrow="down"
                   statPercent="3.48"
                   statPercentColor="text-red-500"
@@ -53,9 +53,9 @@ export default function HeaderStats() {
                 />
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
-                <CardStats
-                  statSubtitle="Monthly Sale"
-                  statTitle={currentMonth?.noOfOrders}
+                <AdminCardStats
+                  statSubtitle="Visitors Today"
+                  statTitle=''
                   statArrow="down"
                   statPercent="1.10"
                   statPercentColor="text-orange-500"
@@ -65,9 +65,9 @@ export default function HeaderStats() {
                 />
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
-                <CardStats
-                  statSubtitle="Monthly Revenue"
-                  statTitle={currentMonth?.totalAmount}
+                <AdminCardStats
+                  statSubtitle="Monthly Visitors"
+                  statTitle=''
                   statArrow="up"
                   statPercent="12"
                   statPercentColor="text-emerald-500"

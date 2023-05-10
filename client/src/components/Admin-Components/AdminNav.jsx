@@ -21,11 +21,9 @@ function AdminNavbar() {
     }
 
     function logout() {
-      try {
-        
+      try {  
           dispatch(adminLogout());
           navigate("/admin/login");
-      
       } catch (err) {
         console.log(err);
       }

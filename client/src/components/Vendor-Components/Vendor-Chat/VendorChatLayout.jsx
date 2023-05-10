@@ -3,27 +3,27 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import ChatLIst from "./ChatLIst";
 import Message from "./Message";
-import {io} from "socket.io-client";
-
+import { io } from "socket.io-client";
 
 function VendorChatLayout() {
   const [conversations, setConversations] = useState([]);
-  const [currentChat, setCurrentChat] = useState(null)
-  const [messages, setMessages] = useState(null)
-  const [newMessage, setNewMessage] = useState('')
-  const [socket, setSocket] = useState(null)
+  const [currentChat, setCurrentChat] = useState(null);
+  const [messages, setMessages] = useState(null);
+  const [newMessage, setNewMessage] = useState("");
+  const [socket, setSocket] = useState(null);
   const vendorId = useSelector((state) => state.vendor.vendor.id);
-  const scrollRef = useRef() 
+  const scrollRef = useRef();
 
-  // useEffect(() => {
-  //   setSocket(io('https://pos.com:3000'))
-  // }, [])
+  useEffect(() => {
+    console.log("use effect");
+    setSocket(io("wss://pos.com", { path: "/api/socket" }));
+  }, []);
 
-  // useEffect(() => {
-  //   socket?.on("welcome",message => {
-  //     console.log(message)
-  //   })
-  // }, [socket])
+  useEffect(() => {
+    socket?.on("welcome", (message) => {
+      console.log(message);
+    });
+  }, [socket]);
 
   useEffect(() => {
     const getConversations = async () => {
@@ -40,37 +40,35 @@ function VendorChatLayout() {
   useEffect(() => {
     const getMessages = async () => {
       try {
-        const res = await axios.get(`/api/chat/messages/${currentChat?._id}`)
-        setMessages(res.data)
+        const res = await axios.get(`/api/chat/messages/${currentChat?._id}`);
+        setMessages(res.data);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
+    };
     getMessages();
-  }, [currentChat])
+  }, [currentChat]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const message = {
       sender: vendorId,
-      text:  newMessage,
-      conversationId: currentChat._id
-    }
+      text: newMessage,
+      conversationId: currentChat._id,
+    };
 
     try {
-      const res = await axios.post("/api/chat/new-message" , message);
-      setMessages([...messages, res.data])
-
+      const res = await axios.post("/api/chat/new-message", message);
+      setMessages([...messages, res.data]);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-  
 
   return (
     <>
@@ -92,8 +90,12 @@ function VendorChatLayout() {
             {/* end search compt */}
             {/* user list */}
             {conversations.map((c) => (
-              <div onClick={() => {setCurrentChat(c)}}>
-              <ChatLIst conversation={c} vendorId={vendorId}/>
+              <div
+                onClick={() => {
+                  setCurrentChat(c);
+                }}
+              >
+                <ChatLIst conversation={c} vendorId={vendorId} />
               </div>
             ))}
             {/* end user list */}
@@ -118,9 +120,7 @@ function VendorChatLayout() {
                   </div>
                   <div className="flex flex-col leading-tight">
                     <div className="text-2xl flex items-center">
-                      <span className="text-gray-700 mr-3">
-                        Table No 1
-                      </span>
+                      <span className="text-gray-700 mr-3">Table No 1</span>
                     </div>
                     <span className="text-lg text-gray-600">
                       {/* Junior Developer */}
@@ -188,14 +188,17 @@ function VendorChatLayout() {
                 </div>
               </div>
               <div
-      id="messages"
-      className="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
-    >
-              {messages?.map((message) => (
-                <div ref={scrollRef}>
-                <Message message={message} ownMessage={message.sender === vendorId}/>
-              </div>
-              ))}
+                id="messages"
+                className="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
+              >
+                {messages?.map((message) => (
+                  <div ref={scrollRef}>
+                    <Message
+                      message={message}
+                      ownMessage={message.sender === vendorId}
+                    />
+                  </div>
+                ))}
               </div>
               <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
                 <div className="relative flex">

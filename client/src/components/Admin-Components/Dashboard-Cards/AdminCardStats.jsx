@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export default function CardStats({
+export default function AdminCardStats({
   statSubtitle,
   statTitle,
   statArrow,
@@ -13,7 +13,7 @@ export default function CardStats({
 }) {
   return (
     <>
-      <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
+      <div className="relative flex flex-col min-w-0 break-words bg-sky-200 rounded mb-6 xl:mb-0 shadow-lg">
         <div className="flex-auto p-4">
           <div className="flex flex-wrap">
             <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
@@ -35,7 +35,7 @@ export default function CardStats({
               </div>
             </div>
           </div>
-          <p className="text-sm text-blueGray-400 mt-4">
+          {/* <p className="text-sm text-blueGray-400 mt-4">
             <span className={statPercentColor + " mr-2"}>
               <i
                 className={
@@ -49,25 +49,25 @@ export default function CardStats({
               {statPercent}%
             </span>
             <span className="whitespace-nowrap">{statDescripiron}</span>
-          </p>
+          </p> */}
         </div>
       </div>
     </>
   );
 }
 
-CardStats.defaultProps = {
-  statSubtitle: "",
-  statTitle: "0",
+AdminCardStats.defaultProps = {
+  statSubtitle: "Traffic",
+  statTitle: "350,897",
   statArrow: "up",
-  statPercent: "0",
+  statPercent: "3.48",
   statPercentColor: "text-emerald-500",
-  statDescripiron: "",
+  statDescripiron: "Since last month",
   statIconName: "far fa-chart-bar",
   statIconColor: "bg-red-500",
 };
 
-CardStats.propTypes = {
+AdminCardStats.propTypes = {
   statSubtitle: PropTypes.string,
   statTitle: PropTypes.string,
   statArrow: PropTypes.oneOf(["up", "down"]),

@@ -15,16 +15,20 @@ function AddBannerForm() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    axios
-      .get("/api/admin/get-banners")
-      .then((res) => {
-        console.log(res.data);
-        setData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    getBanners();
   }, []);
+
+  const getBanners = () => {
+    axios
+    .get("/api/admin/get-banners")
+    .then((res) => {
+      console.log(res.data);
+      setData(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,12 +61,24 @@ function AddBannerForm() {
           if (response.data.success) {
             setFormdata({});
           }
+          getBanners();
         })
         .catch(async (err) => {
           console.log(err);
         });
     }
   };
+
+  const deleteBanner = (id) => {
+    axios.delete(`/api/admin/delete-banner/${id}`).then((res) => {
+      console.log(res);
+      toast.success("Banner Deleted")
+      getBanners()
+    }).catch((error) => {
+      console.log(error);
+      toast.error("Banner Deletion Failed")
+    })
+  }
 
   return (
     <div>
@@ -110,10 +126,7 @@ function AddBannerForm() {
                           <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                             <div className="flex gap-3">
                               <span>
-                                <IoPencil />
-                              </span>
-                              <span>
-                                <IoTrashSharp />
+                                <IoTrashSharp onClick={() => deleteBanner(item._id)} />
                               </span>
                             </div>
                           </td>

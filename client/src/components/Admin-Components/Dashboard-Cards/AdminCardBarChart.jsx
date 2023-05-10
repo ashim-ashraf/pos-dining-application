@@ -1,7 +1,7 @@
 import React from "react";
 import Chart from "chart.js";
 
-export default function CardBarChart({data}) {
+export default function AdminCardBarChart({data}) {
   React.useEffect(() => {
     const monthNames = [
       "January", "February", "March", "April",
