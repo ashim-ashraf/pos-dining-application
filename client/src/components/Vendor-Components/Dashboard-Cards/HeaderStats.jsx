@@ -31,7 +31,7 @@ export default function HeaderStats() {
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle="Sales Today"
-                  statTitle={currentDay.noOfOrders}
+                  statTitle={currentDay?.noOfOrders}
                   statArrow="up"
                   statPercent="3.48"
                   statPercentColor="text-emerald-500"
@@ -43,7 +43,7 @@ export default function HeaderStats() {
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle="Revenue Today"
-                  statTitle={currentDay.totalAmount}
+                  statTitle={currentDay?.totalAmount}
                   statArrow="down"
                   statPercent="3.48"
                   statPercentColor="text-red-500"
@@ -55,7 +55,7 @@ export default function HeaderStats() {
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle="Monthly Sale"
-                  statTitle={currentMonth.noOfOrders}
+                  statTitle={currentMonth?.noOfOrders}
                   statArrow="down"
                   statPercent="1.10"
                   statPercentColor="text-orange-500"
@@ -67,7 +67,7 @@ export default function HeaderStats() {
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle="Monthly Revenue"
-                  statTitle={currentMonth.totalAmount}
+                  statTitle={currentMonth?.totalAmount}
                   statArrow="up"
                   statPercent="12"
                   statPercentColor="text-emerald-500"

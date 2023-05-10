@@ -2,11 +2,8 @@ import express, { Request, Response } from "express";
 import { Conversation } from "../models/conversation";
 import { Message } from "../models/messages";
 
-const router = express.Router();
 
-router.get("/messages", (req:Request , res: Response) => {
-    res.status(200).send("Hi messages")
-})
+  const router = express.Router();
 
 router.post("/new-conversation", async (req, res) => {
   console.log(req.body)

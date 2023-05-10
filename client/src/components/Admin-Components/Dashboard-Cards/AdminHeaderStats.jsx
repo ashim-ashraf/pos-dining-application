@@ -9,13 +9,12 @@ import AdminCardStats from "./AdminCardStats";
 
 export default function AdminHeaderStats() {
 
-  const [currentDay, setCurrentDay] = useState({})
-  const [currentMonth, setCurrentMonth] = useState({})
+  const [statistics, setStatistics] = useState({})
 
   useEffect(() => {
     axios.get("/api/admin/card-stats").then((res) => {
-      setCurrentDay(res.data.currentDayData)
-      setCurrentMonth(res.data.currentMonthData)
+      console.log(res.data)
+      setStatistics(res.data)
     }).catch((error) => {
       console.log(error)
     })
@@ -32,19 +31,19 @@ export default function AdminHeaderStats() {
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4 ">
                 <AdminCardStats
                   statSubtitle="Top Seller"
-                  statTitle={currentDay.noOfOrders}
+                  statTitle={statistics?.topSeller?.restaurantName}
                   statArrow="up"
-                  statPercent="3.48"
+                  statPercent={statistics?.topSeller?.totalOrders}
                   statPercentColor="text-emerald-500"
-                  statDescripiron="Since last day"
+                  statDescripiron="orders for the month"
                   statIconName="far fa-chart-bar"
                   statIconColor="bg-red-500"
                 />
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <AdminCardStats
-                  statSubtitle={"Monthly Sale -" + "Qasr"}
-                  statTitle={currentDay.totalAmount}
+                  statSubtitle={"Sale -" + statistics?.topSeller?.restaurantName}
+                  statTitle={statistics?.topSeller?.totalOrders}
                   statArrow="down"
                   statPercent="3.48"
                   statPercentColor="text-red-500"
@@ -55,8 +54,8 @@ export default function AdminHeaderStats() {
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <AdminCardStats
-                  statSubtitle="Monthly Sale"
-                  statTitle={currentMonth.noOfOrders}
+                  statSubtitle="Visitors Today"
+                  statTitle=''
                   statArrow="down"
                   statPercent="1.10"
                   statPercentColor="text-orange-500"
@@ -67,8 +66,8 @@ export default function AdminHeaderStats() {
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <AdminCardStats
-                  statSubtitle="Monthly Revenue"
-                  statTitle={currentMonth.totalAmount}
+                  statSubtitle="Monthly Visitors"
+                  statTitle=''
                   statArrow="up"
                   statPercent="12"
                   statPercentColor="text-emerald-500"

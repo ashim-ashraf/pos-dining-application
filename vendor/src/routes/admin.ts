@@ -6,6 +6,8 @@ import {
   addBanner,
   addTable,
   adminSignin,
+  cardStats,
+  deleteBanner,
   deleteTableById,
   getAllTables,
   getBanners,
@@ -35,7 +37,11 @@ router.put("/vendor-approval/:id",requireAdminAuth, vendorApproval)
 
 router.post("/create-banner" , requireAdminAuth,upload.single("image"), addBanner)
 
+router.delete('/delete-banner/:bannerId', requireAdminAuth, deleteBanner)
+
 router.get("/get-banners",test, getBanners)
+
+router.get("/card-stats", cardStats)
 
 
 export { router as adminRouter };
