@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { App, Page, ListItem, BlockTitle, List, Block } from "konsta/react";
+import { App, Page, ListItem, List, Block } from "konsta/react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import MobileNav from "./MobileNav";

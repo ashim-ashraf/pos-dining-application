@@ -8,14 +8,16 @@ import {
   validateUrl,
 } from "../../validation/validation";
 import { Toaster, toast } from "react-hot-toast";
-import { IoPencil, IoTrashSharp } from "react-icons/io5";
+import { IoTrashSharp } from "react-icons/io5";
 
 function AddBannerForm() {
   const [formdata, setFormdata] = useState({});
   const [data, setData] = useState(null);
+  const [vendors, setVendors] = useState(null)
 
   useEffect(() => {
     getBanners();
+    getVendors();
   }, []);
 
   const getBanners = () => {
@@ -28,6 +30,15 @@ function AddBannerForm() {
     .catch((err) => {
       console.log(err);
     });
+  }
+
+  const getVendors = () => {
+    axios.get("/api/admin/get-vendors").then((res) => {
+      setVendors(res.data)
+      console.log(res.data)
+    }).catch((err) => {
+      toast.error("Vendors Not Found")
+    })
   }
 
   const handleChange = (e) => {
@@ -71,11 +82,9 @@ function AddBannerForm() {
 
   const deleteBanner = (id) => {
     axios.delete(`/api/admin/delete-banner/${id}`).then((res) => {
-      console.log(res);
       toast.success("Banner Deleted")
       getBanners()
     }).catch((error) => {
-      console.log(error);
       toast.error("Banner Deletion Failed")
     })
   }
@@ -163,7 +172,7 @@ function AddBannerForm() {
               >
                 Banner URL
               </label>
-              <input
+              <select
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border mt-3  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                 id="grid-retailPrice-name"
                 name="url"
@@ -171,7 +180,15 @@ function AddBannerForm() {
                 value={formdata["url"] || ""}
                 type="text"
                 placeholder="/bestsellers"
-              />
+              >
+              <option value="">Select a Vendor</option>
+                    {vendors?.map((vendor, index) => (
+                      <option key={index} value={"/"+vendor._id}>
+                        {vendor.restaurantName}
+                      </option>
+                    ))}
+              </select>
+
               <label
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-2"
                 for="grid-sellingPrice-name"
