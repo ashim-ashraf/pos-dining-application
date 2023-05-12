@@ -95,6 +95,7 @@ function Billing() {
 
   return (
     <UserLayout>
+      <div className="md:px-96">
       <Card outline header="Bill Details" footer="" headerDivider footerDivider>
         <table className="border-collapse w-full">
           <thead>
@@ -137,8 +138,9 @@ function Billing() {
           </tr>
         </tbody>
       </Card>
+      </div>
 
-      <Block className="">
+      <Block className="md:px-160">
         <table className="border-collapse w-full">
           <thead>
             <tr></tr>

@@ -62,7 +62,7 @@ function Notification() {
   }
 
   return (
-    <Block>
+    <Block className="md:px-96">
 
       <div className="mt-4 items-center justify-center ">
         <div className="bg-white p-6  md:mx-auto">

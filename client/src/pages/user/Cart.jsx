@@ -98,7 +98,7 @@ function Cart() {
           console.log(res.data);
           clearCartItems();
           setUpdated(false);
-          toast.success("Order successful")
+          toast.success("Order successful");
         })
         .catch((err) => {
           console.log(err);
@@ -121,7 +121,7 @@ function Cart() {
         console.error("Error opening webcam:", error);
       });
   };
-  
+
   const handleErrorFile = (error) => {
     console.log(error);
   };
@@ -147,10 +147,10 @@ function Cart() {
   };
 
   return (
-    <UserLayout>  
+    <UserLayout>
       <Toaster toastOptions={{ duration: 4000 }} />
       {scanningStatus ? (
-        <>
+        <div className="md:px-96">
           {loading ? (
             <div className="flex justify-center items-center h-screen">
               <div className="text-center">
@@ -160,24 +160,28 @@ function Cart() {
             </div>
           ) : (
             <>
-              <Block>
-                <p className="mb-6">
-                  QR code is available on each table. Capture it to make the
+              <Block className="">
+                <div className="md:flex md:gap-2 md:justify-center md:items-center ">
+                <p className="mb-6 font-bold">
+                  QR code is available on each table.<br/>Capture it to make the
                   table selection
                 </p>
-
-                <QrReader
-                  ref={qrRef}
-                  delay={300}
-                  onError={handleErrorFile}
-                  onScan={handleScanfile}
-                />
+                  <div className="md:w-1/2 md:h-1/6 md:border-2 md:border-gray-400 md:p-4">
+                    <QrReader
+                      ref={qrRef}
+                      delay={300}
+                      onError={handleErrorFile}
+                      onScan={handleScanfile}
+                      style={{ width: "100%" }}
+                    />
+                  </div>
+                </div>
               </Block>
 
               <Block>
-                <div className="mx-auto w-4/5">
+                <div className="mx-auto w-4/5 ">
                   <img
-                    className="mt-8 h-32 w-full rounded-lg  mx-auto object-cover shadow-2xl"
+                    className="mt-8 h-32 md:h-56 w-full rounded-lg  mx-auto object-cover shadow-2xl"
                     src="https://storage.googleapis.com/support-kms-prod/mQmcrC93Ryi2U4x5UdZNeyHQMybbyk71yCVm"
                     alt="food"
                   ></img>
@@ -192,9 +196,9 @@ function Cart() {
               </Block>
             </>
           )}
-        </>
+        </div>
       ) : (
-        <>
+        <div className="md:px-96">
           {Object.keys(cart).length > 0 ? (
             <>
               <Block>
@@ -224,16 +228,16 @@ function Cart() {
                 <table className="border-collapse w-full">
                   <thead>
                     <tr>
-                      <th className=" px-4 py-2">Item Name</th>
-                      <th className=" px-4 py-2">Quantity</th>
-                      <th className=" px-4 py-2">Price</th>
+                      <th className=" px-4 py-2 ">Item Name</th>
+                      <th className=" px-4 py-2 ">Quantity</th>
+                      <th className=" px-4 py-2 ">Price</th>
                     </tr>
                   </thead>
                   <tbody>
                     {Object.keys(cart).map((key) => (
                       <tr key={key}>
-                        <td className=" px-4 py-2">{cart[key].itemName}</td>
-                        <td className=" px-4 py-2">
+                        <td className=" px-4 py-2 ">{cart[key].itemName}</td>
+                        <td className=" px-4 py-2 text-center">
                           <Stepper
                             value={cart[key].count}
                             raised
@@ -243,7 +247,7 @@ function Cart() {
                             onMinus={() => handleDecrease(cart[key])}
                           />
                         </td>
-                        <td className=" px-4 py-2">
+                        <td className=" px-4 py-2 text-center">
                           {"₹" + cart[key].count * cart[key].sellingPrice}
                         </td>
                       </tr>
@@ -251,7 +255,7 @@ function Cart() {
                   </tbody>
                 </table>
               </Block>
-              <Block className="left-0 bottom-10 fixed">
+              <Block className="left-0 bottom-10 fixed md:px-96">
                 <table className="border-collapse w-full">
                   <thead>
                     <tr>
@@ -287,7 +291,7 @@ function Cart() {
               </Block>
             </>
           ) : (
-            <div className="fixed inset-0 flex items-center justify-center flex-col">
+            <div className="fixed inset-0 flex items-center justify-center flex-col ">
               <div>
                 <img
                   src="https://mir-s3-cdn-cf.behance.net/projects/404/95974e121862329.Y3JvcCw5MjIsNzIxLDAsMTM5.png"
@@ -296,7 +300,7 @@ function Cart() {
               </div>
             </div>
           )}
-        </>
+        </div>
       )}
 
       <Toast
