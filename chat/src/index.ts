@@ -30,9 +30,19 @@ const start = async () => {
     console.error(err);
   }
 
+  // let users = [];
+
+  // const addUser = (tableId: string, socketId: string) => {
+  //   !users.some(user => user.tableId === tableId) &&
+  //   users.push({tableId, socketId})
+  // }
+
   io.on("connection", (socket: Socket) => {
     console.log("user connected");
-    socket.emit("welcome", "hello this is socket server");
+    //take userid and socketId from user
+    // socket.on('addUser', tableId => {
+    //   addUser(tableId, socket.id)
+    // }) 
   });
 
   server.listen(3000, () => {
