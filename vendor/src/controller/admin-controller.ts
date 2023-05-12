@@ -8,7 +8,12 @@ import { TableCreatedPublisher } from "../events/publishers/table-created-publis
 import { natsWrapper } from "../nats-wrapper";
 import { VendorApprovalPublisher } from "../events/publishers/vendor-approval-publisher";
 import { Banner } from "../models/banner";
-import { getMonthlyVisitorsCount, getTopRatedDish, getTopSeller, getVisitorsCount } from "../helpers/admin-helper";
+import {
+  getAllVendorMonthlyDataForYear,
+  getMonthlyVisitorsCount,
+  getTopSeller,
+  getVisitorsCount,
+} from "../helpers/admin-helper";
 
 export const AdminVerify = (req: Request, res: Response) => {
   res.send({ currentAdmin: req.currentAdmin || null });
@@ -132,8 +137,12 @@ export const test = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-export const addBanner = async (req: Request, res: Response, next: NextFunction) => {
-  const { title , url} = req.body;
+export const addBanner = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { title, url } = req.body;
   interface FileObject extends Express.Multer.File {
     location: string;
   }
@@ -143,50 +152,67 @@ export const addBanner = async (req: Request, res: Response, next: NextFunction)
     const newBanner = new Banner({
       title,
       url,
-      image
+      image,
     });
     await newBanner.save();
-    res.status(201).send({success:true});
+    res.status(201).send({ success: true });
   } catch (err) {
     next(err);
   }
 };
 
-export const getBanners = async (req: Request, res: Response, next: NextFunction) => {
+export const getBanners = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   let banners = await Banner.find();
   res.status(200).send(banners);
-}
+};
 
-export const cardStats = async (req:Request , res: Response) => {
+export const cardStats = async (req: Request, res: Response) => {
   console.log("called");
-  
+
   try {
-    const [topSeller] = await Promise.all([
+    const [topSeller, dailyCount, monthlyCount] = await Promise.all([
       getTopSeller(),
-      // getTopRatedDish(),
+      getVisitorsCount(),
+      getMonthlyVisitorsCount(),
     ]);
-    // getVisitorsCount(),
-    // getMonthlyVisitorsCount()
-
-    console.log(topSeller);
     
-
     // Send response with data
     res.status(200).send({
       topSeller,
+      dailyCount,
+      monthlyCount,
     });
+
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Internal Server Error" });
   }
+};
+
+export const lineChartStats = async (req: Request, res: Response) => {
+  try {
+    let yearlyVendorSales = await getAllVendorMonthlyDataForYear();
+  console.log(yearlyVendorSales);
+  res.status(200).send(yearlyVendorSales)
+  } catch (error) {
+    throw new BadRequestError("Sale data could not be computed")
+  }
 }
 
-export const deleteBanner = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteBanner = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const bannerId = req.params.bannerId;
-try {
-  const deleteBanner = await Banner.deleteOne({_id:bannerId})
-  res.status(200).send({message: "Banner Succesffully Deleted"})
-} catch (error) {
-  res.status(500).send({message: "Banner Deletion Failed"})
-}
-}
+  try {
+    const deleteBanner = await Banner.deleteOne({ _id: bannerId });
+    res.status(200).send({ message: "Banner Succesffully Deleted" });
+  } catch (error) {
+    res.status(500).send({ message: "Banner Deletion Failed" });
+  }
+};

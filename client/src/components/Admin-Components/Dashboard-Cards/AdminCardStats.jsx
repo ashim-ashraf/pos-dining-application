@@ -57,8 +57,8 @@ export default function AdminCardStats({
 }
 
 AdminCardStats.defaultProps = {
-  statSubtitle: "Traffic",
-  statTitle: "350,897",
+  statSubtitle: " ",
+  statTitle: "0",
   statArrow: "up",
   statPercent: "3.48",
   statPercentColor: "text-emerald-500",

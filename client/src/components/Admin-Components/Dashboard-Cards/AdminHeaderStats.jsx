@@ -55,7 +55,7 @@ export default function AdminHeaderStats() {
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <AdminCardStats
                   statSubtitle="Visitors Today"
-                  statTitle=''
+                  statTitle={statistics?.dailyCount}
                   statArrow="down"
                   statPercent="1.10"
                   statPercentColor="text-orange-500"
@@ -67,7 +67,7 @@ export default function AdminHeaderStats() {
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <AdminCardStats
                   statSubtitle="Monthly Visitors"
-                  statTitle=''
+                  statTitle={statistics?.monthlyCount}
                   statArrow="up"
                   statPercent="12"
                   statPercentColor="text-emerald-500"

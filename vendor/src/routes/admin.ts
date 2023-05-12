@@ -12,6 +12,7 @@ import {
   getAllTables,
   getBanners,
   getVendors,
+  lineChartStats,
   test,
   validateAdminSignin,
   vendorApproval,
@@ -42,6 +43,8 @@ router.delete('/delete-banner/:bannerId', requireAdminAuth, deleteBanner)
 router.get("/get-banners",test, getBanners)
 
 router.get("/card-stats", cardStats)
+
+router.get('/linechart-stats', lineChartStats)
 
 
 export { router as adminRouter };

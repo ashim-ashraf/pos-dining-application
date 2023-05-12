@@ -63,32 +63,142 @@ export const getTopSeller = () => {
   });
 };
 
-export const getTopRatedDish = () => {
-    return new Promise((resolve, reject) => {
-       
-      });
-};
+
 
 export const getVisitorsCount = () => {
-  return new Promise((resolve, reject) => {});
+  return new Promise((resolve, reject) => {
+    Orders.aggregate([
+      {
+        $match: {},
+      },
+      {
+        $unwind: "$orders",
+      },
+      {
+        $match: {
+          "orders.createdAt": {
+            $gte: new Date(new Date().setHours(0, 0, 0, 0)), // Start of day
+            $lt: new Date(new Date().setHours(23, 59, 59, 999)), // End of day
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          noOfOrders: {
+            $sum: 1,
+          },
+          totalAmount: {
+            $sum: "$orders.totalAmount",
+          },
+        },
+      },
+    ]).exec((err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data[0].noOfOrders);
+      }
+    });
+  });
 };
 
 export const getMonthlyVisitorsCount = () => {
-  return new Promise((resolve, reject) => {});
+  return new Promise((resolve, reject) => {
+    Orders.aggregate([
+      {
+        $match: {},
+      },
+      {
+        $unwind: "$orders",
+      },
+      {
+        $match: {
+          "orders.createdAt": {
+            $gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+            $lt: new Date(
+              new Date().getFullYear(),
+              new Date().getMonth() + 1,
+              0,
+              23,
+              59,
+              59,
+              999
+            ),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          noOfOrders: {
+            $sum: 1,
+          },
+          totalAmount: {
+            $sum: "$orders.totalAmount",
+          },
+        },
+      },
+    ]).exec((err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data[0].noOfOrders);
+      }
+    });
+  });
 };
 
 
-// {
-//     $group: {
-//       _id: "$orders.items.name",
-//       totalQuantity: { $sum: "$orders.items.quantity" },
-//     },
-//   },
-//   {
-//     $sort: {
-//       totalQuantity: -1,
-//     },
-//   },
-//   {
-//     $limit: 1,
-//   },
+export const getAllVendorMonthlyDataForYear = () => {
+  return new Promise((resolve , reject ) => {
+    Orders.aggregate([
+      {
+        $match: {
+          "orders.createdAt": {
+            $gte: new Date(new Date().getFullYear(), 0, 1),
+            $lt: new Date(new Date().getFullYear() + 1, 0, 1),
+          },
+        },
+      },
+      {
+        $unwind: "$orders",
+      },
+      {
+        $group: {
+          _id: {
+            restaurantId: "$restaurantId",
+            year: { $year: "$orders.createdAt" },
+            month: { $month: "$orders.createdAt" },
+          },
+          noOfOrders: { $sum: 1 },
+        },
+      },
+      {
+        $group: {
+          _id: { restaurantId: "$_id.restaurantId" },
+          monthlySales: {
+            $push: {
+              month: "$_id.month",
+              year: "$_id.year",
+              noOfOrders: "$noOfOrders",
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          restaurantId: "$_id.restaurantId",
+          monthlySales: "$monthlySales",
+        },
+      },
+    ]).exec((err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });    
+  })
+};
