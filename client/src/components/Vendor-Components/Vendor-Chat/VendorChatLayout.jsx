@@ -14,16 +14,16 @@ function VendorChatLayout() {
   const vendorId = useSelector((state) => state.vendor.vendor.id);
   const scrollRef = useRef();
 
-  useEffect(() => {
-    console.log("use effect");
-    setSocket(io("wss://pos.com", { path: "/api/socket" }));
-  }, []);
+  // useEffect(() => {
+  //   console.log("use effect");
+  //   setSocket(io("wss://pos.com", { path: "/api/socket" }));
+  // }, []);
 
-  useEffect(() => {
-    socket?.on("welcome", (message) => {
-      console.log(message);
-    });
-  }, [socket]);
+  // useEffect(() => {
+  //   socket?.on("welcome", (message) => {
+  //     console.log(message);
+  //   });
+  // }, [socket]);
 
   useEffect(() => {
     const getConversations = async () => {

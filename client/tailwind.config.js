@@ -24,6 +24,7 @@ module.exports = konstaConfig({
         menugreen: '#38a3a5',
         listgreen: '#A8DADC',
         brandred: '#ff0000',
+        fabblue: '#8ECAE6',
       }
     },
   },
