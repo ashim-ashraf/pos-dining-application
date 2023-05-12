@@ -37,11 +37,10 @@ function Banner() {
         </div>
       </div>
 
-      <div className="hidden md:block">
+      <div className="hidden md:block p-5 ">
       <div className="px-28 mt-4 overflow-hidden  overflow-y-hidden">
           <ul
-            className="flex overflow-x-auto gap-6 snap-x snap-mandatory overflow-y-hidden"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            className="flex overflow-x-auto gap-6 snap-x snap-mandatory overflow-y-hidden no-scrollbar"
           >
             {data &&
               data?.map((item) => (

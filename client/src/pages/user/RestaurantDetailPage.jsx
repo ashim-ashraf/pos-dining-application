@@ -51,14 +51,13 @@ function RestaurantDetailPage() {
   return (
     <App theme="ios">
       {showReviews ? (
-        <>
           <UserLayout>
-            <div className="grid grid-cols-3">
-              <div className="">
-                
+        <div className="md:px-96">
+        <div className="grid grid-cols-3">
+              <div>
                 <Block>
                   <img
-                    className="w-30 h-16 object-cover rounded-lg"
+                    className="w-36 h-24 object-cover rounded-lg md:ml-auto"
                     src={restaurantDetails?.image}
                     alt=""
                   />
@@ -70,8 +69,8 @@ function RestaurantDetailPage() {
                 <Block>
                   <p>{restaurantDetails.description}</p>
                 </Block>
-                <Block>
-                  <p className="font-bold text-lg">Reviews</p>
+                <Block className="-mt-4 cursor-pointer text-cyan-600">
+                  <p onClick={() => setShowReviews(false)}>Menu</p>
                 </Block>
               </div>
             </div>
@@ -100,8 +99,8 @@ function RestaurantDetailPage() {
                   ))}
               </List>
             </div>
+        </div>
           </UserLayout>
-        </>
       ) : (
         <Page>
           <MobileNav>

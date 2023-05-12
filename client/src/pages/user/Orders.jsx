@@ -15,14 +15,14 @@ function Orders() {
 
   useEffect(() => {
     getOrders();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getOrders = () => {
     axios
       .get(`/api/users/orders/${table}`)
       .then(async (res) => {
-        console.log(res.data)
+        console.log(res.data);
         dispatch(userOrder(res.data));
         await setOrder(res.data);
         const allCompleted = res.data.items.every((item) => {
@@ -59,66 +59,83 @@ function Orders() {
 
   return (
     <UserLayout>
-      <Block>
-        {order?.items.length > 0?(<><table className="border-collapse w-full">
-          <thead>
-            <tr>
-              <th className=" px-4 py-2">Item Name</th>
-              <th className=" px-4 py-2">Status</th>
-              <th className=" px-4 py-2">Quantity</th>
-              <th className="  "></th>
-            </tr>
-          </thead>
-          <tbody>
-            {order?.items &&
-              order?.items.map((item, index) => {
-                return (
-                  <>
-                    <tr key={index}>
-                      <td className=" px-4 py-2 mt-4 ">{item.itemName}</td>
-                      <td className=" py-2  mt-4 items-center ">
-                        <div className="flex">
-                          <div
-                            className={` h-3 w-3 rounded-full mt-1.5 ${
-                              item.orderStatus === "Delivered"
-                                ? "bg-green-500"
-                                : item.orderStatus === "Cancelled"
-                                ? "bg-red-500"
-                                : item.orderStatus === "Preparing"
-                                ? "bg-orange-500"
-                                : "bg-slate-500"
-                            } text-transparent mr-2`}
-                          ></div>
-                          {item.orderStatus}
-                        </div>
-                      </td>
-                      <td className=" px-8  align-middle ">{item.count}</td>
-                      <td className="  align-middle">
-                        {item.orderStatus === "Pending" ? (
-                          <Button outline onClick={() => cancelOrderItem(item)}>
-                            Cancel
-                          </Button>
-                        ) : (
-                          <></>
-                        )}
-                      </td>
-                    </tr>
-                  </>
-                );
-              })}
-          </tbody>
-        </table></>):(<> <div className="fixed inset-0  flex items-center justify-center flex-col">
-              <div className="">
+      <Block className="md:px-96">
+        {order?.items.length > 0 ? (
+          <>
+            <table className="border-collapse w-full">
+              <thead>
+                <tr>
+                  <th className=" px-4 py-2">Item Name</th>
+                  <th className=" px-4 py-2">Status</th>
+                  <th className=" px-4 py-2">Quantity</th>
+                  <th className="  "></th>
+                </tr>
+              </thead>
+              <tbody>
+                {order?.items &&
+                  order?.items.map((item, index) => {
+                    return (
+                      <>
+                        <tr key={index}>
+                          <td className=" px-4 py-2 mt-4 ">{item.itemName}</td>
+                          <td className="py-2 mt-4">
+                            <div className="flex justify-center items-center text-center">
+                              <div
+                                className={`h-3 w-3 rounded-full mt-1.5 ${
+                                  item.orderStatus === "Delivered"
+                                    ? "bg-green-500"
+                                    : item.orderStatus === "Cancelled"
+                                    ? "bg-red-500"
+                                    : item.orderStatus === "Preparing"
+                                    ? "bg-orange-500"
+                                    : "bg-slate-500"
+                                } text-transparent mr-2`}
+                              ></div>
+                              <span className="text-center">
+                                {item.orderStatus}
+                              </span>
+                            </div>
+                          </td>
+
+                          <td className=" px-8  align-middle text-center">
+                            {item.count}
+                          </td>
+                          <td className="  align-middle">
+                            {item.orderStatus === "Pending" ? (
+                              <Button
+                                outline
+                                onClick={() => cancelOrderItem(item)}
+                              >
+                                Cancel
+                              </Button>
+                            ) : (
+                              <></>
+                            )}
+                          </td>
+                        </tr>
+                      </>
+                    );
+                  })}
+              </tbody>
+            </table>
+          </>
+        ) : (
+          <>
+            {" "}
+            <div className="fixed inset-0  flex items-center justify-center flex-col">
+              <div >
                 <img
+                className="h-[60vh] w-full"
                   src="https://cdn.dribbble.com/userupload/2905354/file/original-92212c04a044acd88c69bedc56b3dda2.png?compress=1&resize=1200x900"
                   alt=""
                 />
               </div>
-            </div></>)}
-        
+            </div>
+          </>
+        )}
       </Block>
 
-      <Block className="left-0 bottom-10 fixed">
+      <Block className="left-0 bottom-10 fixed md:px-96">
         <table className="border-collapse w-full">
           <thead>
             <tr></tr>
