@@ -1,12 +1,13 @@
+import { Navbar } from 'konsta/react'
 import React from 'react'
 
 function MessageUser({message, ownMessage}) {
 
-    console.log(ownMessage)
   return (
+
     <div className="chat-message">
     <div className={ownMessage?"flex items-end justify-end":"flex items-end justify-start"}>
-      <div className={ownMessage?"flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1 items-end" : "flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1  order-2 items-start" }>
+      <div className={ownMessage?"flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1 items-end" : "flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1  items-start" }>
         <div>
           <span className={ownMessage?"px-4 py-2 rounded-lg inline-block rounded-br-none bg-blue-600 text-white":"px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600"}>
             {message.text}

@@ -8,7 +8,7 @@ function MobileNavigation() {
 
     const navigate = useNavigate()
   return (
-    <div> <Tabbar
+    <div className='md:hidden'> <Tabbar
     className="left-0 bottom-0 fixed"
   >
     
