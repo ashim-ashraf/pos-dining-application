@@ -5,6 +5,7 @@ import { Socket } from "socket.io";
 
 
 const start = async () => {
+  console.log("Chat service connecting....");
 
   const io = require("socket.io")(server, {
     path: "/api/socket",
