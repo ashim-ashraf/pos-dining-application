@@ -13,7 +13,7 @@ const firebaseConfig = {
   storageBucket: "yummers-7c3d1.appspot.com",
   messagingSenderId: "21777330572",
   appId: "1:21777330572:web:64a4fef0847875a99566a9",
-  measurementId: "G-E7VVBKSL3H",
+  measurementId: "G-E7VVBKSL3H"
 };
 
 // Initialize Firebase
@@ -26,7 +26,6 @@ export function recaptcha() {
     {
       size: "invisible",
       callback: () => {
-        // onSigninssubmit()
       },
     },
     auth

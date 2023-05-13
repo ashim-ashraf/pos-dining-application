@@ -4,11 +4,12 @@ deploy:
   kubectl:
     manifests:
       - ./infra/k8s/*
+      - ./infra/k8s-dev/*
 build:
   local:
     push: false
   artifacts:
-    - image: pos/open
+    - image: ashimashraf/open
       context: open
       docker:
         dockerfile: Dockerfile
@@ -16,7 +17,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: pos/client
+    - image: ashimashraf/client
       context: client
       docker:
         dockerfile: Dockerfile
@@ -24,7 +25,7 @@ build:
         manual:
           - src: '**/*.jsx'
             dest: .
-    - image: pos/vendor
+    - image: ashimashraf/vendor
       context: vendor
       docker:
         dockerfile: Dockerfile
@@ -32,7 +33,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: pos/chat
+    - image: ashimashraf/chat
       context: chat
       docker:
         dockerfile: Dockerfile

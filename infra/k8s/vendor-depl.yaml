@@ -14,16 +14,7 @@ spec:
     spec:
       containers:
         - name: vendor
-          image: pos/vendor
-          ports:
-            - containerPort: 3000
-              protocol: TCP
-            - containerPort: 3000
-              protocol: TCP
-          volumeMounts:
-            - name: tls-certs
-              mountPath: /etc/tls
-              readOnly: true
+          image: ashimashraf/vendor
           env:
             - name: NATS_CLIENT_ID
               valueFrom:
@@ -54,11 +45,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: admin-username
-                  key: ADMIN_USERNAME
-      volumes:
-        - name: tls-certs
-          secret:
-            secretName: tls-secret            
+                  key: ADMIN_USERNAME           
 ---
 apiVersion: v1
 kind: Service

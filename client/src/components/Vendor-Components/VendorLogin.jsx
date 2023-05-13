@@ -21,10 +21,6 @@ function VendorLogin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-// useEffect(() => {
-//   recaptcha()
-// }, [])
-
 function resendotp() {
   const phoneNumber = "+" + phone;
   onSigninssubmit(phoneNumber)
