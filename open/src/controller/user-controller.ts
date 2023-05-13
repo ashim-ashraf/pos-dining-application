@@ -108,7 +108,6 @@ export const createOrder = async (req: Request, res: Response) => {
       ...rest,
     };
   });
-  console.log(items);
 
   try {
     const table = await Table.findOne({ id: tableId });
@@ -243,7 +242,6 @@ export const getVendors = async (req: Request, res: Response) => {
 export const getVendorById = async (req: Request, res: Response) => {
   console.log("get details called");
   const vendorId = req.params.id;
-  console.log(vendorId);
 
   const vendorDetails = await Vendor.findOne({ restaurantId: vendorId });
   const menu = vendorDetails?.menu;
