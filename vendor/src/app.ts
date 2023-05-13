@@ -34,6 +34,7 @@ app.use(xss())
 app.use(
   cookieSession({
     signed: false,
+    secure: false,
   })
 );
 
