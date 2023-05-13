@@ -14,7 +14,43 @@ spec:
     spec:
       containers:
         - name: client
-          image: pos/client
+          image: ashimashraf/client
+          env:
+            - name: FIREBASE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: firebase-api-key
+                  key: FIREBASE_API_KEY
+            - name: FIREBASE_AUTH_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: firebase-auth-domain
+                  key: FIREBASE_AUTH_DOMAIN
+            - name: FIREBASE_PROJECT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: firebase-project-id
+                  key: FIREBASE_PROJECT_ID
+            - name: FIREBASE_STORAGE_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: firebase-storage-bucket
+                  key: FIREBASE_STORAGE_BUCKET
+            - name: FIREBASE_MESSAGING_SENDER_ID
+              valueFrom:
+                secretKeyRef:
+                  name: firebase-messaging-sender-id
+                  key: FIREBASE_MESSAGING_SENDER_ID
+            - name: FIREBASE_APP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: firebase-app-id
+                  key: FIREBASE_APP_ID
+            - name: FIREBASE_MEASUREMENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: firebase-measurement-id
+                  key: FIREBASE_MEASUREMENT_ID
 ---
 apiVersion: v1
 kind: Service

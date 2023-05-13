@@ -14,16 +14,7 @@ spec:
     spec:
       containers:
         - name: open
-          image: pos/open
-          ports:
-            - containerPort: 3000
-              protocol: TCP
-            - containerPort: 3000
-              protocol: TCP
-          volumeMounts:
-            - name: tls-certs
-              mountPath: /etc/tls
-              readOnly: true
+          image: ashimashraf/open
           env:
             - name: NATS_CLIENT_ID
               valueFrom:
@@ -39,11 +30,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: jwt-secret
-                  key: JWT_KEY
-      volumes:
-        - name: tls-certs
-          secret:
-            secretName: tls-secret          
+                  key: JWT_KEY         
 ---
 apiVersion: v1
 kind: Service
