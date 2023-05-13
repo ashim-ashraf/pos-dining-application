@@ -8,6 +8,8 @@ import { VendorApprovalListener } from "./events/listener/vendor-approval-listen
 import { VendorOpenStatusListener } from "./events/listener/vendor-openstatus-listener";
 
 const start = async () => {
+  console.log("Open service connecting....");
+  
   if (!process.env.JWT_KEY) {
     throw new Error("JWT_KEY must be defined");
   }

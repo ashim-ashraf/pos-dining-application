@@ -8,6 +8,8 @@ import { OrderPaymentUpdateListener } from "./events/listeners/order-payment-lis
 
 
 const start = async () => {
+  console.log("Vendor service connecting....");
+
   if (!process.env.JWT_VENDOR_KEY) {
     throw new Error("JWT_VENDOR_KEY must be defined");
   }
