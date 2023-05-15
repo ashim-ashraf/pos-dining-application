@@ -97,7 +97,7 @@ export const getVisitorsCount = () => {
       if (err) {
         reject(err);
       } else {
-        resolve(data[0].noOfOrders);
+        resolve(data[0]?.noOfOrders);
       }
     });
   });
@@ -143,7 +143,7 @@ export const getMonthlyVisitorsCount = () => {
       if (err) {
         reject(err);
       } else {
-        resolve(data[0].noOfOrders);
+        resolve(data[0]?.noOfOrders);
       }
     });
   });

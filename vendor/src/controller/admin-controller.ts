@@ -26,12 +26,6 @@ export const validateAdminSignin = [
 
 export const adminSignin = (req: Request, res: Response) => {
   const { username, password } = req.body;
-  console.log(
-    "hhhh",
-    process.env.ADMIN_PASSWORD,
-    process.env.ADMIN_USERNAME,
-    process.env.JWT_ADMIN_KEY
-  );
 
   if (
     password === process.env.ADMIN_PASSWORD &&
@@ -74,7 +68,6 @@ export const addTable = async (req: Request, res: Response) => {
       PreviousOrders: savedTable.previousOrders,
     });
   } catch (err) {
-    console.error(err);
     res.status(500).send("Unable to save the table.");
   }
 };
@@ -127,14 +120,8 @@ export const vendorApproval = async (req: Request, res: Response) => {
 
     res.json({ success: true, vendor });
   } catch (error) {
-    console.error(error);
     res.json({ success: false, error });
   }
-};
-
-export const test = (req: Request, res: Response, next: NextFunction) => {
-  console.log("test called with ", req.body);
-  next();
 };
 
 export const addBanner = async (
@@ -171,7 +158,6 @@ export const getBanners = async (
 };
 
 export const cardStats = async (req: Request, res: Response) => {
-  console.log("called");
 
   try {
     const [topSeller, dailyCount, monthlyCount] = await Promise.all([
@@ -188,15 +174,13 @@ export const cardStats = async (req: Request, res: Response) => {
     });
 
   } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: "Internal Server Error" });
+    res.status(400).send({ message: "Data not found" });
   }
 };
 
 export const lineChartStats = async (req: Request, res: Response) => {
   try {
     let yearlyVendorSales = await getAllVendorMonthlyDataForYear();
-  console.log(yearlyVendorSales);
   res.status(200).send(yearlyVendorSales)
   } catch (error) {
     throw new BadRequestError("Sale data could not be computed")

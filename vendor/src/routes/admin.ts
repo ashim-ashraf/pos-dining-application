@@ -13,7 +13,6 @@ import {
   getBanners,
   getVendors,
   lineChartStats,
-  test,
   validateAdminSignin,
   vendorApproval,
 } from "../controller/admin-controller";
@@ -40,7 +39,7 @@ router.post("/create-banner" , requireAdminAuth,upload.single("image"), addBanne
 
 router.delete('/delete-banner/:bannerId', requireAdminAuth, deleteBanner)
 
-router.get("/get-banners",test, getBanners)
+router.get("/get-banners", getBanners)
 
 router.get("/card-stats", cardStats)
 

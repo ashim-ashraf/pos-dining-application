@@ -30,7 +30,6 @@ import {
   vendorSignup,
   vendorVerify,
 } from "../controller/vendor-controller";
-import { test } from "../controller/admin-controller";
 
 const upload = require("../middleware/upload");
 const router = express.Router();

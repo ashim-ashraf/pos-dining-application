@@ -34,7 +34,11 @@ export const getCurrentDayData = (restaurantId: String) => {
       if (err) {
         reject(err);
       } else {
-        resolve(data[0]);
+        if (data && data.length > 0) {
+          resolve(data[0]);
+        } else {
+          reject("No data found");
+        }
       }
     });
   });
@@ -85,7 +89,11 @@ export const getCurrentMonthData = (restaurantId: String) => {
       if (err) {
         reject(err);
       } else {
-        resolve(data[0]);
+        if (data && data.length > 0) {
+          resolve(data[0]);
+        } else {
+          reject("No data found");
+        }
       }
     });
   });
@@ -134,7 +142,11 @@ export const getMonthlyDataForYear = (restaurantId: string) => {
           if (err) {
             reject(err);
           } else {
-            resolve(data[0]);
+            if (data && data.length > 0) {
+              resolve(data[0]);
+            } else {
+              reject("No data found");
+            }
           }
         });
       });
