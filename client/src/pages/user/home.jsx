@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { App, Page, ListItem, List, Block } from "konsta/react";
+import { App, Page, ListItem, List, Block, KonstaProvider } from "konsta/react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import MobileNav from "./MobileNav";
@@ -46,8 +46,9 @@ export default function Homepage() {
   });
 
   return (
-    <App theme="ios">
-      <Page className="bg-white ">
+    
+    <App theme="ios"  >
+      <Page className="">
         <MobileNav>
           {/* search for web passed as children */}
           <div className="w-full max-w-xs xl:max-w-lg 2xl:max-w-2xl bg-gray-100 rounded-md hidden xl:flex items-center">
@@ -83,7 +84,7 @@ export default function Homepage() {
               <div className="flex justify-between overflow-hidden rounded-md bg-white shadow shadow-black/20 ">
                 <input
                   type="text"
-                  className="block w-full flex-1 py-2 px-3 focus:outline-none"
+                  className="block w-full flex-1 py-2 px-3 focus:outline-none dark:text-black"
                   placeholder="Start Typing..."
                   value={searchQuery}
                   onChange={handleSearchInputChange}
@@ -251,5 +252,6 @@ export default function Homepage() {
         <MobileNavigation />
       </Page>
     </App>
+  
   );
 }

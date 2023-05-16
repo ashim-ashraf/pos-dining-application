@@ -23,7 +23,7 @@ function VendorChatLayout() {
   //   socket?.on("welcome", (message) => {
   //     console.log(message);
   //   });
-  // }, [socket]);
+  // }, [socket]);c
 
   useEffect(() => {
     const getConversations = async () => {

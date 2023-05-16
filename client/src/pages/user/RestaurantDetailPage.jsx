@@ -50,6 +50,7 @@ function RestaurantDetailPage() {
 
   return (
     <App theme="ios">
+      <Page className="">
       {showReviews ? (
           <UserLayout>
         <div className="md:px-96">
@@ -205,6 +206,7 @@ function RestaurantDetailPage() {
         </Page>
       )}
       <MobileNavigation />
+      </Page>
     </App>
   );
 }

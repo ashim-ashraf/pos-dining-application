@@ -30,13 +30,14 @@ import PaymentSuccessPage from "./pages/user/PaymentSuccessPage";
 import UserChat from "./pages/user/UserChat";
 import VendorChat from "./pages/vendor/VendorChat";
 import VendorDashboard from "./pages/vendor/VendorDashboard";
+import { KonstaProvider } from "konsta/react";
 
 function App() {
   return (
-    <div className="App">
+    
+    <div className="App" >
       <Router>
         <Routes>
-
         <Route path="/" element={<Homepage />} />
         <Route path="/restaurant/:restaurantId" element={<RestaurantDetailPage />} />
         <Route path="/cart" element={<Cart />} />
@@ -44,7 +45,7 @@ function App() {
         <Route path="/billing" element={<Billing />} />
         <Route path="/success" element={<PaymentSuccessPage />} />
         <Route path="/chat" element={<UserChat />} />
-
+       
 
 
         <Route element={<VendorIsLogged/>}>
@@ -78,6 +79,7 @@ function App() {
         </Routes>
       </Router>
     </div>
+   
   );
 }
 

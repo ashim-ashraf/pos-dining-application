@@ -22,7 +22,7 @@ function Banner() {
       <div className="block md:hidden">
         <div className=" mt-4 overflow-hidden">
           <ul
-            className="flex  overflow-x-auto gap-6 snap-x snap-mandatory before:shrink-0 before:w-[40vw] after:shrink-0 after:w-[30vw] scrollbar-hidden"
+            className="flex  overflow-x-auto gap-6 snap-x snap-mandatory   after:shrink-0 after:w-[30vw] scrollbar-hidden"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {data &&
