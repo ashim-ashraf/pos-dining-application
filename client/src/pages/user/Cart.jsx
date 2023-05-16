@@ -18,6 +18,7 @@ import QrReader from "react-qr-scanner";
 import { bookedTable } from "../../features/authSlices/userSlice";
 import { releiveTable } from "../../features/authSlices/userSlice";
 import { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function Cart() {
   const videoRef = useRef(null);
@@ -33,7 +34,8 @@ function Cart() {
   } = useCart();
   const [cart, setCart] = useState(getCart().items);
   const table = useSelector((state) => state.user.table);
-  const orderId = useSelector((state) => state.user.orderId);
+  const orderId = useSelector((state) => state.user.order);
+  console.log(orderId,"ddddddddddddd");
   const [toast, setToast] = useState(false);
   const [errorToast, setErrorToast] = useState(false);
   const [actionScan, setActionScan] = useState(false);
@@ -44,6 +46,7 @@ function Cart() {
   const [loading, setLoading] = useState(false);
   const [updated, setUpdated] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!updated) {
@@ -99,6 +102,7 @@ function Cart() {
           clearCartItems();
           setUpdated(false);
           toast.success("Order successful");
+          navigate("/orders");
         })
         .catch((err) => {
           console.log(err);
@@ -112,7 +116,7 @@ function Cart() {
     // setIsCameraOpen(true);
 
     navigator.mediaDevices
-      .getUserMedia({ video: true })
+      .getUserMedia({ video: { facingMode: "environment" } })
       .then((stream) => {
         videoRef.current.srcObject = stream;
         videoRef.current.play();
@@ -162,10 +166,11 @@ function Cart() {
             <>
               <Block className="">
                 <div className="md:flex md:gap-2 md:justify-center md:items-center ">
-                <p className="mb-6 font-bold">
-                  QR code is available on each table.<br/>Capture it to make the
-                  table selection
-                </p>
+                  <p className="mb-6 font-bold">
+                    QR code is available on each table.
+                    <br />
+                    Capture it to make the table selection
+                  </p>
                   <div className="md:w-1/2 md:h-1/6 md:border-2 md:border-gray-400 md:p-4">
                     <QrReader
                       ref={qrRef}

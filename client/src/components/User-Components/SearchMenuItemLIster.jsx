@@ -10,6 +10,7 @@ import {
 import React, { useEffect, useState } from "react";
 import useCart from "../../components/User-Components/Cart-Functions";
 import { Toaster } from "react-hot-toast";
+import Star from "./Star";
 
 function SearchMenuItemLIster(props) {
   const { items, restaurantId } = props;
@@ -32,97 +33,127 @@ function SearchMenuItemLIster(props) {
   return (
     <List strongIos dividersIos>
       <div className="flex w-full border-2 p-2 ">
-                  <div className="ml-5 uppercase font-bold text-sm md:px-40">
-                    Search Results
-                  </div>
-                  <div className="ml-auto mr-5"></div>
-                </div>
+        <div className="ml-5 uppercase font-bold text-sm md:px-40">
+          Search Results
+        </div>
+        <div className="ml-auto mr-5"></div>
+      </div>
       {items?.length > 0 &&
         items.map((item, index) => (
           <>
             <div key={index} className="block md:hidden">
               <ListItem
-                onClick={() => {
-                  setSheetOpened(true);
-                  setCurrentItem(item);
-                }}
                 link
                 chevronMaterial={true}
-                title={item.itemName}
-                text={item.sellingPrice}
-                subtitle={item.category}
-                media={
-                  <img
-                    className="ios:rounded-lg material:rounded-full ios:w-20 material:w-10"
-                    src={item?.image}
-                    width="80"
-                    alt={item.itemName}
-                  />
-                }
-              ></ListItem>
-              {isItemInCart(item._id) ? (
-                <Stepper
-                  raised
-                  large
-                  outline
-                  onPlus={() => {
-                    increaseCount(item);
-                    setCart(getCart().items);
-                  }}
-                  onMinus={() => {
-                    decreaseCount(item);
-                    setCart(getCart().items);
-                  }}
-                  min={1}
-                  max={10}
-                  value={cart[item._id].count}
-                />
-              ) : (
-                <div className="grid grid-cols-3 gap-x-4">
-                  <Toaster
-                    toastOptions={{ duration: 4000 }}
-                    position="top-center"
-                  />
-                  <Button
-                    outline
+                title={
+                  <div
                     onClick={() => {
-                      let status = addToCart(item, restaurantId);
-                      if (status) {
-                        setCart(getCart().items);
-                      } else {
-                        setToast(true);
-                      }
+                      setSheetOpened(true);
+                      setCurrentItem(item);
                     }}
                   >
-                    Add
-                  </Button>
-                  <Toast
-                    className="bottom-12 "
-                    position="left"
-                    opened={toast}
-                    button={
-                      <Button
-                        rounded
-                        clear
-                        small
-                        inline
-                        onClick={() => setToast(false)}
-                      >
-                        Close
-                      </Button>
-                    }
-                  >
-                    <div className="shrink ">
-                      You have items from another restaurant in the Cart
-                    </div>
-                  </Toast>
-                </div>
-              )}
+                    item.itemName
+                  </div>
+                }
+                after={
+                  <div className="font-bold">&#8377;{item.sellingPrice}</div>
+                }
+                subtitle={
+                  <div>
+                    <div>{item.category}</div>
+                    <div className="ml-auto ">
+                      {item.averagerating ? (
+                        <Star
+                          stars={item.averagerating}
+                          reviews={item?.ratings.length}
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </div>{" "}
+                  </div>
+                }
+                text={
+                  <div className="mt-2">
+                    {isItemInCart(item._id) ? (
+                      <Stepper
+                        raised
+                        large
+                        outline
+                        onPlus={() => {
+                          increaseCount(item);
+                          setCart(getCart().items);
+                        }}
+                        onMinus={() => {
+                          decreaseCount(item);
+                          setCart(getCart().items);
+                        }}
+                        min={1}
+                        max={10}
+                        value={cart[item._id].count}
+                      />
+                    ) : (
+                      <div className="grid grid-cols-3 gap-x-4">
+                        <Toaster
+                          toastOptions={{ duration: 4000 }}
+                          position="top-center"
+                        />
+                        <Button
+                          outline
+                          onClick={() => {
+                            let status = addToCart(item, restaurantId);
+                            if (status) {
+                              setCart(getCart().items);
+                            } else {
+                              setToast(true);
+                            }
+                          }}
+                        >
+                          Add
+                        </Button>
+                        <Toast
+                          className="bottom-12 "
+                          position="left"
+                          opened={toast}
+                          button={
+                            <Button
+                              rounded
+                              clear
+                              small
+                              inline
+                              onClick={() => setToast(false)}
+                            >
+                              Close
+                            </Button>
+                          }
+                        >
+                          <div className="shrink ">
+                            You have items from another restaurant in the Cart
+                          </div>
+                        </Toast>
+                      </div>
+                    )}
+                  </div>
+                }
+                media={
+                  <div className="w-20 overflow-hidden rounded-lg">
+                    <img
+                      onClick={() => {
+                        setSheetOpened(true);
+                        setCurrentItem(item);
+                      }}
+                      className=" h-full object-contain"
+                      src={item?.image}
+                      width="80"
+                      alt={item.itemName}
+                    />
+                  </div>
+                }
+              ></ListItem>
             </div>
 
             <div className="hidden md:block px-40">
               <div class="grid grid-cols-1 md:grid-cols-4 gap-6 p-6">
-                
                 {items?.length > 0 &&
                   items.map((item, index) => (
                     <div
@@ -250,7 +281,7 @@ function SearchMenuItemLIster(props) {
               <img
                 className="w-full"
                 src={currentItem?.image}
-                alt="Sunset in the mountains"
+                alt={currentItem?.itemName}
               />
               <div className="px-6 py-4">
                 <div className="font-bold text-xl mb-2">
