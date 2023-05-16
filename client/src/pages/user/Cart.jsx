@@ -115,8 +115,9 @@ function Cart() {
     setScanningStatus(true);
     // setIsCameraOpen(true);
 
-    navigator.mediaDevices
-      .getUserMedia({ video: { facingMode: "environment" } })
+    const constraints = { video: { facingMode: { exact: 'environment' } } };
+
+    navigator.mediaDevices.getUserMedia(constraints)
       .then((stream) => {
         videoRef.current.srcObject = stream;
         videoRef.current.play();
