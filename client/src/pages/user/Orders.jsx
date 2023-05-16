@@ -125,8 +125,8 @@ function Orders() {
             <div className="fixed inset-0  flex items-center justify-center flex-col">
               <div >
                 <img
-                className="h-[60vh] w-full"
-                  src="https://cdn.dribbble.com/userupload/2905354/file/original-92212c04a044acd88c69bedc56b3dda2.png?compress=1&resize=1200x900"
+                className="h-[60vh] w-full xs:h-[40vh]"
+                  src="https://cdn3.iconfinder.com/data/icons/food-delivery-aesthetics-vol-2/256/No_Online_Orders-512.png"
                   alt=""
                 />
               </div>

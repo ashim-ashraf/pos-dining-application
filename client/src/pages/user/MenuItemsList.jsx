@@ -72,94 +72,116 @@ function MenuItemsList(props) {
                   <div className="block md:hidden">
                     <div key={index} className="rounded-lg">
                       <ListItem
-                        className=""
-                        onClick={() => {
-                          setSheetOpened(true);
-                          setCurrentItem(item);
-                        }}
                         link
                         chevronMaterial={true}
-                        title={item.itemName}
-                        text={item.sellingPrice}
-                        subtitle={item.category}
-                        media={
-                          <img
-                            className="ios:rounded-lg material:rounded-full ios:w-20 material:w-10"
-                            src={item?.image}
-                            width="80"
-                            alt={item.itemName}
-                          />
-                        }
-                      ></ListItem>
-
-                      {isItemInCart(item._id) ? (
-                        <Stepper
-                          raised
-                          large
-                          outline
-                          onPlus={() => {
-                            increaseCount(item);
-                            setCart(getCart().items);
-                          }}
-                          onMinus={() => {
-                            decreaseCount(item);
-                            setCart(getCart().items);
-                          }}
-                          min={1}
-                          max={10}
-                          value={cart[item._id].count}
-                        />
-                      ) : (
-                        <div className="grid grid-cols-3 gap-x-4">
-                          <Toaster
-                            toastOptions={{ duration: 4000 }}
-                            position="top-center"
-                          />
-                          <Button
-                            outline
+                        title={
+                          <div
                             onClick={() => {
-                              let status = addToCart(item, restaurantId);
-                              if (status) {
-                                setCart(getCart().items);
-                              } else {
-                                setToast(true);
-                              }
+                              setSheetOpened(true);
+                              setCurrentItem(item);
                             }}
                           >
-                            Add
-                          </Button>
-                          <Toast
-                            className="bottom-12 "
-                            position="left"
-                            opened={toast}
-                            button={
-                              <Button
-                                rounded
-                                clear
-                                small
-                                inline
-                                onClick={() => setToast(false)}
-                              >
-                                Close
-                              </Button>
-                            }
-                          >
-                            <div className="shrink ">
-                              You have items from another restaurant in the Cart
-                            </div>
-                          </Toast>
-                        </div>
-                      )}
-                    </div>
-                    <div className="ml-auto ">
-                      {item.averagerating ? (
-                        <Star
-                          stars={item.averagerating}
-                          reviews={item?.ratings.length}
-                        />
-                      ) : (
-                        ""
-                      )}
+                            item.itemName
+                          </div>
+                        }
+                        after={
+                          <div className="font-bold">
+                            &#8377;{item.sellingPrice}
+                          </div>
+                        }
+                        subtitle={
+                          <div>
+                            <div>{item.category}</div>
+                            <div className="ml-auto ">
+                              {item.averagerating ? (
+                                <Star
+                                  stars={item.averagerating}
+                                  reviews={item?.ratings.length}
+                                />
+                              ) : (
+                                ""
+                              )}
+                            </div>{" "}
+                          </div>
+                        }
+                        text={
+                          <div className="mt-2">
+                            {isItemInCart(item._id) ? (
+                              <Stepper
+                                raised
+                                large
+                                outline
+                                onPlus={() => {
+                                  increaseCount(item);
+                                  setCart(getCart().items);
+                                }}
+                                onMinus={() => {
+                                  decreaseCount(item);
+                                  setCart(getCart().items);
+                                }}
+                                min={1}
+                                max={10}
+                                value={cart[item._id].count}
+                              />
+                            ) : (
+                              <div className="grid grid-cols-3 gap-x-4">
+                                <Toaster
+                                  toastOptions={{ duration: 4000 }}
+                                  position="top-center"
+                                />
+                                <Button
+                                  outline
+                                  onClick={() => {
+                                    let status = addToCart(item, restaurantId);
+                                    if (status) {
+                                      setCart(getCart().items);
+                                    } else {
+                                      setToast(true);
+                                    }
+                                  }}
+                                >
+                                  Add
+                                </Button>
+                                <Toast
+                                  className="bottom-12 "
+                                  position="left"
+                                  opened={toast}
+                                  button={
+                                    <Button
+                                      rounded
+                                      clear
+                                      small
+                                      inline
+                                      onClick={() => setToast(false)}
+                                    >
+                                      Close
+                                    </Button>
+                                  }
+                                >
+                                  <div className="shrink ">
+                                    You have items from another restaurant in
+                                    the Cart
+                                  </div>
+                                </Toast>
+                              </div>
+                            )}
+                          </div>
+                        }
+                        media={
+                          <div className="w-20 overflow-hidden rounded-lg">
+                            <img
+                              onClick={() => {
+                                setSheetOpened(true);
+                                setCurrentItem(item);
+                              }}
+                              className=" h-full object-contain"
+                              src={item?.image}
+                              width="80"
+                              alt={item.itemName}
+                            />
+                          </div>
+                        }
+                      ></ListItem>
                     </div>
                   </div>
                 </>
@@ -173,10 +195,13 @@ function MenuItemsList(props) {
                   .filter((item) => item.category === category)
                   .map((item, index) => (
                     <div class=" rounded-xl bg-white p-3 shadow-lg hover:shadow-xl">
-                      <div  onClick={() => {
-                        setSheetOpened(true);
-                        setCurrentItem(item);
-                      }} class="relative flex items-end overflow-hidden rounded-xl">
+                      <div
+                        onClick={() => {
+                          setSheetOpened(true);
+                          setCurrentItem(item);
+                        }}
+                        class="relative flex items-end overflow-hidden rounded-xl"
+                      >
                         <img
                           className="h-[25vh] w-full  cursor-pointer"
                           src={item?.image}
@@ -198,10 +223,15 @@ function MenuItemsList(props) {
                       </div>
 
                       <div class="mt-1 p-2">
-                        <h2  onClick={() => {
-                        setSheetOpened(true);
-                        setCurrentItem(item);
-                      }} class="text-slate-700 cursor-pointer">{item?.itemName}</h2>
+                        <h2
+                          onClick={() => {
+                            setSheetOpened(true);
+                            setCurrentItem(item);
+                          }}
+                          class="text-slate-700 cursor-pointer"
+                        >
+                          {item?.itemName}
+                        </h2>
                         <p class="mt-1 text-sm text-slate-400 line-through">
                           &#x20B9;{item?.retailPrice}
                         </p>
@@ -294,34 +324,30 @@ function MenuItemsList(props) {
         opened={sheetOpened}
         onBackdropClick={() => setSheetOpened(false)}
       >
-        <Block>
-          <div>
-            <div className="max-w-sm rounded overflow-hidden shadow-lg">
-              <img
-                className="w-full"
-                src={currentItem?.image}
-                alt="Sunset in the mountains"
-              />
-              <div className="px-6 py-4">
-                <div className="font-bold text-xl mb-2">
-                  {currentItem?.itemName}
-                </div>
-                <p className="text-gray-700 text-base">
-                  {currentItem?.description}
-                </p>
+        <div>
+          <div className="w-full rounded overflow-hidden shadow-lg">
+            <img
+              className="w-full"
+              src={currentItem?.image}
+              alt={currentItem?.itemName}
+            />
+            <div className="px-6 py-4">
+              <div className="font-bold text-xl mb-2">
+                {currentItem?.itemName}
               </div>
-              <div className="px-6 pt-4 pb-2"></div>
+              <p className="text-gray-700 text-base">
+                {currentItem?.description}
+              </p>
             </div>
+            <div className="px-6 pt-4 pb-2"></div>
           </div>
-          <div className="block md:hidden">
-            <>End</>
-          </div>
-        </Block>
+        </div>
+        <div className="block md:hidden"></div>
       </Sheet>
 
       {/* floating action button for scroll to category */}
       <div className="fixed z-50">
-        <div className="fixed bottom-20 right-0 md:right-12 md:bottom-10">
+        <div className="fixed bottom-32 right-0 md:right-12 md:bottom-10">
           <button
             onClick={() => showlist()}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-6 px-6 mr-5 rounded-full"
@@ -334,8 +360,8 @@ function MenuItemsList(props) {
       </div>
       {showListStatus ? (
         <div className="fixed z-50">
-          <div className="fixed bottom-8 right-0 md:bottom-6 md:right-32">
-            <ul className="bg-orange-100 border rounded-lg shadow-md absolute right-0 bottom-12 mr-4 w-64 h-72 overflow-y-scroll md:bg-fabblue">
+          <div className="fixed bottom-18 right-0 md:bottom-6 md:right-32">
+            <ul className="bg-emerald-100 border rounded-lg shadow-md absolute right-0 bottom-12 mr-4 w-64 h-72 overflow-y-scroll md:bg-fabblue">
               {category?.map((category) => (
                 <li
                   onClick={() => {

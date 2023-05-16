@@ -30,7 +30,6 @@ import PaymentSuccessPage from "./pages/user/PaymentSuccessPage";
 import UserChat from "./pages/user/UserChat";
 import VendorChat from "./pages/vendor/VendorChat";
 import VendorDashboard from "./pages/vendor/VendorDashboard";
-import { KonstaProvider } from "konsta/react";
 
 function App() {
   return (

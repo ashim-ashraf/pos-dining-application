@@ -7,21 +7,21 @@ const Star = ({ stars, reviews }) => {
     return (
       <span key={index}>
         {stars >= index + 1 ? (
-          <FaStar className="icon" />
+          <FaStar className="icon text-yellow-500" />
         ) : stars >= number ? (
-          <FaStarHalfAlt className="icon" />
+          <FaStarHalfAlt className="icon text-yellow-500" />
         ) : (
-          <AiOutlineStar className="icon" />
+          <AiOutlineStar className="icon text-yellow-500" />
         )}
       </span>
     );
   });
 
   return (
-    <div className="mt-1">
-      <div className="icon-style flex gap-1 ">
+    <div className="mb-1">
+      <div className="icon-style items-center flex gap-1 ">
         {ratingStar}
-        <p>({reviews} customer reviews)</p>
+        <p>({reviews} reviews)</p>
       </div>
      </div>
 

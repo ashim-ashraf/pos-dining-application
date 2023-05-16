@@ -103,7 +103,7 @@ function RestaurantDetailPage() {
         </div>
           </UserLayout>
       ) : (
-        <Page>
+        <>
           <MobileNav>
             {/* search for web passed as children */}
             <div className="w-full max-w-xs xl:max-w-lg 2xl:max-w-2xl bg-gray-100 rounded-md hidden xl:flex items-center">
@@ -162,39 +162,39 @@ function RestaurantDetailPage() {
             </Block>
           </div>
 
-          <>
+          
           {/* restaurant details */}
             <div className="grid grid-cols-3">
-              <div>
-                <Block>
+              <div className="mx-4">
+            
                   <img
                     className="w-36 h-24 object-cover rounded-lg md:ml-auto"
                     src={restaurantDetails?.image}
                     alt=""
                   />
-                </Block>
+              
               </div>
 
               <div className=" col-span-2">
-                <BlockTitle>{restaurantDetails.restaurantName}</BlockTitle>
-                <Block>
-                  <p>{restaurantDetails.description}</p>
-                </Block>
-                <Block className="-mt-4 cursor-pointer text-cyan-600">
-                  <p onClick={() => setShowReviews(true)}>Reviews</p>
-                </Block>
+                <div className="mx-5 font-bold">{restaurantDetails.restaurantName}</div>
+                
+                  <p className="mx-5 mt-2 text-sm ">{restaurantDetails.description}</p>
+                
+               
+                  <p className="mx-5 pt-1 cursor-pointer text-cyan-600" onClick={() => setShowReviews(true)}>Reviews</p>
+               
               </div>
             </div>
 
             {searchQuery ? (
-              <div>
+              <div className="mx-4">
                 <SearchMenuItemLIster
                   items={filteredMenu}
                   restaurantId={restaurantDetails.restaurantId}
                 />
               </div>
             ) : (
-              <div>
+              <div className="mx-4">
                 <MenuItemsList
                   category={category}
                   items={menu}
@@ -203,7 +203,7 @@ function RestaurantDetailPage() {
               </div>
             )}
           </>
-        </Page>
+        
       )}
       <MobileNavigation />
       </Page>

@@ -5,6 +5,8 @@ import axios from "axios";
 import MobileNav from "./MobileNav";
 import MobileNavigation from "../../components/User-Components/MobileNavigation";
 import Banner from "./Banner";
+import UserFooter from "../../components/User-Components/UserFooter";
+
 
 export default function Homepage() {
   const [restaurants, setRestaurants] = useState([]);
@@ -248,7 +250,7 @@ export default function Homepage() {
             </div>
           </div>
         )}
-
+        <UserFooter/>
         <MobileNavigation />
       </Page>
     </App>
