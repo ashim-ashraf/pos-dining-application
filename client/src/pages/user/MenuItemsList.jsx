@@ -140,8 +140,9 @@ function MenuItemsList(props) {
                                     );
                                     if (status) {
                                       setCart(getCart());
-                                    }
-                                    if (restaurantId !== order._id) {
+                                    } else 
+                                    if (restaurantId !== order?.restaurantId) {
+                                      console.log(restaurantId, order.restaurantId)
                                       setAlert(true);
                                     } else {
                                       setToast(true);
@@ -263,8 +264,8 @@ function MenuItemsList(props) {
                                       );
                                       if (status) {
                                         setCart(getCart().items);
-                                      }
-                                      if (restaurantId !== order._id) {
+                                      } else 
+                                      if (restaurantId !== order?._id) {
                                         setAlert(true);
                                       } else {
                                         setToast(true);

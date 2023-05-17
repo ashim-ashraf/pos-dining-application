@@ -17,7 +17,6 @@ function RestaurantDetailPage() {
   const [showReviews, setShowReviews] = useState(false);
 
   useEffect(() => {
-    console.log("useEffect1");
     axios
       .get(`/api/users/get-vendor/${restaurantId}`)
       .then((res) => {
@@ -164,25 +163,19 @@ function RestaurantDetailPage() {
 
           
           {/* restaurant details */}
-            <div className="grid grid-cols-3 md:mt-9  md:bg-pink-800 p-20">
+            <div className="grid grid-cols-3 md:mt-9  md:bg-pink-800 md:p-20">
               <div className="mx-4">
-            
                   <img
                     className="w-36 h-24 object-cover rounded-lg md:ml-auto"
                     src={restaurantDetails?.image}
                     alt=""
                   />
-              
               </div>
 
               <div className=" col-span-2">
-                <div className="mx-5 font-bold text-white">{restaurantDetails.restaurantName}</div>
-                
-                  <p className="mx-5 mt-2 text-sm text-white">{restaurantDetails.description}</p>
-                
-               
-                  <p className="mx-5 pt-1 cursor-pointer text-cyan-200" onClick={() => setShowReviews(true)}>Reviews</p>
-               
+                <div className="mx-5 font-bold md:text-white">{restaurantDetails.restaurantName}</div>
+                  <p className="mx-5 mt-2 text-sm md:text-white">{restaurantDetails.description}</p>
+                  <p className="mx-5 pt-1 cursor-pointer md:text-cyan-200" onClick={() => setShowReviews(true)}>Reviews</p>
               </div>
             </div>
 
