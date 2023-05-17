@@ -13,7 +13,6 @@ export default function Account({userData,setUserData , handleChangeValidation, 
 
   useEffect(() => {
     axios.get(`/api/vendors/listed-restaurant/${vendorId}`).then(async(res) => {
-      console.log(res.data)
       // setRestaurant(res.data)
       const {
         restaurantName,

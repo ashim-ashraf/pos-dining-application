@@ -111,7 +111,7 @@ function SearchMenuItemLIster(props) {
                             if (status) {
                               setCart(getCart().items);
                             } else 
-                            if (restaurantId !== order?._id) {
+                            if (order && restaurantId !== order?._id) {
                               setAlert(true);
                             } else {
                               setToast(true);
@@ -226,7 +226,7 @@ function SearchMenuItemLIster(props) {
                                       if (status) {
                                         setCart(getCart().items);
                                       } else 
-                                      if (restaurantId !== order?._id) {
+                                      if (order && restaurantId !== order?._id) {
                                         setAlert(true);
                                       } else {
                                         setToast(true);
