@@ -66,9 +66,9 @@ function Orders() {
     <UserLayout>
       <Toaster toastOptions={{ duration: 4000 }} />
 
-      <BlockTitle className="bg-emerald-100 p-4">
+      {order && <BlockTitle className="bg-emerald-100 p-4">
         Active Restaurant : {detailedCart.restaurantName}
-      </BlockTitle>
+      </BlockTitle>}
 
       <Block className="md:px-96">
         {order?.items.length > 0 ? (

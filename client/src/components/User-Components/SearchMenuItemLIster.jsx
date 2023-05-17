@@ -37,6 +37,7 @@ function SearchMenuItemLIster(props) {
   };
 
   return (
+    <>
     <List strongIos dividersIos>
       <div className="flex w-full border-2 p-2 ">
         <div className="ml-5 uppercase font-bold text-sm md:px-40">
@@ -110,8 +111,11 @@ function SearchMenuItemLIster(props) {
                             let status = addToCart(item, restaurantId);
                             if (status) {
                               setCart(getCart().items);
-                            } else 
-                            if (order?._id && restaurantId && restaurantId !== order?._id) {
+                            } else if (
+                              order?._id &&
+                              restaurantId &&
+                              restaurantId !== order?._id
+                            ) {
                               setAlert(true);
                             } else {
                               setToast(true);
@@ -225,8 +229,11 @@ function SearchMenuItemLIster(props) {
                                       );
                                       if (status) {
                                         setCart(getCart().items);
-                                      } else 
-                                      if (order?._id &&  restaurantId && restaurantId !== order?._id) {
+                                      } else if (
+                                        order?._id &&
+                                        restaurantId &&
+                                        restaurantId !== order?._id
+                                      ) {
                                         setAlert(true);
                                       } else {
                                         setToast(true);
@@ -271,7 +278,36 @@ function SearchMenuItemLIster(props) {
         }
       />
 
+     
+
+      <Sheet
+        className="pb-safe block md:hidden"
+        opened={sheetOpened}
+        onBackdropClick={() => setSheetOpened(false)}
+      >
+        <div>
+          <div className="w-full rounded overflow-hidden shadow-lg">
+            <img
+              className="w-full"
+              src={currentItem?.image}
+              alt={currentItem?.itemName}
+            />
+            <div className="px-6 py-4">
+              <div className="font-bold text-xl mb-2">
+                {currentItem?.itemName}
+              </div>
+              <p className="text-gray-700 text-base mb-2">
+                {currentItem?.description}
+              </p>
+            </div>
+            <div className="px-6 pt-4 pb-2"></div>
+          </div>
+        </div>
+        <div className="block md:hidden"></div>
+      </Sheet>
+     </List>
       <Dialog
+      className="hidden md:block"
         opened={sheetOpened}
         onBackdropClick={() => setSheetOpened(false)}
         content={
@@ -295,7 +331,7 @@ function SearchMenuItemLIster(props) {
           </div>
         }
       />
-    </List>
+      </>
   );
 }
 

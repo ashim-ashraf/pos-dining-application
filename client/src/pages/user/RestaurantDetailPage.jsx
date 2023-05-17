@@ -109,7 +109,7 @@ function RestaurantDetailPage() {
               <input
                 className="border-l rounded-lg p-4 border-gray-300 bg-transparent font-semibold text-sm pl-4"
                 type="text"
-                placeholder="Search Restaurants"
+                placeholder="Search Dishes"
                 value={searchQuery}
                 onChange={handleSearchInputChange}
               />
@@ -139,7 +139,7 @@ function RestaurantDetailPage() {
                   <input
                     type="text"
                     className="block w-full flex-1 py-2 px-3 focus:outline-none"
-                    placeholder="Search Foods"
+                    placeholder="Search Dishes"
                     value={searchQuery}
                     onChange={handleSearchInputChange}
                   />
