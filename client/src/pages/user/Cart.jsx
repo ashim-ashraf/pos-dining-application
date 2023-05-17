@@ -116,16 +116,16 @@ function Cart() {
     setScanningStatus(true);
     // setIsCameraOpen(true);
 
-    const constraints = { video: { facingMode: { ideal: 'environment' } } };
+    // const constraints = { video: true };
 
-    navigator.mediaDevices.getUserMedia(constraints)
-      .then((stream) => {
-        videoRef.current.srcObject = stream;
-        videoRef.current.play();
-      })
-      .catch((error) => {
-        console.error("Error opening webcam:", error);
-      });
+    // navigator.mediaDevices.getUserMedia(constraints)
+    //   .then((stream) => {
+    //     videoRef.current.srcObject = stream;
+    //     videoRef.current.play();
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error opening webcam:", error);
+    //   });
   };
 
   const handleErrorFile = (error) => {
@@ -175,6 +175,7 @@ function Cart() {
                   </p>
                   <div className="md:w-1/2 md:h-1/6 md:border-2 md:border-gray-400 md:p-4">
                     <QrReader
+                      facingMode="rear"
                       ref={qrRef}
                       delay={300}
                       onError={handleErrorFile}

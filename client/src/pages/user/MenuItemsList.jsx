@@ -331,7 +331,7 @@ function MenuItemsList(props) {
               <div className="font-bold text-xl mb-2">
                 {currentItem?.itemName}
               </div>
-              <p className="text-gray-700 text-base">
+              <p className="text-gray-700 text-base mb-2">
                 {currentItem?.description}
               </p>
             </div>
