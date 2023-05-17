@@ -3,13 +3,12 @@ import { Toaster } from "react-hot-toast";
 
 export default function Payment({image, setImage, imageErrors}) {
  
-  const [ setSelectedImages] = useState([]);
+  const [selectedImage, setSelectedImage] = useState([])
 
   function handleImageChange(event) {
     const file = event.target.files[0];
-    console.log(file)
     setImage(file);
-    setSelectedImages(file);
+    setSelectedImage(file);
   }
 
   // function handledrop(e) {
