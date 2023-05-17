@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = { table:null, isbooked: false, order: null , dataForRating: null };
+const initialState = { table:null, isbooked: false, order: {} , dataForRating: null };
 
 export const userSlice = createSlice({
   name: "user",
@@ -17,7 +17,7 @@ export const userSlice = createSlice({
     },
 
     clearOrder: (state) => {
-      state.order = null
+      state.order = {}
     },
 
     ratingData: (state, action) => {

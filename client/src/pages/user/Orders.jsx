@@ -2,17 +2,20 @@ import React, { useEffect, useState } from "react";
 import UserLayout from "../../components/User-Components/UserLayout";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { Block, Button } from "konsta/react";
+import { Block, BlockTitle, Button } from "konsta/react";
 import { userOrder } from "../../features/authSlices/userSlice";
 import { Link } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
+import useCart from "../../components/User-Components/Cart-Functions";
 
 function Orders() {
+  const { getCart } = useCart();
   const table = useSelector((state) => state.user.table);
   const [order, setOrder] = useState(null);
   const [allDelivered, setAllDelivered] = useState(false);
   const [allCancelled, setAllCancelled] = useState(false);
   const dispatch = useDispatch();
+  const [detailedCart, setDetailedCart] = useState(getCart());
 
   useEffect(() => {
     getOrders();
@@ -62,6 +65,11 @@ function Orders() {
   return (
     <UserLayout>
       <Toaster toastOptions={{ duration: 4000 }} />
+
+      <BlockTitle className="bg-emerald-100 p-4">
+        Active Restaurant : {detailedCart.restaurantName}
+      </BlockTitle>
+
       <Block className="md:px-96">
         {order?.items.length > 0 ? (
           <>
