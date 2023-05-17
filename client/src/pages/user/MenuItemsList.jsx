@@ -33,10 +33,6 @@ function MenuItemsList(props) {
     }
   };
 
-  for (let i = 0; i < items?.length; i++) {
-    console.log("for", items[i].averagerating);
-  }
-
   useEffect(() => {
     console.log(category, "gsaddfasdf");
     setCart(getCart().items);
@@ -359,23 +355,37 @@ function MenuItemsList(props) {
         </div>
       </div>
       {showListStatus ? (
-        <div className="fixed z-50">
-          <div className="fixed bottom-18 right-0 md:bottom-6 md:right-32">
-            <ul className="bg-emerald-100 border rounded-lg shadow-md absolute right-0 bottom-12 mr-4 w-64 h-72 overflow-y-scroll md:bg-fabblue">
-              {category?.map((category) => (
-                <li
-                  onClick={() => {
-                    scrollToDiv(category);
-                    showlist();
-                  }}
-                  className="p-4"
-                >
-                  {category}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+       <div className="fixed z-50">
+       <div className="fixed bottom-28 right-5 md:bottom-6 md:right-32">
+         <div className="bg-emerald-100 border rounded-lg shadow-md md:bg-fabblue">
+           <div className="flex justify-between p-4 items-center">
+             <h2 className="text-xl font-semibold">Categories</h2>
+             <button onClick={showlist} className="text-gray-500 focus:outline-none ml-2 mt-1">
+               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5">
+                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+               </svg>
+             </button>
+           </div>
+           <ul className="overflow-y-scroll max-h-60 ">
+             {category?.map((category) => (
+               <li
+                 key={category}
+                 onClick={() => {
+                   scrollToDiv(category);
+                   showlist();
+                 }}
+                 className="p-4 w-24"
+               >
+                 {category}
+               </li>
+             ))}
+           </ul>
+         </div>
+       </div>
+     </div>
+     
+     
+     
       ) : (
         ""
       )}

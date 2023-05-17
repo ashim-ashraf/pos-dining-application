@@ -1,5 +1,5 @@
 import { Icon, Tabbar, TabbarLink } from "konsta/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CgHome, CgShoppingBag } from "react-icons/cg";
 import { IoCart } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,19 @@ import { useNavigate } from "react-router-dom";
 function MobileNavigation() {
   const [activeTab, setActiveTab] = useState("tab-1");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const currentPath = window.location.pathname;
+    
+    if (currentPath === "/cart") {
+      setActiveTab("tab-2");
+    } else if (currentPath === "/orders") {
+      setActiveTab("tab-3");
+    } else {
+      setActiveTab("tab-1");
+    }
+  }, []);
+
   return (
     <div className="md:hidden">
       <Tabbar className="left-0 bottom-0 fixed">
