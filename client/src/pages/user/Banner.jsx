@@ -9,7 +9,6 @@ function Banner() {
     axios
       .get("/api/admin/get-banners")
       .then((res) => {
-        console.log(res.data);
         setData(res.data);
       })
       .catch((err) => {

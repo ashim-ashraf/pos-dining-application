@@ -35,7 +35,6 @@ function Cart() {
   const [cart, setCart] = useState(getCart().items);
   const table = useSelector((state) => state.user.table);
   const orderId = useSelector((state) => state.user.order);
-  console.log(orderId,"ddddddddddddd");
   const [toast, setToast] = useState(false);
   const [errorToast, setErrorToast] = useState(false);
   const [actionScan, setActionScan] = useState(false);
@@ -102,7 +101,9 @@ function Cart() {
           clearCartItems();
           setUpdated(false);
           toast.success("Order successful");
-          navigate("/orders");
+          setTimeout(() => {
+            navigate("/orders");
+          }, 2000);
         })
         .catch((err) => {
           console.log(err);
@@ -115,7 +116,7 @@ function Cart() {
     setScanningStatus(true);
     // setIsCameraOpen(true);
 
-    const constraints = { video: { facingMode: { exact: 'environment' } } };
+    const constraints = { video: { facingMode: { ideal: 'environment' } } };
 
     navigator.mediaDevices.getUserMedia(constraints)
       .then((stream) => {

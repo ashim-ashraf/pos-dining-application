@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Block, Button } from "konsta/react";
 import { userOrder } from "../../features/authSlices/userSlice";
 import { Link } from "react-router-dom";
+import { Toaster, toast } from "react-hot-toast";
 
 function Orders() {
   const table = useSelector((state) => state.user.table);
@@ -38,6 +39,7 @@ function Orders() {
         setAllCancelled(Cancelled);
       })
       .catch((err) => {
+        toast.error("You haven't ordered yet!")
         console.log(err);
       });
   };
@@ -59,6 +61,7 @@ function Orders() {
 
   return (
     <UserLayout>
+      <Toaster toastOptions={{ duration: 4000 }} />
       <Block className="md:px-96">
         {order?.items.length > 0 ? (
           <>
@@ -125,7 +128,7 @@ function Orders() {
             <div className="fixed inset-0  flex items-center justify-center flex-col">
               <div >
                 <img
-                className="h-[60vh] w-full xs:h-[40vh]"
+                className="h-[60vh] w-full xs:h-[24vh]"
                   src="https://cdn3.iconfinder.com/data/icons/food-delivery-aesthetics-vol-2/256/No_Online_Orders-512.png"
                   alt=""
                 />

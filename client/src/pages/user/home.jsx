@@ -24,10 +24,6 @@ export default function Homepage() {
       });
   }, []);
 
-  useEffect(() => {
-    console.log(restaurants);
-  }, [restaurants]);
-
   const handleclick = (restaurantId) => {
     navigate(`/restaurant/${restaurantId}`);
   };
