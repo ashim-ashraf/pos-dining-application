@@ -33,7 +33,9 @@ function MenuManagementForm() {
           .then(() => {
             getCategories();
             console.log("category added");
-          });
+          }).catch((res) => {
+            toast.error("Failed adding category")
+          })
       }
     } catch (error) {
       console.log(error);

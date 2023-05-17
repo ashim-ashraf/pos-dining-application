@@ -84,14 +84,18 @@ function Billing() {
         responseType: 'blob'
       })
       .then((response) => {
-        console.log(response.data)
-        const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
-        saveAs(pdfBlob, 'test.pdf');
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.setAttribute('rel', 'noopener noreferrer');
+        link.click();
       })
       .catch((error) => {
         console.log(error);
       });
   };
+  
 
   return (
     <UserLayout>
