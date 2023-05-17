@@ -24,7 +24,7 @@ function Orders() {
       .get(`/api/users/orders/${table}`)
       .then(async (res) => {
         console.log(res.data);
-        dispatch(userOrder(res.data));
+        await dispatch(userOrder(res.data));
         await setOrder(res.data);
         const allCompleted = res.data.items.every((item) => {
           return (
@@ -39,7 +39,7 @@ function Orders() {
         setAllCancelled(Cancelled);
       })
       .catch((err) => {
-        toast.error("You haven't ordered yet!")
+        toast.error("You haven't ordered yet!");
         console.log(err);
       });
   };
@@ -126,9 +126,9 @@ function Orders() {
           <>
             {" "}
             <div className="fixed inset-0  flex items-center justify-center flex-col">
-              <div >
+              <div>
                 <img
-                className="h-[60vh] w-full xs:h-[24vh]"
+                  className="h-[60vh] w-full xs:h-[24vh]"
                   src="https://cdn3.iconfinder.com/data/icons/food-delivery-aesthetics-vol-2/256/No_Online_Orders-512.png"
                   alt=""
                 />
