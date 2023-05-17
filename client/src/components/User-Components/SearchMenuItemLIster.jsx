@@ -1,6 +1,8 @@
 import {
   Block,
   Button,
+  Dialog,
+  DialogButton,
   List,
   ListItem,
   Sheet,
@@ -11,23 +13,27 @@ import React, { useEffect, useState } from "react";
 import useCart from "../../components/User-Components/Cart-Functions";
 import { Toaster } from "react-hot-toast";
 import Star from "./Star";
+import { useSelector } from "react-redux";
 
 function SearchMenuItemLIster(props) {
   const { items, restaurantId } = props;
-  const { getCart, addToCart, increaseCount, decreaseCount } = useCart();
+  const { getCart, addToCart, increaseCount, decreaseCount, clearCart } =
+    useCart();
   const [cart, setCart] = useState(null);
   const [toast, setToast] = useState(false);
   const [sheetOpened, setSheetOpened] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
+  const order = useSelector((state) => state.user.order);
+  const [alert, setAlert] = useState(false);
 
   useEffect(() => {
-    setCart(getCart().items);
+    setCart(getCart());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const isItemInCart = (itemId) => {
-    if (!cart) return false;
-    return cart.hasOwnProperty(itemId);
+    if (!cart?.items) return false;
+    return cart?.items.hasOwnProperty(itemId);
   };
 
   return (
@@ -52,7 +58,7 @@ function SearchMenuItemLIster(props) {
                       setCurrentItem(item);
                     }}
                   >
-                    item.itemName
+                    {item.itemName}
                   </div>
                 }
                 after={
@@ -90,7 +96,7 @@ function SearchMenuItemLIster(props) {
                         }}
                         min={1}
                         max={10}
-                        value={cart[item._id].count}
+                        value={cart?.items[item._id].count}
                       />
                     ) : (
                       <div className="grid grid-cols-3 gap-x-4">
@@ -104,6 +110,9 @@ function SearchMenuItemLIster(props) {
                             let status = addToCart(item, restaurantId);
                             if (status) {
                               setCart(getCart().items);
+                            }
+                            if (restaurantId !== order._id) {
+                              setAlert(true);
                             } else {
                               setToast(true);
                             }
@@ -111,26 +120,6 @@ function SearchMenuItemLIster(props) {
                         >
                           Add
                         </Button>
-                        <Toast
-                          className="bottom-12 "
-                          position="left"
-                          opened={toast}
-                          button={
-                            <Button
-                              rounded
-                              clear
-                              small
-                              inline
-                              onClick={() => setToast(false)}
-                            >
-                              Close
-                            </Button>
-                          }
-                        >
-                          <div className="shrink ">
-                            You have items from another restaurant in the Cart
-                          </div>
-                        </Toast>
                       </div>
                     )}
                   </div>
@@ -156,15 +145,13 @@ function SearchMenuItemLIster(props) {
               <div class="grid grid-cols-1 md:grid-cols-4 gap-6 p-6">
                 {items?.length > 0 &&
                   items.map((item, index) => (
-                    <div
-                      onClick={() => {
-                        setSheetOpened(true);
-                        setCurrentItem(item);
-                      }}
-                      class="cursor-pointer rounded-xl bg-white p-3 shadow-lg hover:shadow-xl"
-                    >
+                    <div class="cursor-pointer rounded-xl bg-white p-3 shadow-lg hover:shadow-xl">
                       <div class="relative flex items-end overflow-hidden rounded-xl">
                         <img
+                          onClick={() => {
+                            setSheetOpened(true);
+                            setCurrentItem(item);
+                          }}
                           className="h-[25vh] w-full"
                           src={item?.image}
                           alt={item?.itemName}
@@ -185,7 +172,15 @@ function SearchMenuItemLIster(props) {
                       </div>
 
                       <div class="mt-1 p-2">
-                        <h2 class="text-slate-700">{item?.itemName}</h2>
+                        <h2
+                          onClick={() => {
+                            setSheetOpened(true);
+                            setCurrentItem(item);
+                          }}
+                          class="text-slate-700"
+                        >
+                          {item?.itemName}
+                        </h2>
                         <p class="mt-1 text-sm text-slate-400 line-through">
                           &#x20B9;{item?.retailPrice}
                         </p>
@@ -212,7 +207,7 @@ function SearchMenuItemLIster(props) {
                                   }}
                                   min={1}
                                   max={10}
-                                  value={cart[item._id].count}
+                                  value={cart?.items[item._id].count}
                                 />
                               ) : (
                                 <div className="grid grid-cols-3 gap-x-4">
@@ -230,6 +225,9 @@ function SearchMenuItemLIster(props) {
                                       );
                                       if (status) {
                                         setCart(getCart().items);
+                                      }
+                                      if (restaurantId !== order._id) {
+                                        setAlert(true);
                                       } else {
                                         setToast(true);
                                       }
@@ -237,27 +235,6 @@ function SearchMenuItemLIster(props) {
                                   >
                                     Add
                                   </Button>
-                                  <Toast
-                                    className="bottom-12 "
-                                    position="left"
-                                    opened={toast}
-                                    button={
-                                      <Button
-                                        rounded
-                                        clear
-                                        small
-                                        inline
-                                        onClick={() => setToast(false)}
-                                      >
-                                        Close
-                                      </Button>
-                                    }
-                                  >
-                                    <div className="shrink ">
-                                      You have items from another restaurant in
-                                      the Cart
-                                    </div>
-                                  </Toast>
                                 </div>
                               )}
                             </span>
@@ -270,14 +247,36 @@ function SearchMenuItemLIster(props) {
             </div>
           </>
         ))}
-      <Sheet
-        className="pb-safe"
+
+      <Dialog
+        opened={alert}
+        onBackdropClick={() => setAlert(false)}
+        title="Order Active"
+        content={`You have an active order from ${cart?.restaurantName}`}
+        buttons={
+          <DialogButton onClick={() => setAlert(false)}>Ok</DialogButton>
+        }
+      />
+
+      <Dialog
+        opened={toast}
+        onBackdropClick={() => setToast(false)}
+        title="Delete Cart"
+        content={`You have items from ${cart?.restaurantName} in the Cart`}
+        buttons={
+          <>
+            <DialogButton onClick={() => clearCart()}>Proceed</DialogButton>
+            <DialogButton onClick={() => setToast(false)}>Cancel</DialogButton>
+          </>
+        }
+      />
+
+      <Dialog
         opened={sheetOpened}
         onBackdropClick={() => setSheetOpened(false)}
-      >
-        <Block>
+        content={
           <div>
-            <div className="max-w-sm rounded overflow-hidden shadow-lg">
+            <div className="max-w-sm md:w-70 rounded overflow-hidden shadow-lg">
               <img
                 className="w-full"
                 src={currentItem?.image}
@@ -294,11 +293,8 @@ function SearchMenuItemLIster(props) {
               <div className="px-6 pt-4 pb-2"></div>
             </div>
           </div>
-          <div className="">
-            <>End</>
-          </div>
-        </Block>
-      </Sheet>
+        }
+      />
     </List>
   );
 }

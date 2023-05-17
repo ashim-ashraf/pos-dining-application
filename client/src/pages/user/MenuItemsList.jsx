@@ -1,6 +1,8 @@
 import {
   Block,
   Button,
+  Dialog,
+  DialogButton,
   List,
   ListItem,
   Sheet,
@@ -12,15 +14,19 @@ import useCart from "../../components/User-Components/Cart-Functions";
 import { Toaster } from "react-hot-toast";
 import { BsJournalBookmarkFill } from "react-icons/bs";
 import Star from "../../components/User-Components/Star";
+import { useSelector } from "react-redux";
 
 function MenuItemsList(props) {
-  const { items, restaurantId, category } = props;
-  const { getCart, addToCart, increaseCount, decreaseCount } = useCart();
+  const { items, restaurantId, category, restaurantName } = props;
+  const { getCart, addToCart, increaseCount, decreaseCount, clearCart } =
+    useCart();
   const [cart, setCart] = useState(null);
   const [toast, setToast] = useState(false);
   const [sheetOpened, setSheetOpened] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
   const [showListStatus, setShowListStatus] = useState(false);
+  const order = useSelector((state) => state.user.order);
+  const [alert, setAlert] = useState(false);
 
   const showlist = () => {
     setShowListStatus(!showListStatus);
@@ -34,14 +40,13 @@ function MenuItemsList(props) {
   };
 
   useEffect(() => {
-    console.log(category, "gsaddfasdf");
-    setCart(getCart().items);
+    setCart(getCart());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const isItemInCart = (itemId) => {
-    if (!cart) return false;
-    return cart.hasOwnProperty(itemId);
+    if (!cart?.items) return false;
+    return cart?.items.hasOwnProperty(itemId);
   };
 
   return (
@@ -77,7 +82,7 @@ function MenuItemsList(props) {
                               setCurrentItem(item);
                             }}
                           >
-                            item.itemName
+                            {item.itemName}
                           </div>
                         }
                         after={
@@ -109,15 +114,15 @@ function MenuItemsList(props) {
                                 outline
                                 onPlus={() => {
                                   increaseCount(item);
-                                  setCart(getCart().items);
+                                  setCart(getCart());
                                 }}
                                 onMinus={() => {
                                   decreaseCount(item);
-                                  setCart(getCart().items);
+                                  setCart(getCart());
                                 }}
                                 min={1}
                                 max={10}
-                                value={cart[item._id].count}
+                                value={cart.items[item._id].count}
                               />
                             ) : (
                               <div className="grid grid-cols-3 gap-x-4">
@@ -128,9 +133,16 @@ function MenuItemsList(props) {
                                 <Button
                                   outline
                                   onClick={() => {
-                                    let status = addToCart(item, restaurantId);
+                                    let status = addToCart(
+                                      item,
+                                      restaurantId,
+                                      restaurantName
+                                    );
                                     if (status) {
-                                      setCart(getCart().items);
+                                      setCart(getCart());
+                                    }
+                                    if (restaurantId !== order._id) {
+                                      setAlert(true);
                                     } else {
                                       setToast(true);
                                     }
@@ -138,27 +150,6 @@ function MenuItemsList(props) {
                                 >
                                   Add
                                 </Button>
-                                <Toast
-                                  className="bottom-12 "
-                                  position="left"
-                                  opened={toast}
-                                  button={
-                                    <Button
-                                      rounded
-                                      clear
-                                      small
-                                      inline
-                                      onClick={() => setToast(false)}
-                                    >
-                                      Close
-                                    </Button>
-                                  }
-                                >
-                                  <div className="shrink ">
-                                    You have items from another restaurant in
-                                    the Cart
-                                  </div>
-                                </Toast>
                               </div>
                             )}
                           </div>
@@ -254,7 +245,7 @@ function MenuItemsList(props) {
                                   }}
                                   min={1}
                                   max={10}
-                                  value={cart[item._id].count}
+                                  value={cart.items[item._id].count}
                                 />
                               ) : (
                                 <div className="grid grid-cols-3 gap-x-4">
@@ -272,6 +263,9 @@ function MenuItemsList(props) {
                                       );
                                       if (status) {
                                         setCart(getCart().items);
+                                      }
+                                      if (restaurantId !== order._id) {
+                                        setAlert(true);
                                       } else {
                                         setToast(true);
                                       }
@@ -315,31 +309,60 @@ function MenuItemsList(props) {
         </div>
       ))}
 
-      <Sheet
-        className="pb-safe"
+      <Dialog
+        opened={alert}
+        onBackdropClick={() => setAlert(false)}
+        title="Order Active"
+        content={`You have an active order from ${cart?.restaurantName}`}
+        buttons={
+          <DialogButton onClick={() => setAlert(false)}>Ok</DialogButton>
+        }
+      />
+
+      <Dialog
+        opened={toast}
+        onBackdropClick={() => setToast(false)}
+        title="Delete Cart"
+        content={`You have items from ${cart?.restaurantName} in the Cart`}
+        buttons={
+          <>
+            <DialogButton
+              onClick={() => {
+                localStorage.removeItem("cart");
+                setToast(false);
+              }}
+            >
+              Proceed
+            </DialogButton>
+            <DialogButton onClick={() => setToast(false)}>Cancel</DialogButton>
+          </>
+        }
+      />
+
+      <Dialog
         opened={sheetOpened}
         onBackdropClick={() => setSheetOpened(false)}
-      >
-        <div>
-          <div className="w-full rounded overflow-hidden shadow-lg">
-            <img
-              className="w-full"
-              src={currentItem?.image}
-              alt={currentItem?.itemName}
-            />
-            <div className="px-6 py-4">
-              <div className="font-bold text-xl mb-2">
-                {currentItem?.itemName}
+        content={
+          <div>
+            <div className="max-w-sm md:w-70 rounded overflow-hidden shadow-lg">
+              <img
+                className="w-full"
+                src={currentItem?.image}
+                alt={currentItem?.itemName}
+              />
+              <div className="px-6 py-4">
+                <div className="font-bold text-xl mb-2">
+                  {currentItem?.itemName}
+                </div>
+                <p className="text-gray-700 text-base">
+                  {currentItem?.description}
+                </p>
               </div>
-              <p className="text-gray-700 text-base mb-2">
-                {currentItem?.description}
-              </p>
+              <div className="px-6 pt-4 pb-2"></div>
             </div>
-            <div className="px-6 pt-4 pb-2"></div>
           </div>
-        </div>
-        <div className="block md:hidden"></div>
-      </Sheet>
+        }
+      />
 
       {/* floating action button for scroll to category */}
       <div className="fixed z-50">
@@ -355,37 +378,48 @@ function MenuItemsList(props) {
         </div>
       </div>
       {showListStatus ? (
-       <div className="fixed z-50">
-       <div className="fixed bottom-28 right-5 md:bottom-6 md:right-32">
-         <div className="bg-emerald-100 border rounded-lg shadow-md md:bg-fabblue">
-           <div className="flex justify-between p-4 items-center">
-             <h2 className="text-xl font-semibold">Categories</h2>
-             <button onClick={showlist} className="text-gray-500 focus:outline-none ml-2 mt-1">
-               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5">
-                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-               </svg>
-             </button>
-           </div>
-           <ul className="overflow-y-scroll max-h-60 ">
-             {category?.map((category) => (
-               <li
-                 key={category}
-                 onClick={() => {
-                   scrollToDiv(category);
-                   showlist();
-                 }}
-                 className="p-4 w-24"
-               >
-                 {category}
-               </li>
-             ))}
-           </ul>
-         </div>
-       </div>
-     </div>
-     
-     
-     
+        <div className="fixed z-50">
+          <div className="fixed bottom-28 right-5 md:bottom-6 md:right-32">
+            <div className="bg-emerald-100 border rounded-lg shadow-md md:bg-fabblue">
+              <div className="flex justify-between p-4 items-center">
+                <h2 className="text-xl font-semibold">Categories</h2>
+                <button
+                  onClick={showlist}
+                  className="text-gray-500 focus:outline-none ml-2 mt-1"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    className="w-5 h-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <ul className="overflow-y-scroll max-h-60 ">
+                {category?.map((category) => (
+                  <li
+                    key={category}
+                    onClick={() => {
+                      scrollToDiv(category);
+                      showlist();
+                    }}
+                    className="p-4 w-24"
+                  >
+                    {category}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
       ) : (
         ""
       )}

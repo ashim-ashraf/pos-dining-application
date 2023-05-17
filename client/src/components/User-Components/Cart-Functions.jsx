@@ -1,16 +1,19 @@
+import { useSelector } from "react-redux";
 
 
 function useCart() {
+  
   const getCart = () => {
     return (
       JSON.parse(localStorage.getItem("cart")) || {
         restaurantId: null,
+        restaurantName:null,
         items: {},
       }
     );
   };
 
-  function addToCart(item, restaurantId) {
+  function addToCart(item, restaurantId, restaurantName) {
     const cart = getCart() || { restaurantId: null, items: {} };
     if (cart.restaurantId && cart.restaurantId !== restaurantId) {
       // toast.error("You have items from another restaurant in the Cart")
@@ -23,6 +26,7 @@ function useCart() {
       cart.items[itemId] = { ...item, count: 1 };
     }
     cart.restaurantId = restaurantId;
+    cart.restaurantName = restaurantName;
     localStorage.setItem("cart", JSON.stringify(cart));
     return true;
   }

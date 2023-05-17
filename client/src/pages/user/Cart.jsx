@@ -15,7 +15,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import QrReader from "react-qr-scanner";
-import { bookedTable } from "../../features/authSlices/userSlice";
+import { bookedTable, userOrder } from "../../features/authSlices/userSlice";
 import { releiveTable } from "../../features/authSlices/userSlice";
 import { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -96,8 +96,8 @@ function Cart() {
       const cart = localStorage.getItem("cart");
       axios
         .post("/api/users/orders", { cart, table })
-        .then((res) => {
-          console.log(res.data);
+        .then(async(res) => {
+          await dispatch(userOrder(res.data));
           clearCartItems();
           setUpdated(false);
           toast.success("Order successful");
@@ -175,7 +175,7 @@ function Cart() {
                   </p>
                   <div className="md:w-1/2 md:h-1/6 md:border-2 md:border-gray-400 md:p-4">
                     <QrReader
-                      facingMode="environment"
+                      facingMode={"environment"}
                       ref={qrRef}
                       delay={300}
                       onError={handleErrorFile}

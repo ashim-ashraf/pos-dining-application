@@ -53,8 +53,8 @@ function RestaurantDetailPage() {
       <Page className="">
       {showReviews ? (
           <UserLayout>
-        <div className="md:px-96">
-        <div className="grid grid-cols-3">
+        <div className="md:px-96 ">
+        <div className="grid grid-cols-3 md:mt-5">
               <div>
                 <Block>
                   <img
@@ -164,7 +164,7 @@ function RestaurantDetailPage() {
 
           
           {/* restaurant details */}
-            <div className="grid grid-cols-3">
+            <div className="grid grid-cols-3 md:mt-9  md:bg-pink-800 p-20">
               <div className="mx-4">
             
                   <img
@@ -176,12 +176,12 @@ function RestaurantDetailPage() {
               </div>
 
               <div className=" col-span-2">
-                <div className="mx-5 font-bold">{restaurantDetails.restaurantName}</div>
+                <div className="mx-5 font-bold text-white">{restaurantDetails.restaurantName}</div>
                 
-                  <p className="mx-5 mt-2 text-sm ">{restaurantDetails.description}</p>
+                  <p className="mx-5 mt-2 text-sm text-white">{restaurantDetails.description}</p>
                 
                
-                  <p className="mx-5 pt-1 cursor-pointer text-cyan-600" onClick={() => setShowReviews(true)}>Reviews</p>
+                  <p className="mx-5 pt-1 cursor-pointer text-cyan-200" onClick={() => setShowReviews(true)}>Reviews</p>
                
               </div>
             </div>
@@ -191,6 +191,7 @@ function RestaurantDetailPage() {
                 <SearchMenuItemLIster
                   items={filteredMenu}
                   restaurantId={restaurantDetails.restaurantId}
+                  restaurantName={restaurantDetails.restaurantName}
                 />
               </div>
             ) : (
@@ -199,6 +200,7 @@ function RestaurantDetailPage() {
                   category={category}
                   items={menu}
                   restaurantId={restaurantDetails.restaurantId}
+                  restaurantName={restaurantDetails.restaurantName}
                 />
               </div>
             )}
