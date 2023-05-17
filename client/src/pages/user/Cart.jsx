@@ -7,6 +7,7 @@ import {
   ActionsGroup,
   ActionsLabel,
   Block,
+  BlockTitle,
   Button,
   Preloader,
   Stepper,
@@ -33,6 +34,7 @@ function Cart() {
     clearCartItems,
   } = useCart();
   const [cart, setCart] = useState(getCart().items);
+  const [detailedCart, setDetailedCart] = useState(getCart());
   const table = useSelector((state) => state.user.table);
   const orderId = useSelector((state) => state.user.order);
   const [toast, setToast] = useState(false);
@@ -50,6 +52,7 @@ function Cart() {
   useEffect(() => {
     if (!updated) {
       setCart(getCart().items || {});
+      setDetailedCart(getCart());
     }
   }, [updated]);
 
@@ -96,7 +99,7 @@ function Cart() {
       const cart = localStorage.getItem("cart");
       axios
         .post("/api/users/orders", { cart, table })
-        .then(async(res) => {
+        .then(async (res) => {
           await dispatch(userOrder(res.data));
           clearCartItems();
           setUpdated(false);
@@ -233,7 +236,11 @@ function Cart() {
                   </>
                 )}
 
-                <table className="border-collapse w-full">
+                <BlockTitle className="bg-emerald-100 p-4">
+                  Active Restaurant : {detailedCart.restaurantName}
+                </BlockTitle>
+
+                <table className="border-collapse w-full mt-10 ">
                   <thead>
                     <tr>
                       <th className=" px-4 py-2 ">Item Name</th>

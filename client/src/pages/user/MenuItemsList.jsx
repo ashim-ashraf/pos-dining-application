@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 
 function MenuItemsList(props) {
   const { items, restaurantId, category, restaurantName } = props;
+  console.log(restaurantId);
   const { getCart, addToCart, increaseCount, decreaseCount, clearCart } =
     useCart();
   const [cart, setCart] = useState(null);
@@ -141,8 +142,7 @@ function MenuItemsList(props) {
                                     if (status) {
                                       setCart(getCart());
                                     } else 
-                                    if (restaurantId !== order?.restaurantId) {
-                                      console.log(restaurantId, order.restaurantId)
+                                    if (order?._id && restaurantId && restaurantId !== order?.restaurantId) {
                                       setAlert(true);
                                     } else {
                                       setToast(true);
@@ -265,7 +265,7 @@ function MenuItemsList(props) {
                                       if (status) {
                                         setCart(getCart().items);
                                       } else 
-                                      if (restaurantId !== order?._id) {
+                                      if (order?._id &&  restaurantId && restaurantId !== order?._id) {
                                         setAlert(true);
                                       } else {
                                         setToast(true);
