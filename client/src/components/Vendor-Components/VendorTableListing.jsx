@@ -274,33 +274,15 @@ function VendorTable() {
                   >
                     Colour Code
                   </label>
-                  <ul className="list-disc ">
-                    <li className="flex items-center mb-2">
-                      <div className="w-10 h-4 bg-red-500 mr-2"></div>
-                      <span className="text-gray-700 text-sm">
-                        Pending Cleaning
-                      </span>
-                    </li>
-                    <li className="flex items-center mb-2">
-                      <div className="w-10 h-4  bg-blue-500 mr-2"></div>
-                      <span className="text-gray-700 text-sm">
-                        Waiting for Order
-                      </span>
-                    </li>
+                  <ul className="list-disc ">             
                     <li className="flex items-center mb-2">
                       <div className="w-10 h-4  bg-green-500 mr-2"></div>
                       <span className="text-gray-700 text-sm">
-                        Food delivered
+                        Table Active
                       </span>
                     </li>
                     <li className="flex items-center mb-2">
-                      <div className="w-10 h-4  bg-yellow-500 mr-2"></div>
-                      <span className="text-gray-700 text-sm">
-                        Order Being Prepared
-                      </span>
-                    </li>
-                    <li className="flex items-center mb-2">
-                      <div className="w-10 h-4  bg-white mr-2"></div>
+                      <div className="w-10 h-4  bg-white mr-2 border-2 border-slate-400"></div>
                       <span className="text-gray-700 text-sm">
                         Tabel Unoccupied
                       </span>

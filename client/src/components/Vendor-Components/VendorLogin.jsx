@@ -85,13 +85,11 @@ useEffect(() => {
   };
 
   function onOTPVerify() {
-    console.log(window.confirmationResult)
     setLoading(true);
       window.confirmationResult
       .confirm(otp)
       .then(async (res) => {
-        console.log(res.user);
-        let user = res.user;
+        let user = res;
         await axios.post("/api/vendors/signin", { user }).then((response) => {
           console.log(response);
           dispatch(vendorLogin(response.data));

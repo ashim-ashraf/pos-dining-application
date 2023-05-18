@@ -3,8 +3,6 @@ import Chart from "chart.js";
 
 
 export default function CardLineChart({data}) {
-
-
   useEffect(() => {
     if (data) {
       const monthNames = [

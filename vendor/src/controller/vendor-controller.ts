@@ -4,7 +4,7 @@ import { OrderStatusUpdatePublisher } from "../events/publishers/order-status-pu
 import { natsWrapper } from "../nats-wrapper";
 import { Vendor } from "../models/vendor";
 import mongoose from "mongoose";
-import { BadRequestError } from "@snackopedia/common";
+import { BadRequestError, NotAuthorizedError } from "@snackopedia/common";
 import jwt from "jsonwebtoken";
 import { VendorPublisher } from "../events/publishers/vendor-publisher";
 import { VendorOpenStatusPublisher } from "../events/publishers/vendor-openstatus-publisher";
@@ -18,6 +18,9 @@ import {
 
 const fs = require("fs");
 const PDFDocument = require("pdfkit");
+const admin = require("firebase-admin");
+const serviceAccount = require("../../serviceAccountKey.json");
+
 
 export const vendorVerify = (req: Request, res: Response) => {
   res.send({ currentVendor: req.currentVendor || null });
@@ -242,7 +245,7 @@ export const vendorSignup = async (req: Request, res: Response) => {
   const { userName, user } = req.body;
 
   let name = userName;
-  let phone = user.phoneNumber;
+  let phone = user.user.phoneNumber;
 
   const vendor = Vendor.build({
     name,
@@ -281,10 +284,48 @@ export const vendorSignup = async (req: Request, res: Response) => {
   res.status(201).send(vendorDetails);
 };
 
+//for verifyUserToken controller
+declare global {
+  namespace Express {
+    interface Request {
+      uid?: string;
+    }
+  }
+}
+
+export const verifyUserToken = async (req:Request, res: Response, next:NextFunction) => {
+  const {user} = req.body;  
+
+  try {
+    // Initialize the Firebase Admin SDK
+    if (!admin.apps.length) {
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+      });
+   }else {
+      admin.app(); // if already initialized, use that one
+   }
+    
+
+    // Verify the user's ID token
+    const decodedToken = await admin.auth().verifyIdToken(user._tokenResponse.idToken);
+    const uid = decodedToken.uid;
+
+    // Attach the UID to the request for further processing
+    req.uid = uid;
+
+    // Proceed to the next middleware
+    next();
+  } catch (error) {
+    console.error('Error verifying ID token:', error);
+    throw new NotAuthorizedError()
+  }
+}
+
 export const vendorSignin = async (req: Request, res: Response) => {
   const { user } = req.body;
-
-  let phone = user.phoneNumber;
+  
+  let phone = user.user.phoneNumber;
   let existingVendor = await Vendor.findOne({ phone });
   if (!existingVendor) {
     throw new BadRequestError("User not found");
@@ -824,8 +865,9 @@ export const getLineChartStatistics = async (req: Request, res: Response) => {
     );
     console.log(revenueData);
     
-
-    res.status(200).send({orderData, revenueData});
+    console.log(currentYearData);
+    
+    res.status(200).send({currentYearData,orderData, revenueData});
   } catch (error) {
     res.status(404).send({ message: "Data not found" });
   }

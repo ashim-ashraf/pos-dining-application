@@ -19,7 +19,7 @@ function VendorDashboard() {
       .get(`/api/vendors/linechart-stats/${restaurantId}`)
       .then((res) => {
         setYearData(res.data);
-        console.log(res.data);
+        console.log("senter",res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -28,7 +28,7 @@ function VendorDashboard() {
 
   return (
     <VendorLayout>
-     <div className="relative bg-emerald-200 ">
+     <div className="relative bg-emerald-200 h-full">
       <HeaderStats/>
       <div className="flex flex-wrap">
         <div className="w-full xl:w-8/12 mb-12 xl:mb-0 px-4">

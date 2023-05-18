@@ -119,9 +119,9 @@ function Notification() {
                     <div>
                       <Rate
                         rating={
-                          ratings.find((r) => r.id === item._id)?.rating ?? 0
+                          ratings.find((r) => r?.id === item?._id)?.rating ?? 0
                         }
-                        onRating={(rate) => handleRating(index, rate, item._id)}
+                        onRating={(rate) => handleRating(index, rate, item?._id)}
                       />
                     </div>
                   }

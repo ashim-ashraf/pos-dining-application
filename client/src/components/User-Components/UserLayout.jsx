@@ -2,7 +2,6 @@ import React from 'react'
 import MobileNav from '../../pages/user/MobileNav'
 import { App, Page } from 'konsta/react'
 import MobileNavigation from './MobileNavigation'
-import { Toaster } from 'react-hot-toast'
 
 
 function UserLayout({children}) {
