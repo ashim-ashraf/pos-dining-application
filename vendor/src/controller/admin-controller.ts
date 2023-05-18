@@ -14,6 +14,8 @@ import {
   getTopSeller,
   getVisitorsCount,
 } from "../helpers/admin-helper";
+import { BannerCreatedPublisher } from "../events/publishers/banner-created-publisher";
+import { BannerDeletedPublisher } from "../events/publishers/banner-deleted-publisher";
 
 export const AdminVerify = (req: Request, res: Response) => {
   res.send({ currentAdmin: req.currentAdmin || null });
@@ -141,7 +143,13 @@ export const addBanner = async (
       url,
       image,
     });
-    await newBanner.save();
+    const banner = await newBanner.save();
+
+    console.log(banner);
+    await new BannerCreatedPublisher(natsWrapper.client).publish({
+      banner: banner
+    });
+    
     res.status(201).send({ success: true });
   } catch (err) {
     next(err);
@@ -151,10 +159,13 @@ export const addBanner = async (
 export const getBanners = async (
   req: Request,
   res: Response,
-  next: NextFunction
 ) => {
-  let banners = await Banner.find();
-  res.status(200).send(banners);
+  try{
+    let banners = await Banner.find();
+    res.status(200).send(banners);
+  } catch(error) {
+    res.status(400).send({message: "Banner Not found"})
+  }
 };
 
 export const cardStats = async (req: Request, res: Response) => {
@@ -195,6 +206,10 @@ export const deleteBanner = async (
   const bannerId = req.params.bannerId;
   try {
     const deleteBanner = await Banner.deleteOne({ _id: bannerId });
+    await new BannerDeletedPublisher(natsWrapper.client).publish({
+      bannerId: bannerId
+    });
+    
     res.status(200).send({ message: "Banner Succesffully Deleted" });
   } catch (error) {
     res.status(500).send({ message: "Banner Deletion Failed" });
