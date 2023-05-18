@@ -8,10 +8,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - yummers.shop
+    - www.yummers.shop
     secretName: yummers-app-tls
   rules:
-    - host: yummers.shop
+    - host: www.yummers.shop
       http:
         paths:
           - path: /api/users/?(.*)
@@ -62,7 +62,7 @@ kind: Service
 metadata:
   annotations:
     service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: 'true'
-    service.beta.kubernetes.io/do-loadbalancer-hostname: 'yummers.shop'
+    service.beta.kubernetes.io/do-loadbalancer-hostname: 'www.yummers.shop'
   labels:
     helm.sh/chart: ingress-nginx-2.0.3
     app.kubernetes.io/name: ingress-nginx
