@@ -29,6 +29,7 @@ import {
   vendorSignout,
   vendorSignup,
   vendorVerify,
+  verifyUserToken,
 } from "../controller/vendor-controller";
 
 const upload = require("../middleware/upload");
@@ -42,9 +43,9 @@ router.get("/get-table/:id",requireVendorAuth, getTableById );
 
 router.get("/generate-bill/:tableId/:restaurantId",requireVendorAuth, getTableBill)
 
-router.post("/signup", vendorSignup);
+router.post("/signup",verifyUserToken, vendorSignup);
 
-router.post("/signin", vendorSignin);
+router.post("/signin", verifyUserToken ,vendorSignin);
 
 router.post("/signout", vendorSignout);
 
