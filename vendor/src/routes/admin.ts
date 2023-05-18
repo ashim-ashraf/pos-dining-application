@@ -16,34 +16,38 @@ import {
   validateAdminSignin,
   vendorApproval,
 } from "../controller/admin-controller";
-import {  requireAdminAuth, validateRequest } from "@snackopedia/common";
+import { requireAdminAuth, validateRequest } from "@snackopedia/common";
 
 const upload = require("../middleware/upload");
 const router = express.Router();
 
 router.get("/admin-verify", requireAdminAuth, AdminVerify);
 
-router.post("/signin", validateAdminSignin , validateRequest , adminSignin );
+router.post("/signin", validateAdminSignin, validateRequest, adminSignin);
 
-router.post("/add-table",  requireAdminAuth, addTable);
+router.post("/add-table", requireAdminAuth, addTable);
 
-router.get("/get-tables", requireAdminAuth, getAllTables)
+router.get("/get-tables", requireAdminAuth, getAllTables);
 
-router.delete("/delete-table/:id",requireAdminAuth, deleteTableById)
+router.delete("/delete-table/:id", requireAdminAuth, deleteTableById);
 
-router.get("/get-vendors",  requireAdminAuth, getVendors )
+router.get("/get-vendors", requireAdminAuth, getVendors);
 
-router.put("/vendor-approval/:id",requireAdminAuth, vendorApproval)
+router.put("/vendor-approval/:id", requireAdminAuth, vendorApproval);
 
-router.post("/create-banner" , requireAdminAuth,upload.single("image"), addBanner)
+router.get("/card-stats", requireAdminAuth, cardStats);
 
-router.delete('/delete-banner/:bannerId', requireAdminAuth, deleteBanner)
+router.get("/linechart-stats", requireAdminAuth, lineChartStats);
 
-router.get("/get-banners", getBanners)
+router.get("/get-banners", requireAdminAuth, getBanners);
 
-router.get("/card-stats", cardStats)
+router.delete("/delete-banner/:bannerId", requireAdminAuth, deleteBanner);
 
-router.get('/linechart-stats', lineChartStats)
-
+router.post(
+  "/create-banner",
+  requireAdminAuth,
+  upload.single("image"),
+  addBanner
+);
 
 export { router as adminRouter };

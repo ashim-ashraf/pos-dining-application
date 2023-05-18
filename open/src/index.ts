@@ -6,6 +6,8 @@ import { TableCreatedListener } from "./events/listener/table-created-listener";
 import { OrderStatusUpdateListener } from "./events/listener/order-status-update-listener";
 import { VendorApprovalListener } from "./events/listener/vendor-approval-listener";
 import { VendorOpenStatusListener } from "./events/listener/vendor-openstatus-listener";
+import { BannerCreatedListener } from "./events/listener/banner-created-listener";
+import { BannerDeletedListener } from "./events/listener/banner-deleted-listener";
 
 const start = async () => {
   console.log("Open service connecting....");
@@ -44,6 +46,8 @@ const start = async () => {
     new OrderStatusUpdateListener(natsWrapper.client).listen();
     new VendorApprovalListener(natsWrapper.client).listen();
     new VendorOpenStatusListener(natsWrapper.client).listen();
+    new BannerCreatedListener(natsWrapper.client).listen();
+    new BannerDeletedListener(natsWrapper.client).listen();
 
     await mongoose.connect(process.env.MONGO_URI, {
       dbName:'pos',
