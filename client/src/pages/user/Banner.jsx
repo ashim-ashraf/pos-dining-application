@@ -7,7 +7,7 @@ function Banner() {
   const navigate = useNavigate()
   useEffect(() => {
     axios
-      .get("/api/admin/get-banners")
+      .get("/api/users/get-banners")
       .then((res) => {
         setData(res.data);
       })
