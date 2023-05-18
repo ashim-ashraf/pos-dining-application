@@ -242,11 +242,11 @@ function MenuItemsList(props) {
                                     outline
                                     onPlus={() => {
                                       increaseCount(item);
-                                      setCart(getCart().items);
+                                      setCart(getCart());
                                     }}
                                     onMinus={() => {
                                       decreaseCount(item);
-                                      setCart(getCart().items);
+                                      setCart(getCart());
                                     }}
                                     min={1}
                                     max={10}
@@ -267,7 +267,7 @@ function MenuItemsList(props) {
                                           restaurantId
                                         );
                                         if (status) {
-                                          setCart(getCart().items);
+                                          setCart(getCart());
                                         } else if (
                                           order?._id &&
                                           restaurantId &&
@@ -281,27 +281,6 @@ function MenuItemsList(props) {
                                     >
                                       Add
                                     </Button>
-                                    <Toast
-                                      className="bottom-12 "
-                                      position="left"
-                                      opened={toast}
-                                      button={
-                                        <Button
-                                          rounded
-                                          clear
-                                          small
-                                          inline
-                                          onClick={() => setToast(false)}
-                                        >
-                                          Close
-                                        </Button>
-                                      }
-                                    >
-                                      <div className="shrink ">
-                                        You have items from another restaurant
-                                        in the Cart
-                                      </div>
-                                    </Toast>
                                   </div>
                                 )}
                               </span>

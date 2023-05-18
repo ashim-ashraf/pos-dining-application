@@ -91,8 +91,7 @@ function VendorSignup() {
     window.confirmationResult
       .confirm(otp)
       .then(async (res) => {
-        console.log(res.user);
-        let user = res.user;
+        let user = res;
         await axios
           .post("/api/vendors/signup", { user, userName })
           .then((response) => {

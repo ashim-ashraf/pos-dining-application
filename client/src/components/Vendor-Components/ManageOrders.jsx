@@ -37,7 +37,7 @@ function ManageOrders() {
   return (
     <div className="flex flex-col">
       <div className="flex gap-5">
-        <div className="w-full md:w-8/12  mb-6 mt-10 md:mb-0  ">
+        <div className="w-full md:w-6/12  mb-6 mt-10 md:mb-0  ">
           <table className="items-center w-full bg-transparent border-collapse">
             <thead>
               <tr>
@@ -53,7 +53,7 @@ function ManageOrders() {
                     "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700"
                   }
                 >
-                  Email
+                  Total
                 </th>
                 <th
                   className={
@@ -99,8 +99,8 @@ function ManageOrders() {
             </tbody>
           </table>
         </div>
-        <div className="w-full md:w-7/12  mb-6 mt-10 md:mb-0 border-2 rounded-lg border-emerald-500 ">
-          <table className="items-center w-full bg-transparent border-collapse">
+        <div className=" md:w-5/12  mb-6 mt-10 md:mb-0  rounded-lg">
+          <table className="items-center w-full bg-transparent border-collapse border-2 border-emerald-500">
             <thead>
               <tr className="bg-emerald-200  ">
                 <th

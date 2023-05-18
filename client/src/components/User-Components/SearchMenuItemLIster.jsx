@@ -1,5 +1,4 @@
 import {
-  Block,
   Button,
   Dialog,
   DialogButton,
@@ -7,7 +6,6 @@ import {
   ListItem,
   Sheet,
   Stepper,
-  Toast,
 } from "konsta/react";
 import React, { useEffect, useState } from "react";
 import useCart from "../../components/User-Components/Cart-Functions";
@@ -89,11 +87,11 @@ function SearchMenuItemLIster(props) {
                         outline
                         onPlus={() => {
                           increaseCount(item);
-                          setCart(getCart().items);
+                          setCart(getCart());
                         }}
                         onMinus={() => {
                           decreaseCount(item);
-                          setCart(getCart().items);
+                          setCart(getCart());
                         }}
                         min={1}
                         max={10}
@@ -110,7 +108,7 @@ function SearchMenuItemLIster(props) {
                           onClick={() => {
                             let status = addToCart(item, restaurantId);
                             if (status) {
-                              setCart(getCart().items);
+                              setCart(getCart());
                             } else if (
                               order?._id &&
                               restaurantId &&
@@ -203,11 +201,11 @@ function SearchMenuItemLIster(props) {
                                   outline
                                   onPlus={() => {
                                     increaseCount(item);
-                                    setCart(getCart().items);
+                                    setCart(getCart());
                                   }}
                                   onMinus={() => {
                                     decreaseCount(item);
-                                    setCart(getCart().items);
+                                    setCart(getCart());
                                   }}
                                   min={1}
                                   max={10}
@@ -228,7 +226,7 @@ function SearchMenuItemLIster(props) {
                                         restaurantId
                                       );
                                       if (status) {
-                                        setCart(getCart().items);
+                                        setCart(getCart());
                                       } else if (
                                         order?._id &&
                                         restaurantId &&
