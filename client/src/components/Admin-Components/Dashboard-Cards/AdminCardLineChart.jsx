@@ -23,7 +23,7 @@ export default function AdminCardLineChart({data}) {
       const borderColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
     
       return {
-        label: item?.restaurantId,
+        label: item?.restaurantName,
         backgroundColor,
         borderColor,
         data: item?.sales.map((data) => data?.noOfOrders),
