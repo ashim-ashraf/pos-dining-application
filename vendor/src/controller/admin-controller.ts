@@ -147,43 +147,38 @@ export const addBanner = async (
 
     console.log(banner);
     await new BannerCreatedPublisher(natsWrapper.client).publish({
-      banner: banner
+      banner: banner,
     });
-    
+
     res.status(201).send({ success: true });
   } catch (err) {
     next(err);
   }
 };
 
-export const getBanners = async (
-  req: Request,
-  res: Response,
-) => {
-  try{
+export const getBanners = async (req: Request, res: Response) => {
+  try {
     let banners = await Banner.find();
     res.status(200).send(banners);
-  } catch(error) {
-    res.status(400).send({message: "Banner Not found"})
+  } catch (error) {
+    res.status(400).send({ message: "Banner Not found" });
   }
 };
 
 export const cardStats = async (req: Request, res: Response) => {
-
   try {
     const [topSeller, dailyCount, monthlyCount] = await Promise.all([
       getTopSeller(),
       getVisitorsCount(),
       getMonthlyVisitorsCount(),
     ]);
-    
+
     // Send response with data
     res.status(200).send({
       topSeller,
       dailyCount,
       monthlyCount,
     });
-
   } catch (error) {
     res.status(400).send({ message: "Data not found" });
   }
@@ -191,12 +186,13 @@ export const cardStats = async (req: Request, res: Response) => {
 
 export const lineChartStats = async (req: Request, res: Response) => {
   try {
-    let yearlyVendorSales = await getAllVendorMonthlyDataForYear();
-  res.status(200).send(yearlyVendorSales)
+    let yearlyVendorSales = await getAllVendorMonthlyDataForYear()
+    console.log(yearlyVendorSales);
+    res.status(200).send(yearlyVendorSales);
   } catch (error) {
-    throw new BadRequestError("Sale data could not be computed")
+    throw new BadRequestError("Sale data could not be computed");
   }
-}
+};
 
 export const deleteBanner = async (
   req: Request,
@@ -207,9 +203,9 @@ export const deleteBanner = async (
   try {
     const deleteBanner = await Banner.deleteOne({ _id: bannerId });
     await new BannerDeletedPublisher(natsWrapper.client).publish({
-      bannerId: bannerId
+      bannerId: bannerId,
     });
-    
+
     res.status(200).send({ message: "Banner Succesffully Deleted" });
   } catch (error) {
     res.status(500).send({ message: "Banner Deletion Failed" });

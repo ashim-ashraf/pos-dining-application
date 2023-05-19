@@ -37,7 +37,7 @@ router.put("/vendor-approval/:id", requireAdminAuth, vendorApproval);
 
 router.get("/card-stats", requireAdminAuth, cardStats);
 
-router.get("/linechart-stats", requireAdminAuth, lineChartStats);
+router.get("/linechart-stats", lineChartStats);
 
 router.get("/get-banners", requireAdminAuth, getBanners);
 

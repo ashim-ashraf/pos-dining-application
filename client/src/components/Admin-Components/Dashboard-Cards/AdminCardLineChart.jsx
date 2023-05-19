@@ -5,7 +5,7 @@ import axios from "axios";
 
 export default function AdminCardLineChart({data}) {
 
-  const [statistics, setStatistics] = useState({})
+  const [statistics, setStatistics] = useState([])
 
   useEffect(() => {
     axios.get("/api/admin/linechart-stats").then((res) => {
@@ -17,6 +17,21 @@ export default function AdminCardLineChart({data}) {
   }, [])
 
   useEffect(() => {
+
+    const salesData = statistics?.map((item) => {
+      const backgroundColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+      const borderColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+    
+      return {
+        label: item?.restaurantId,
+        backgroundColor,
+        borderColor,
+        data: item?.sales.map((data) => data?.noOfOrders),
+        fill: false,
+      };
+    });
+    
+
     const monthNames = [
       "January", "February", "March", "April",
       "May", "June", "July", "August",
@@ -30,22 +45,7 @@ export default function AdminCardLineChart({data}) {
       type: "line",
       data: {
         labels: labels,
-        datasets: [
-          {
-            label: new Date().getFullYear(),
-            backgroundColor: "#4c51bf",
-            borderColor: "#4c51bf",
-            data: [65, 78, 66, 44, 56, 67, 75],
-            fill: false,
-          },
-          {
-            label: new Date().getFullYear() - 1,
-            fill: false,
-            backgroundColor: "#fff",
-            borderColor: "#fff",
-            data: [40, 68, 86, 74, 56, 60, 87],
-          },
-        ],
+        datasets: salesData
       },
       options: {
         maintainAspectRatio: false,
@@ -120,7 +120,7 @@ export default function AdminCardLineChart({data}) {
     };
     var ctx = document.getElementById("line-chart").getContext("2d");
     window.myLine = new Chart(ctx, config);
-  }, [data]);
+  }, [statistics]);
 
 
   // useEffect(() => {
