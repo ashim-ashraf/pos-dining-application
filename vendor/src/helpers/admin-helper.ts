@@ -191,7 +191,9 @@ export const getAllVendorMonthlyDataForYear = () => {
         $project: {
           _id: 0,
           vendorDetails:1,
-          restaurantId: "$_id.restaurantId",
+          restaurantId: {
+            $toObjectId: "$_id.restaurantId" 
+          },
           sales: {
             $map: {
               input: { $range: [1, 13] },
@@ -213,6 +215,12 @@ export const getAllVendorMonthlyDataForYear = () => {
           foreignField: "_id",
           as: "vendorDetails"
         }
+      },{
+        $project: {
+          restaurantName: { $arrayElemAt: ["$vendorDetails.restaurantName", 0] },
+          restaurantId:1,
+          sales:1
+        },
       },
     ]).exec((err, data) => {
       if (err) {
