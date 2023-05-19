@@ -9,8 +9,6 @@ spec:
   tls:
   - hosts:
     - www.yummers.shop
-    - yummers.shop
-    - admin.yummers.shop
     secretName: yummers-app-tls
   rules:
     - host: www.yummers.shop
@@ -23,61 +21,6 @@ spec:
                 name: open-srv
                 port:
                   number: 3000
-          - path: /api/socket/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: chat-srv
-                port:
-                  number: 3000
-          - path: /api/chat/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: chat-srv
-                port:
-                  number: 3000
-          - path: /?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: client-srv
-                port:
-                  number: 3000
-    - host: yummers.shop
-      http:
-        paths:
-          - path: /api/users/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: open-srv
-                port:
-                  number: 3000
-          - path: /api/socket/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: chat-srv
-                port:
-                  number: 3000
-          - path: /api/chat/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: chat-srv
-                port:
-                  number: 3000
-          - path: /?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: client-srv
-                port:
-                  number: 3000  
-    - host: admin.yummers.shop
-      http:
-        paths:
           - path: /api/vendors/?(.*)
             pathType: Prefix
             backend:
@@ -90,6 +33,20 @@ spec:
             backend:
               service:
                 name: vendor-srv
+                port:
+                  number: 3000
+          - path: /api/socket/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: chat-srv
+                port:
+                  number: 3000
+          - path: /api/chat/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: chat-srv
                 port:
                   number: 3000
           - path: /?(.*)
@@ -105,7 +62,7 @@ kind: Service
 metadata:
   annotations:
     service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: 'true'
-    service.beta.kubernetes.io/do-loadbalancer-hostname: 'www.yummers.shop,yummers.shop,admin.yummers.shop'
+    service.beta.kubernetes.io/do-loadbalancer-hostname: 'www.yummers.shop'
   labels:
     helm.sh/chart: ingress-nginx-2.0.3
     app.kubernetes.io/name: ingress-nginx
