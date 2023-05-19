@@ -31,19 +31,53 @@ const start = async () => {
     console.error(err);
   }
 
-  // let users = [];
+  interface User {
+    id: string;
+    socketId: string;
+  }
+  
+  let users: User[] = [];
+  
+  const addUser = (id: string, socketId: string): void => {
+    !users.some((user) => user.id === id) &&
+      users.push({ id, socketId });
+  };
 
-  // const addUser = (tableId: string, socketId: string) => {
-  //   !users.some(user => user.tableId === tableId) &&
-  //   users.push({tableId, socketId})
-  // }
+  const removeUser = (socketId: string) => {
+    users = users.filter((user) => user.socketId !== socketId);
+  };
+
+  const getUser = (id: string) => {
+    return users.find((user) => user.id === id);
+  };
 
   io.on("connection", (socket: Socket) => {
     console.log("user connected");
     //take userid and socketId from user
-    // socket.on('addUser', tableId => {
-    //   addUser(tableId, socket.id)
-    // }) 
+    socket.on('addUser', id => {
+      addUser(id, socket.id)
+      console.log(id, socket.id);
+    })
+
+    socket.on("disconnect", () => {
+      console.log("user disconneted");
+      removeUser(socket.id);
+    });
+
+    socket.on("sendMessage", ({ senderid, receiverid, text }) => {
+      const receiver = getUser(receiverid);
+      console.log(receiverid);
+      console.log(receiver);
+  
+      if (receiver) {
+        console.log("here");
+  
+        io.to(receiver?.socketId).emit("getMessage", {
+          senderid,
+          text,
+        });
+      }
+    });
   });
 
   server.listen(3000, () => {

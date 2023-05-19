@@ -8,22 +8,31 @@ import { io } from "socket.io-client";
 function VendorChatLayout() {
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
-  const [messages, setMessages] = useState(null);
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [socket, setSocket] = useState(null);
   const vendorId = useSelector((state) => state.vendor.vendor.id);
   const scrollRef = useRef();
+  const [arrivalMessage, setArrivalMessage] = useState({})
 
-  // useEffect(() => {
-  //   console.log("use effect");
-  //   setSocket(io("wss://pos.com", { path: "/api/socket" }));
-  // }, []);
+  const socket = useRef();
 
-  // useEffect(() => {
-  //   socket?.on("welcome", (message) => {
-  //     console.log(message);
-  //   });
-  // }, [socket]);c
+  useEffect(() => {
+    socket.current = io("wss://pos.com", { path: "/api/socket" });
+    socket.current.emit("addUser", vendorId);
+
+    socket.current.on('getMessage', (data) => {
+      setArrivalMessage({
+        sender: data.senderId,
+        text: data.text,
+        createdAt: Date.now(),
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    setMessages([...messages, arrivalMessage]);
+  }, [arrivalMessage]);
+
 
   useEffect(() => {
     const getConversations = async () => {
@@ -57,6 +66,14 @@ function VendorChatLayout() {
       text: newMessage,
       conversationId: currentChat._id,
     };
+
+    const tableId = currentChat.members.find((m) => m !== vendorId);
+
+    socket.current.emit('sendMessage', {
+      senderid: vendorId,
+      receiverid: tableId,
+      text: newMessage,
+    });
 
     try {
       const res = await axios.post("/api/chat/new-message", message);

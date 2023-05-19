@@ -11,26 +11,39 @@ function ChatLayout() {
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const tableId = useSelector((state) => state.user.table);
-  const [messages, setMessages] = useState(null);
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const scrollRef = useRef();
+  const [arrivalMessage, setArrivalMessage] = useState({})
   // const [socket, setSocket] = useState(null);
 
   const socket = useRef();
 
-  // useEffect(() => {
-  //   socket.current = io("wss://pos.com", { path: "/api/socket" });
-  // }, []);
+  useEffect(() => {
+    socket.current = io("wss://pos.com", { path: "/api/socket" });
+    socket.current.emit("addUser", tableId);
 
-  // useEffect(() => {
-  //   socket.current.emit("addUser", tableId);
-  // }, [tableId]);
+    socket.current.on('getMessage', (data) => {
+      setArrivalMessage({
+        sender: data.senderId,
+        text: data.text,
+        createdAt: Date.now(),
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    setMessages([...messages, arrivalMessage]);
+  }, [arrivalMessage]);
+
+
 
   useEffect(() => {
     const getConversations = async () => {
       try {
         const res = await axios.get("/api/chat/conversation/" + tableId);
         setConversations(res.data);
+        console.log(res.data)
       } catch (err) {
         console.log(err);
       }
@@ -58,6 +71,14 @@ function ChatLayout() {
       text: newMessage,
       conversationId: currentChat._id,
     };
+
+    const restaurantId = currentChat.members.find((m) => m !== tableId);
+
+    socket.current.emit('sendMessage', {
+      senderid: tableId,
+      receiverid: restaurantId,
+      text: newMessage,
+    });
 
     try {
       const res = await axios.post("/api/chat/new-message", message);
