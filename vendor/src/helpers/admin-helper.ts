@@ -1,6 +1,7 @@
 import { Orders } from "../models/orders";
 import mongoose from "mongoose"
 import { Vendor } from "../models/vendor";
+import { vendorSignin } from "../controller/vendor-controller";
 
 export const getTopSeller = () => {
   return new Promise((resolve, reject) => {
@@ -189,14 +190,37 @@ export const getAllVendorMonthlyDataForYear = () => {
       {
         $project: {
           _id: 0,
+          vendorDetails:1,
           restaurantId: "$_id.restaurantId",
-          monthlySales: "$monthlySales",
+          sales: {
+            $map: {
+              input: { $range: [1, 13] },
+              as: "month",
+              in: {
+                $cond: [
+                  { $in: ["$$month", { $map: { input: "$monthlySales", as: "s", in: "$$s.month" } }] },
+                  { $first: { $filter: { input: "$monthlySales", as: "s", cond: { $eq: ["$$s.month", "$$month"] } } } },
+                  { month: "$$month", year: 0, noOfOrders: 0 },
+                ],
+              },
+            },
+          },
         },
+      },{
+        $lookup: {
+          from: "vendors",
+          localField: "restaurantId",
+          foreignField: "_id",
+          as: "vendorDetails"
+        }
       },
     ]).exec((err, data) => {
       if (err) {
+        console.log(err); 
         reject(err);
       } else {
+        console.log(data);
+        
         resolve(data);
       }
     });    
