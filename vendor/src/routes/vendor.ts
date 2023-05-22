@@ -85,9 +85,9 @@ router.post("/delete-image",requireVendorAuth, deleteS3image)
 
 router.get('/get-orders/:id',requireVendorAuth, getAllOrders)
 
-router.get("/card-stats/:restaurantId", getCardStatistics)
+router.get("/card-stats/:restaurantId",requireVendorAuth, getCardStatistics)
 
-router.get("/linechart-stats/:restaurantId", getLineChartStatistics)
+router.get("/linechart-stats/:restaurantId",requireVendorAuth, getLineChartStatistics)
 
 
 
