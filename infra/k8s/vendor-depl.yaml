@@ -15,6 +15,9 @@ spec:
       containers:
         - name: vendor
           image: ashimashraf/vendor
+          volumeMounts:
+            - name: firebase-config
+              mountPath: /infra/k8s
           env:
             - name: NATS_CLIENT_ID
               valueFrom:
@@ -46,11 +49,6 @@ spec:
                 secretKeyRef:
                   name: admin-username
                   key: ADMIN_USERNAME
-            - name: FIREBASE_ADMIN_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: firebase-admin-key
-                  key: FIREBASE_ADMIN_KEY
             - name: BUCKET_SECRET_ACCESSKEY
               valueFrom:
                 secretKeyRef:
@@ -60,7 +58,11 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name:  bucket-accesskey-id
-                  key: BUCKET_ACCESSKEYID           
+                  key: BUCKET_ACCESSKEYID                    
+      volumes:
+        - name: firebase-config
+          secret:
+            secretName: firebase-admin-config
 ---
 apiVersion: v1
 kind: Service
