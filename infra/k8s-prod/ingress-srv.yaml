@@ -9,6 +9,8 @@ spec:
   tls:
   - hosts:
     - www.yummers.shop
+    - yummers.shop
+    - admin.yummers.shop
     secretName: yummers-app-tls
   rules:
     - host: www.yummers.shop
@@ -56,6 +58,52 @@ spec:
                 name: client-srv
                 port:
                   number: 3000
+     rules:
+    - host: yummers.shop
+      http:
+        paths:
+          - path: /api/users/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: open-srv
+                port:
+                  number: 3000
+          - path: /api/vendors/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: vendor-srv
+                port:
+                  number: 3000
+          - path: /api/admin/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: vendor-srv
+                port:
+                  number: 3000
+          - path: /api/socket/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: chat-srv
+                port:
+                  number: 3000
+          - path: /api/chat/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: chat-srv
+                port:
+                  number: 3000
+          - path: /?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: client-srv
+                port:
+                  number: 3000    
 ---
 apiVersion: v1
 kind: Service
