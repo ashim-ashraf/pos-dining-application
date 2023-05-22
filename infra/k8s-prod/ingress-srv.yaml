@@ -102,7 +102,45 @@ spec:
               service:
                 name: client-srv
                 port:
-                  number: 3000    
+                  number: 3000
+    - host: admin.yummers.shop
+      http:
+        paths:
+          - path: /api/vendors/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: vendor-srv
+                port:
+                  number: 3000
+          - path: /api/admin/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: vendor-srv
+                port:
+                  number: 3000
+          - path: /api/socket/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: chat-srv
+                port:
+                  number: 3000
+          - path: /api/chat/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: chat-srv
+                port:
+                  number: 3000
+          - path: /admin/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: client-srv
+                port:
+                  number: 3000        
 ---
 apiVersion: v1
 kind: Service
