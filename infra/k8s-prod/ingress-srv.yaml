@@ -134,7 +134,7 @@ spec:
                 name: chat-srv
                 port:
                   number: 3000
-          - path: /admin/?(.*)
+          - path: /?(.*)
             pathType: Prefix
             backend:
               service:
