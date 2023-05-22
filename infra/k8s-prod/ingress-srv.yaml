@@ -10,7 +10,6 @@ spec:
   - hosts:
     - www.yummers.shop
     - yummers.shop
-    - admin.yummers.shop
     secretName: yummers-app-tls
   rules:
     - host: www.yummers.shop
@@ -173,4 +172,44 @@ spec:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/component: controller
-          
+spec:
+  rules:
+    - host: admin.yummers.shop
+      http:
+        paths:
+          - path: /api/vendors/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: vendor-srv
+                port:
+                  number: 3000
+          - path: /api/admin/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: vendor-srv
+                port:
+                  number: 3000
+          - path: /api/socket/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: chat-srv
+                port:
+                  number: 3000
+          - path: /api/chat/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: chat-srv
+                port:
+                  number: 3000
+          - path: /?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: client-srv
+                port:
+                  number: 3000
+  
