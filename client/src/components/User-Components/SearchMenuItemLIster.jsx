@@ -23,6 +23,7 @@ function SearchMenuItemLIster(props) {
   const [currentItem, setCurrentItem] = useState(null);
   const order = useSelector((state) => state.user.order);
   const [alert, setAlert] = useState(false);
+  const isMobile = window.matchMedia('(max-width: 767px)').matches;
 
   useEffect(() => {
     setCart(getCart());
@@ -275,10 +276,13 @@ function SearchMenuItemLIster(props) {
           </>
         }
       />
+     </List>
+      
+      
 
-     
-
-      <Sheet
+<div>
+      {isMobile ? (
+        <Sheet
         className="pb-safe block md:hidden"
         opened={sheetOpened}
         onBackdropClick={() => setSheetOpened(false)}
@@ -303,8 +307,9 @@ function SearchMenuItemLIster(props) {
         </div>
         <div className="block md:hidden"></div>
       </Sheet>
-     </List>
-      <Dialog
+
+      ) : (
+        <Dialog
       className="hidden md:block"
         opened={sheetOpened}
         onBackdropClick={() => setSheetOpened(false)}
@@ -329,6 +334,8 @@ function SearchMenuItemLIster(props) {
           </div>
         }
       />
+      )}
+    </div>
       </>
   );
 }

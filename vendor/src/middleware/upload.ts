@@ -5,8 +5,8 @@ const {S3Client , DeleteObjectCommand} = require('@aws-sdk/client-s3')
 const s3 = new S3Client({
   region: 'ap-south-1',
   credentials:{
-    accessKeyId: "AKIA2XSQGD76W7UNSEFQ",
-    secretAccessKey: "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",
+    accessKeyId: process.env.BUCKET_ACCESSKEYID,
+    secretAccessKey: process.env.BUCKET_SECRET_ACCESSKEY,
   }});
 
   const uploadS3 = multer({

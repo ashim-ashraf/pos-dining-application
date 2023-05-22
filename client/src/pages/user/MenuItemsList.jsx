@@ -28,6 +28,7 @@ function MenuItemsList(props) {
   const [showListStatus, setShowListStatus] = useState(false);
   const order = useSelector((state) => state.user.order);
   const [alert, setAlert] = useState(false);
+  const isMobile = window.matchMedia('(max-width: 767px)').matches;
 
   const showlist = () => {
     setShowListStatus(!showListStatus);
@@ -71,6 +72,7 @@ function MenuItemsList(props) {
                 .filter((item) => item.category === category)
                 .map((item, index) => (
                   <>
+                  {console.log(item)}
                     {/* menu card - mobile */}
                     <div className="block md:hidden">
                       <div key={index} className="rounded-lg">
@@ -328,31 +330,7 @@ function MenuItemsList(props) {
           }
         />
 
-        <Sheet
-          className="pb-safe block md:hidden"
-          opened={sheetOpened}
-          onBackdropClick={() => setSheetOpened(false)}
-        >
-          <div>
-            <div className="w-full rounded overflow-hidden shadow-lg">
-              <img
-                className="w-full"
-                src={currentItem?.image}
-                alt={currentItem?.itemName}
-              />
-              <div className="px-6 py-4">
-                <div className="font-bold text-xl mb-2">
-                  {currentItem?.itemName}
-                </div>
-                <p className="text-gray-700 text-base mb-2">
-                  {currentItem?.description}
-                </p>
-              </div>
-              <div className="px-6 pt-4 pb-2"></div>
-            </div>
-          </div>
-          <div className="block md:hidden"></div>
-        </Sheet>
+        
 
         {/* floating action button for scroll to category */}
         <div className="fixed z-50">
@@ -414,7 +392,38 @@ function MenuItemsList(props) {
           ""
         )}
       </List>
-      <Dialog
+      
+      
+      
+        <div>
+      {isMobile ? (
+        <Sheet
+        className="pb-safe block md:hidden"
+        opened={sheetOpened}
+        onBackdropClick={() => setSheetOpened(false)}
+      >
+        <div>
+          <div className="w-full rounded overflow-hidden shadow-lg">
+            <img
+              className="w-full"
+              src={currentItem?.image}
+              alt={currentItem?.itemName}
+            />
+            <div className="px-6 py-4">
+              <div className="font-bold text-xl mb-2">
+                {currentItem?.itemName}
+              </div>
+              <p className="text-gray-700 text-base mb-2">
+                {currentItem?.description}
+              </p>
+            </div>
+            <div className="px-6 pt-4 pb-2"></div>
+          </div>
+        </div>
+        <div className="block md:hidden"></div>
+      </Sheet>
+      ) : (
+        <Dialog
         className="hidden md:block"
         opened={sheetOpened}
         onBackdropClick={() => setSheetOpened(false)}
@@ -439,6 +448,8 @@ function MenuItemsList(props) {
           </div>
         }
       />
+      )}
+    </div>
     </>
   );
 }

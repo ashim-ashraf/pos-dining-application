@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Rate from "./StarRating";
 import { clearRatingData } from "../../features/authSlices/userSlice";
-import { toast } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { isValidName, validateDescription } from "../../validation/validation";
 
 function Notification() {
   const [restaurantName, setRestaurantName] = useState("");
@@ -48,22 +49,28 @@ function Notification() {
   };
 
   const handleSubmit = () => {
-    const restaurantId = order.restaurantId
-    axios.post("/api/users/restaurant-rating", {restaurantId,formdata, ratings}).then((res) => {
-      console.log(res)
-      toast.success("Review Submitted");
-      dispatch(clearRatingData())
-      setTimeout(() => {
-        navigate('/');
-      }, 2000)
-    }).catch((error) => {
-      console.log(error)
-    })
+    if (!isValidName(formdata.username)){
+      toast.error("Enter a valid name")
+    } else if (!validateDescription(formdata.feedback)){
+      toast.error('Enter a valid description')
+    } else {
+      const restaurantId = order.restaurantId
+      axios.post("/api/users/restaurant-rating", {restaurantId,formdata, ratings}).then((res) => {
+        console.log(res)
+        toast.success("Review Submitted");
+        dispatch(clearRatingData())
+        setTimeout(() => {
+          navigate('/');
+        }, 2000)
+      }).catch((error) => {
+        console.log(error)
+      })
+    }
   }
 
   return (
     <Block className="md:px-96">
-
+<Toaster toastOptions={{ duration: 4000 }} />
       <div className="mt-4 items-center justify-center ">
         <div className="bg-white p-6  md:mx-auto">
           <svg
