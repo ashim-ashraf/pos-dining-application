@@ -45,7 +45,22 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: admin-username
-                  key: ADMIN_USERNAME           
+                  key: ADMIN_USERNAME
+            - name: FIREBASE_ADMIN_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: firebase-admin-key
+                  key: FIREBASE_ADMIN_KEY
+            - name: BUCKET_SECRET_ACCESSKEY
+              valueFrom:
+                secretKeyRef:
+                  name: bucket-secret-accesskey
+                  key: BUCKET_SECRET_ACCESSKEY
+            - name: BUCKET_ACCESSKEYID
+              valueFrom:
+                secretKeyRef:
+                  name:  bucket-accesskey-id
+                  key: BUCKET_ACCESSKEYID           
 ---
 apiVersion: v1
 kind: Service
