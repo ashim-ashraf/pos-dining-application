@@ -83,7 +83,7 @@ export default function Homepage() {
                 <input
                   type="text"
                   className="block w-full flex-1 py-2 px-3 focus:outline-none dark:text-black"
-                  placeholder="Start Typing..."
+                  placeholder="Start Restaurants..."
                   value={searchQuery}
                   onChange={handleSearchInputChange}
                 />
