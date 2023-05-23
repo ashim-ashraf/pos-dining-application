@@ -177,7 +177,8 @@ function Cart() {
                   </p>
                   <div className="md:w-1/2 md:h-1/6 md:border-2 md:border-gray-400 md:p-4">
                     <QrReader
-                      ref={qrRef}
+                      // ref={qrRef}
+                      facingMode={"rear"}
                       delay={300}
                       onError={handleErrorFile}
                       onScan={handleScanfile}
