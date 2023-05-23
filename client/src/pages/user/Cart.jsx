@@ -119,9 +119,8 @@ function Cart() {
     setScanningStatus(true);
     // setIsCameraOpen(true);
 
-    // const constraints = { video: true };
-
-    // navigator.mediaDevices.getUserMedia(constraints)
+    // navigator.mediaDevices
+    //   .getUserMedia({ video: true })
     //   .then((stream) => {
     //     videoRef.current.srcObject = stream;
     //     videoRef.current.play();
@@ -178,7 +177,6 @@ function Cart() {
                   </p>
                   <div className="md:w-1/2 md:h-1/6 md:border-2 md:border-gray-400 md:p-4">
                     <QrReader
-                      facingMode={"environment"}
                       ref={qrRef}
                       delay={300}
                       onError={handleErrorFile}
