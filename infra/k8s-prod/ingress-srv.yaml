@@ -56,97 +56,14 @@ spec:
               service:
                 name: client-srv
                 port:
-                  number: 3000
-    - host: yummers.shop
-      http:
-        paths:
-          - path: /api/users/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: open-srv
-                port:
-                  number: 3000
-          - path: /api/vendors/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: vendor-srv
-                port:
-                  number: 3000
-          - path: /api/admin/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: vendor-srv
-                port:
-                  number: 3000
-          - path: /api/socket/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: chat-srv
-                port:
-                  number: 3000
-          - path: /api/chat/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: chat-srv
-                port:
-                  number: 3000
-          - path: /?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: client-srv
-                port:
-                  number: 3000
-    - host: admin.yummers.shop
-      http:
-        paths:
-          - path: /api/vendors/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: vendor-srv
-                port:
-                  number: 3000
-          - path: /api/admin/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: vendor-srv
-                port:
-                  number: 3000
-          - path: /api/socket/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: chat-srv
-                port:
-                  number: 3000
-          - path: /api/chat/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: chat-srv
-                port:
-                  number: 3000
-          - path: /?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: client-srv
-                port:
-                  number: 3000        
+                  number: 3000   
 ---
 apiVersion: v1
 kind: Service
 metadata:
   annotations:
     service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: 'true'
-    service.beta.kubernetes.io/do-loadbalancer-hostname: 'www.yummers.shop, yummers.shop, admin.yummers.shop'
+    service.beta.kubernetes.io/do-loadbalancer-hostname: 'www.yummers.shop'
   labels:
     helm.sh/chart: ingress-nginx-2.0.3
     app.kubernetes.io/name: ingress-nginx
@@ -172,52 +89,3 @@ spec:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/component: controller
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: ingress-serviceb
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/use-regex: "true"
-spec:
-  rules:
-    - host: admin.yummers.shop
-      http:
-        paths:
-          - path: /api/vendors/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: vendor-srv
-                port:
-                  number: 3000
-          - path: /api/admin/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: vendor-srv
-                port:
-                  number: 3000
-          - path: /api/socket/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: chat-srv
-                port:
-                  number: 3000
-          - path: /api/chat/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: chat-srv
-                port:
-                  number: 3000
-          - path: /?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: client-srv
-                port:
-                  number: 3000
-  
