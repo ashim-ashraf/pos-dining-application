@@ -148,6 +148,7 @@ function Cart() {
       .then((res) => {
         console.log(res.data);
         dispatch(releiveTable());
+        window.location.reload()
       })
       .catch((err) => {
         console.log(err);
@@ -297,6 +298,20 @@ function Cart() {
                           }}
                         >
                           Order Items
+                        </Button>
+                      </td>
+
+                      <td className=" px-4 py-2">
+                        <Button
+                          onClick={() => {
+                            if (table) {
+                              handleOrder();
+                            } else {
+                              setToast(true);
+                            }
+                          }}
+                        >
+                          Chat
                         </Button>
                       </td>
                     </tr>

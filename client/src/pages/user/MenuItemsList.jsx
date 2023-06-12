@@ -183,18 +183,18 @@ function MenuItemsList(props) {
 
             {/* menu card - web */}
             <div className="hidden md:block px-40">
-              <div class="grid grid-cols-1 md:grid-cols-4 gap-6 p-6">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 p-6">
                 {items?.length > 0 &&
                   items
                     .filter((item) => item.category === category)
                     .map((item, index) => (
-                      <div class=" rounded-xl bg-white p-3 shadow-lg hover:shadow-xl">
+                      <div className=" rounded-xl bg-white p-3 shadow-lg hover:shadow-xl">
                         <div
                           onClick={() => {
                             setSheetOpened(true);
                             setCurrentItem(item);
                           }}
-                          class="relative flex items-end overflow-hidden rounded-xl"
+                          className="relative flex items-end overflow-hidden rounded-xl"
                         >
                           <img
                             className="h-[25vh] w-full  cursor-pointer"
@@ -202,41 +202,41 @@ function MenuItemsList(props) {
                             alt={item?.itemName}
                           />
 
-                          <div class="absolute bottom-3 left-3 inline-flex items-center rounded-lg bg-white p-2 shadow-md">
+                          <div className="absolute bottom-3 left-3 inline-flex items-center rounded-lg bg-white p-2 shadow-md">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              class="h-5 w-5 text-yellow-400"
+                              className="h-5 w-5 text-yellow-400"
                               viewBox="0 0 20 20"
                               fill="currentColor"
                             >
                               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                             </svg>
 
-                            <span class="ml-1 text-sm text-slate-400">4.9</span>
+                            <span className="ml-1 text-sm text-slate-400">4.9</span>
                           </div>
                         </div>
 
-                        <div class="mt-1 p-2">
+                        <div className="mt-1 p-2">
                           <h2
                             onClick={() => {
                               setSheetOpened(true);
                               setCurrentItem(item);
                             }}
-                            class="text-slate-700 cursor-pointer"
+                            className="text-slate-700 cursor-pointer"
                           >
                             {item?.itemName}
                           </h2>
-                          <p class="mt-1 text-sm text-slate-400 line-through">
+                          <p className="mt-1 text-sm text-slate-400 line-through">
                             &#x20B9;{item?.retailPrice}
                           </p>
 
-                          <p class="mt-1 text-lg font-bold text-slate-700">
+                          <p className="mt-1 text-lg font-bold text-slate-700">
                             &#x20B9;{item?.sellingPrice}
                           </p>
 
-                          <div class="mt-3 flex items-end justify-between">
+                          <div className="mt-3 flex items-end justify-between">
                             <p>
-                              <span class="text-lg font-bold text-orange-500">
+                              <span className="text-lg font-bold text-orange-500">
                                 {isItemInCart(item._id) ? (
                                   <Stepper
                                     raised

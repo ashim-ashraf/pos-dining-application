@@ -1,6 +1,3 @@
-import { useSelector } from "react-redux";
-
-
 function useCart() {
   
   const getCart = () => {
