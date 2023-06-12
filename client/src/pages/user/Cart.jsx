@@ -65,7 +65,6 @@ function Cart() {
       axios
         .post("/api/users/book-table", { code })
         .then((res) => {
-          console.log(res);
           dispatch(bookedTable(res.data.tableid));
           setScanningStatus(false);
         })
@@ -146,7 +145,6 @@ function Cart() {
     axios
       .post("/api/users/releive-table", { code })
       .then((res) => {
-        console.log(res.data);
         dispatch(releiveTable());
         window.location.reload()
       })
