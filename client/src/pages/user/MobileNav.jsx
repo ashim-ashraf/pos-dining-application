@@ -62,7 +62,7 @@ function MobileNav({ children }) {
                       3
                     </div> */}
                     <svg
-                      class="h-6  text-gray-500"
+                      className="h-6  text-gray-500"
                       aria-hidden="true"
                       focusable="false"
                       data-prefix="fas"
