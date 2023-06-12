@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 function Banner() {
   const [data, setData] = useState(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   useEffect(() => {
     axios
       .get("/api/users/get-banners")
@@ -25,27 +25,33 @@ function Banner() {
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {data &&
-              data?.map((item) => (
-                <li className="shrink-0 cursor-pointer snap-center" onClick={() => navigate("/restaurant"+item.url)} >
-                  <img
-                    src={item?.image}
-                    alt="images"
-                    className="w-80 h-auto rounded-lg"
-                  ></img>
-                </li>
+              data?.map((item, index) => (
+                <div key={index}>
+                  <li
+                    className="shrink-0 cursor-pointer snap-center"
+                    onClick={() => navigate("/restaurant" + item.url)}
+                  >
+                    <img
+                      src={item?.image}
+                      alt="images"
+                      className="w-80 h-auto rounded-lg"
+                    ></img>
+                  </li>
+                </div>
               ))}
           </ul>
         </div>
       </div>
 
       <div className="hidden md:block  ">
-      <div className="px-28 mt-4 overflow-hidden overflow-y-hidden p-10 bg-pink-800 ">
-          <ul
-            className="flex overflow-x-auto gap-6 snap-x snap-mandatory overflow-y-hidden no-scrollbar "
-          >
+        <div className="px-28 mt-4 overflow-hidden overflow-y-hidden p-10 bg-pink-800 ">
+          <ul className="flex overflow-x-auto gap-6 snap-x snap-mandatory overflow-y-hidden no-scrollbar ">
             {data &&
               data?.map((item) => (
-                <li className="shrink-0 cursor-pointer snap-center overflow-y-hidden" onClick={() => navigate("/restaurant"+item.url)}>
+                <li
+                  className="shrink-0 cursor-pointer snap-center overflow-y-hidden"
+                  onClick={() => navigate("/restaurant" + item.url)}
+                >
                   <img
                     src={item?.image}
                     alt="images"
@@ -55,7 +61,6 @@ function Banner() {
               ))}
           </ul>
         </div>
-
       </div>
     </>
   );

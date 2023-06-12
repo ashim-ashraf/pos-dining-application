@@ -43,8 +43,6 @@ function Billing() {
           return acc;
         }, []);
         order.items = filteredItems;
-        console.log("filter", order);
-
         setOrder(order);
         dispatch(ratingData(order))
       })
@@ -84,7 +82,6 @@ function Billing() {
         responseType: 'blob'
       })
       .then((response) => {
-        console.log(response.data)
         const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
         saveAs(pdfBlob, 'test.pdf');
       })
