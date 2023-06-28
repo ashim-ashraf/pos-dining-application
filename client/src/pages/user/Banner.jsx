@@ -21,20 +21,20 @@ function Banner() {
       <div className="block md:hidden">
         <div className=" mt-4 overflow-hidden">
           <ul
-            className="flex  overflow-x-auto gap-6 snap-x snap-mandatory   after:shrink-0 after:w-[30vw] scrollbar-hidden"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            className="flex overflow-x-auto gap-4 snap-x snap-mandatory"
+            // style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {data &&
               data?.map((item, index) => (
                 <div key={index}>
                   <li
-                    className="shrink-0 cursor-pointer snap-center"
+                    className="w-[19rem] snap-center shrink-0  "
                     onClick={() => navigate("/restaurant" + item.url)}
                   >
                     <img
                       src={item?.image}
                       alt="images"
-                      className="w-80 h-auto rounded-lg"
+                      className="h-fit rounded-lg"
                     ></img>
                   </li>
                 </div>
@@ -47,7 +47,8 @@ function Banner() {
         <div className="px-28 mt-4 overflow-hidden overflow-y-hidden p-10 bg-pink-800 ">
           <ul className="flex overflow-x-auto gap-6 snap-x snap-mandatory overflow-y-hidden no-scrollbar ">
             {data &&
-              data?.map((item) => (
+              data?.map((item, index) => (
+                <div key={index}>
                 <li
                   className="shrink-0 cursor-pointer snap-center overflow-y-hidden"
                   onClick={() => navigate("/restaurant" + item.url)}
@@ -58,6 +59,7 @@ function Banner() {
                     className="w-80 h-auto rounded-lg"
                   ></img>
                 </li>
+                </div>
               ))}
           </ul>
         </div>
