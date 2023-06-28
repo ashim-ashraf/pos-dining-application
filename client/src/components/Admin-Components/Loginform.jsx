@@ -25,7 +25,6 @@ function Loginform() {
         await dispatch(adminLogin());
         navigate("/admin/dashboard");
       }).catch(async (err) => {
-        console.log(err.response.data.errors);
         toast.error("Invalid Credentials")
       });
     } else {

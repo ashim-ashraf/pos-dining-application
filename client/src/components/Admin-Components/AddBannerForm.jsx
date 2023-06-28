@@ -24,7 +24,6 @@ function AddBannerForm() {
     axios
     .get("/api/admin/get-banners")
     .then((res) => {
-      console.log(res.data);
       setData(res.data);
     })
     .catch((err) => {
@@ -35,7 +34,6 @@ function AddBannerForm() {
   const getVendors = () => {
     axios.get("/api/admin/get-vendors").then((res) => {
       setVendors(res.data)
-      console.log(res.data)
     }).catch((err) => {
       toast.error("Vendors Not Found")
     })

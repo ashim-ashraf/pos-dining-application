@@ -15,9 +15,7 @@ function VendorLandingPage() {
   const vendorId = useSelector((state) => state.vendor.vendor.id);
 
   useEffect(() => {
-    console.log(vendorId);
     axios.get(`/api/vendors/listed-restaurant/${vendorId}`).then(async(res) => {
-      console.log(res.data)
       setRestaurant(res.data)
       await setShowRegistration(true);
     }).catch(() => {

@@ -11,7 +11,6 @@ export default function AdminHeaderStats() {
 
   useEffect(() => {
     axios.get("/api/admin/card-stats").then((res) => {
-      console.log(res.data)
       setStatistics(res.data)
     }).catch((error) => {
       console.log(error)

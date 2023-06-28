@@ -13,7 +13,6 @@ export default function CardLineChart({data}) {
       
       const currentMonth = new Date().getMonth();
       const labels = monthNames.slice(0, currentMonth + 1);
-      console.log(labels);  
       var config = {
         type: "line",
         data: {

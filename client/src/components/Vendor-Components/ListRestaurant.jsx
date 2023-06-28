@@ -20,7 +20,6 @@ function ListRestaurant({ Restaurant }) {
     axios
       .put(`/api/vendors/shop-status/${restaurantId}`, { status })
       .then((res) => {
-        console.log(res.data);
         setOpenStatus(!openStatus);
       })
       .catch((error) => {

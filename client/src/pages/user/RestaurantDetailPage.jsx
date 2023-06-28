@@ -30,12 +30,6 @@ function RestaurantDetailPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  //   console.log("useEffect2")
-  //   setMenu(restaurantDetails.menu);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
   };

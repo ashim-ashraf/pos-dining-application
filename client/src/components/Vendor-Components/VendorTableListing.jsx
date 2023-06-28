@@ -45,7 +45,6 @@ function VendorTable() {
     axios
       .post("/api/vendors/manage-order-status", { tableId, entityId, status })
       .then((res) => {
-        console.log(res.data);
         setCurrentTable(res.data);
         getTables();
         setLoading(false);
@@ -61,7 +60,6 @@ function VendorTable() {
         responseType: 'blob'
       })
       .then((response) => {
-        console.log(response.data)
         const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
         saveAs(pdfBlob, 'test.pdf');
       })

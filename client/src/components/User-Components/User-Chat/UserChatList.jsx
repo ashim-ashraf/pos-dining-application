@@ -7,11 +7,9 @@ function UserChatList({ conversation, tableId }) {
 
   useEffect(() => {
     const vendorId = conversation.members.find((m) => m !== tableId);
-console.log(vendorId)
     const getTable = async () => {
       try {
         const res = await axios.get(`/api/users/get-vendor/${vendorId}`);
-        console.log(res.data,"axioas")
         setVendor(res.data.vendorDetails)
       } catch (error) {
         console.log(error);

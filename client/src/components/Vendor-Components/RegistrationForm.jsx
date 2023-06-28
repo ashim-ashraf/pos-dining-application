@@ -47,7 +47,6 @@ const {imageErrors , imageHandleNext} = useFormImageValidation(image)
 
   const handleClick = (direction) => {
     let newStep = currentStep;
-    console.log("New step =", newStep)
     if (newStep === 1) {
         if (handleNext()) {
             direction === "next" ? newStep++ : newStep--;
@@ -55,7 +54,6 @@ const {imageErrors , imageHandleNext} = useFormImageValidation(image)
             toast.error("Please fill out all the from before proceeding to next!");
         }
     } else if (newStep === 2) {
-      console.log("image handle ", imageHandleNext())
        if (imageHandleNext()){
          direction === "next" ? newStep++ : newStep--;
        } else {
