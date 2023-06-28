@@ -26,7 +26,6 @@ function Orders() {
     axios
       .get(`/api/users/orders/${table}`)
       .then(async (res) => {
-        console.log(res.data);
         await dispatch(userOrder(res.data));
         await setOrder(res.data);
         const allCompleted = res.data.items.every((item) => {
@@ -51,7 +50,6 @@ function Orders() {
     const entityId = item.entityId;
     const tableId = table;
     let status = "Cancelled";
-    console.log(entityId, tableId, status);
     axios
       .post("/api/users/cancel-orderitem", { entityId, tableId, status })
       .then(() => {

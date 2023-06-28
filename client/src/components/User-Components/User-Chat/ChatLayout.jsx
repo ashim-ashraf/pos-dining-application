@@ -43,7 +43,6 @@ function ChatLayout() {
       try {
         const res = await axios.get("/api/chat/conversation/" + tableId);
         setConversations(res.data);
-        console.log(res.data)
       } catch (err) {
         console.log(err);
       }

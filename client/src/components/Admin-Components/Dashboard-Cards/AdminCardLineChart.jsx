@@ -9,7 +9,6 @@ export default function AdminCardLineChart({data}) {
 
   useEffect(() => {
     axios.get("/api/admin/linechart-stats").then((res) => {
-      console.log(res.data)
       setStatistics(res.data)
     }).catch((error) => {
       console.log(error)
@@ -40,7 +39,6 @@ export default function AdminCardLineChart({data}) {
     
     const currentMonth = new Date().getMonth();
     const labels = monthNames.slice(0, currentMonth + 1);
-    console.log(labels);  
     var config = {
       type: "line",
       data: {
@@ -121,108 +119,6 @@ export default function AdminCardLineChart({data}) {
     var ctx = document.getElementById("line-chart").getContext("2d");
     window.myLine = new Chart(ctx, config);
   }, [statistics]);
-
-
-  // useEffect(() => {
-  //   if (data) {
-  //     const monthNames = [
-  //       "January", "February", "March", "April",
-  //       "May", "June", "July", "August",
-  //       "September", "October", "November", "December"
-  //     ];
-      
-  //     const currentMonth = new Date().getMonth();
-  //     const labels = monthNames.slice(0, currentMonth + 1);
-  //     console.log(labels);  
-  //     var config = {
-  //       type: "line",
-  //       data: {
-  //         labels:labels,
-  //         datasets: [
-  //           {
-  //             label: new Date().getFullYear(),
-  //             backgroundColor: "#4c51bf",
-  //             borderColor: "#4c51bf",
-  //             data: data || [],
-  //             fill: false,
-  //           },
-  //         ],
-  //       },
-  //       options: {
-  //         maintainAspectRatio: false,
-  //         responsive: true,
-  //         title: {
-  //           display: false,
-  //           text: "Sales Charts",
-  //           fontColor: "white",
-  //         },
-  //         legend: {
-  //           labels: {
-  //             fontColor: "white",
-  //           },
-  //           align: "end",
-  //           position: "bottom",
-  //         },
-  //         tooltips: {
-  //           mode: "index",
-  //           intersect: false,
-  //         },
-  //         hover: {
-  //           mode: "nearest",
-  //           intersect: true,
-  //         },
-  //         scales: {
-  //           xAxes: [
-  //             {
-  //               ticks: {
-  //                 fontColor: "rgba(255,255,255,.7)",
-  //               },
-  //               display: true,
-  //               scaleLabel: {
-  //                 display: false,
-  //                 labelString: "Month",
-  //                 fontColor: "white",
-  //               },
-  //               gridLines: {
-  //                 display: false,
-  //                 borderDash: [2],
-  //                 borderDashOffset: [2],
-  //                 color: "rgba(33, 37, 41, 0.3)",
-  //                 zeroLineColor: "rgba(0, 0, 0, 0)",
-  //                 zeroLineBorderDash: [2],
-  //                 zeroLineBorderDashOffset: [2],
-  //               },
-  //             },
-  //           ],
-  //           yAxes: [
-  //             {
-  //               ticks: {
-  //                 fontColor: "rgba(255,255,255,.7)",
-  //               },
-  //               display: true,
-  //               scaleLabel: {
-  //                 display: false,
-  //                 labelString: "Value",
-  //                 fontColor: "white",
-  //               },
-  //               gridLines: {
-  //                 borderDash: [3],
-  //                 borderDashOffset: [3],
-  //                 drawBorder: false,
-  //                 color: "rgba(255, 255, 255, 0.15)",
-  //                 zeroLineColor: "rgba(33, 37, 41, 0)",
-  //                 zeroLineBorderDash: [2],
-  //                 zeroLineBorderDashOffset: [2],
-  //               },
-  //             },
-  //           ],
-  //         },
-  //       },
-  //     };
-  //     var ctx = document.getElementById("line-chart").getContext("2d");
-  //     window.myLine = new Chart(ctx, config);
-  //   }
-  // }, [data]);
 
   const canvasStyle = {
     display: 'block',

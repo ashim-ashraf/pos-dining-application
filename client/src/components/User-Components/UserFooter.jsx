@@ -5,7 +5,7 @@ function UserFooter() {
     const [showFooter, setShowFooter] = useState(false);
 
   useEffect(() => {
-    const delay = 1000; // Delay in milliseconds (2 seconds)
+    const delay = 1001; // Delay in milliseconds (2 seconds)
     const timer = setTimeout(() => {
       setShowFooter(true);
     }, delay);
