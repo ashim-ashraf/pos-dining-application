@@ -10,7 +10,6 @@ function ChatLIst({conversation, vendorId}) {
     const getTable = async () => {
       try{
         const res = await axios(`/api/vendors/get-table/${tableId}`);
-        console.log(res.data)
         setTable(res.data)
       } catch (error){
         console.log(error)

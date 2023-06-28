@@ -55,7 +55,6 @@ useEffect(() => {
         if (validatePhone(phone)) {
           setLoading(true);
           const phoneNumber = "+" + phone;
-          console.log(phone);
           axios
             .post("/api/vendors/check-vendor", { phone })
             .then(() => {
@@ -74,7 +73,6 @@ useEffect(() => {
             })
             .catch((error) => {
               toast.error("Account not found!");
-              console.log("catch block", error);
               setLoading(false);
             });
         }
@@ -91,7 +89,6 @@ useEffect(() => {
       .then(async (res) => {
         let user = res;
         await axios.post("/api/vendors/signin", { user }).then((response) => {
-          console.log(response);
           dispatch(vendorLogin(response.data));
           setLoading(false);
           navigate("/vendors/dashboard");

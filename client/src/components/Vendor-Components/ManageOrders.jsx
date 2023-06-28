@@ -15,7 +15,6 @@ function ManageOrders() {
     axios
       .get(`/api/vendors/get-orders/${vendorId}`)
       .then((res) => {
-        console.log(res.data);
         setOrders(res.data[0].orders);
       })
       .catch((error) => {

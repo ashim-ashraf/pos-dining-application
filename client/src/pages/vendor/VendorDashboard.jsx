@@ -19,7 +19,6 @@ function VendorDashboard() {
       .get(`/api/vendors/linechart-stats/${restaurantId}`)
       .then((res) => {
         setYearData(res.data);
-        console.log("senter",res.data);
       })
       .catch((error) => {
         console.log(error);

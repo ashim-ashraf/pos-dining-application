@@ -30,12 +30,7 @@ function Notification() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    console.log(restaurantName);
-    console.log(ratings);
-  }, [ratings, restaurantName]);
-
-  const handleRating = (index, rate, itemId) => {
+   const handleRating = (index, rate, itemId) => {
     setRatings((prevRatings) => {
       const newRatings = [...prevRatings];
       newRatings[index] = { id: itemId, rating: rate };
@@ -56,7 +51,6 @@ function Notification() {
     } else {
       const restaurantId = order.restaurantId
       axios.post("/api/users/restaurant-rating", {restaurantId,formdata, ratings}).then((res) => {
-        console.log(res)
         toast.success("Review Submitted");
         dispatch(clearRatingData())
         setTimeout(() => {

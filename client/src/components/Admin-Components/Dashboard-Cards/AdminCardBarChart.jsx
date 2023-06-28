@@ -11,7 +11,6 @@ export default function AdminCardBarChart({data}) {
     
     const currentMonth = new Date().getMonth();
     const labels = monthNames.slice(0, currentMonth + 1);
-    console.log(labels);  
     let config = {
       type: "bar",
       data: {

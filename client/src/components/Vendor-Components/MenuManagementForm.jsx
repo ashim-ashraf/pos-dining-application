@@ -32,7 +32,6 @@ function MenuManagementForm() {
           .post("/api/vendors/category", { userId, categoryName })
           .then(() => {
             getCategories();
-            console.log("category added");
           }).catch((res) => {
             toast.error("Failed adding category")
           })
@@ -60,7 +59,6 @@ function MenuManagementForm() {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res.data);
         setMenu(res.data.menu);
       })
       .catch((error) => {
@@ -81,7 +79,6 @@ function MenuManagementForm() {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res.data);
         setCategory(res.data.categories);
       })
       .catch((error) => {
@@ -135,7 +132,6 @@ function MenuManagementForm() {
         toast.error("Select a valid image for upload");
       } else {
         formdata.userId = userId;
-        console.log("before submission", formdata);
         const submitFormData = new FormData();
         for (const key in formdata) {
           submitFormData.append(key, formdata[key]);
@@ -191,7 +187,6 @@ function MenuManagementForm() {
   //form data appending and api call after edit validations
   const editpost = () => {
     formdata.userId = userId;
-    console.log("before submission", formdata);
     const submitFormData = new FormData();
     for (const key in formdata) {
       submitFormData.append(key, formdata[key]);
@@ -219,7 +214,6 @@ function MenuManagementForm() {
     axios
       .post(`/api/vendors/publish-vendors/${userId}`)
       .then((res) => {
-        console.log(res.data);
         toast.success("vendor published");
       })
       .catch((err) => {

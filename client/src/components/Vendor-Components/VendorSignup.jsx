@@ -70,7 +70,6 @@ function VendorSignup() {
                   toast.success("OTP sended successfully!");
                   setShowOTP(true);
                   setLoading(false);
-                  console.log(userName);
                 })
                 .catch((error) => {
                   setLoading(false);
@@ -95,7 +94,6 @@ function VendorSignup() {
         await axios
           .post("/api/vendors/signup", { user, userName })
           .then((response) => {
-            console.log(response);
             dispatch(vendorLogin(response.data));
             setLoading(false);
             navigate("/vendors/dashboard");

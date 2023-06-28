@@ -25,7 +25,6 @@ export default function VendorsList({ color }) {
     axios
     .put(`/api/admin/vendor-approval/${id}`,{currentStatus})
     .then(response => {
-      console.log("Vendor approval status updated successfully!");
       setUpdated(false)
     })
     .catch(error => {
